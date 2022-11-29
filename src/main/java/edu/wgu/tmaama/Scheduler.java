@@ -11,11 +11,10 @@ import java.io.IOException;
 public class Scheduler extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        var url = Scheduler.class.getResource("/views/Main.fxml");
         FXMLLoader loader = new FXMLLoader(Scheduler.class.getResource("/views/Main.fxml"));
         Scene scene = new Scene(loader.load(), 1000, 1000);
         stage.setScene(scene);
-        MainController mainController = (MainController) loader.getController();
+        MainController mainController = loader.getController();
         mainController.setPrimaryStage(stage);
         stage.show();
     }
