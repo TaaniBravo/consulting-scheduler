@@ -6,7 +6,8 @@ WORKDIR /app
 RUN mvn -f ./pom.xml clean package
 
 # Package stage
-FROM openjdk:17-alpine
-COPY --from=build /app/target/scheduler-1.0-SNAPSHOT-jar-with-dependencies.jar /usr/local/lib/scheduler.jar
+FROM openjdk:17 as app
+WORKDIR /app
+COPY --from=build /app/target/scheduler-1.0-SNAPSHOT-jar-with-dependencies.jar ./scheduler.jar
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "/usr/local/lib/scheduler.jar"]
+ENTRYPOINT ["java", "-jar", "/app/scheduler.jar"]

@@ -1,0 +1,33 @@
+version: "1.0.0"
+services:
+  scheduler:
+    container_name: scheduler
+    build:
+      context: ./
+      target: app
+      dockerfile: ./Dockerfile
+    volumes:
+      - ./:/app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
+    links:
+      - mysql
+  mysql:
+    container_name: "mysql"
+    image: "mysql:8.0.31"
+    restart: "on-failure"
+    volumes:
+      - ./src/main/resources/sql/createDatabase.sql:/docker-entypoint-initdb.d/dump.sql
+      - db:/var/local/mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_USER: root
+      MYSQL_DATABASE: consultingscheduler
+      MYSQL_PASSWORD: null
+volumes:
+  db:
+    driver: local
