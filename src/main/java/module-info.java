@@ -1,6 +1,7 @@
 module edu.wgu.tmaama {
     requires javafx.controls;
     requires javafx.fxml;
+    requires java.sql;
 
     opens edu.wgu.tmaama to javafx.fxml;
     opens edu.wgu.tmaama.controllers to javafx.fxml;

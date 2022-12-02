@@ -1,8 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<GridPane xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wgu.tmaama.controllers.MainController">
-    <Label text="Hello, World!"/>
+<GridPane alignment="CENTER" prefHeight="600.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wgu.tmaama.controllers.MainController">
+    <Label text="Consulting Scheduler" textAlignment="CENTER" underline="true">
+      <font>
+         <Font name="System Bold" size="36.0" />
+      </font>
+      <GridPane.margin>
+         <Insets bottom="20.0" />
+      </GridPane.margin></Label>
+   <TextField fx:id="usernameTextField" GridPane.rowIndex="2" />
+   <TextField GridPane.rowIndex="4" />
+   <Label text="Username" GridPane.rowIndex="1" />
+   <Label text="Password" GridPane.rowIndex="3" />
+   <ButtonBar prefHeight="40.0" prefWidth="200.0" GridPane.rowIndex="5">
+     <buttons>
+       <Button fx:id="loginButton" mnemonicParsing="false" onAction="#handleLogin" text="Login" />
+         <Button fx:id="signUpButton" mnemonicParsing="false" onAction="#handleSignUp" text="Sign Up" />
+     </buttons>
+      <GridPane.margin>
+         <Insets top="20.0" />
+      </GridPane.margin>
+   </ButtonBar>
+   <columnConstraints>
+      <ColumnConstraints />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" />
+   </rowConstraints>
 </GridPane>

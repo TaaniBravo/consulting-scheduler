@@ -19,14 +19,12 @@ services:
     image: "mysql:8.0.31"
     restart: "on-failure"
     volumes:
-      - ./src/main/resources/sql/createDatabase.sql:/docker-entypoint-initdb.d/dump.sql
-      - db:/var/local/mysql
+      - ./src/main/resources/sql/createDatabase.sql:/docker-entrypoint-initdb.d/dump.sql
+      - db:/var/lib/mysql
     ports:
       - "3306:3306"
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-      MYSQL_USER: root
-      MYSQL_DATABASE: consultingscheduler
       MYSQL_PASSWORD: null
 volumes:
   db:
