@@ -1,6 +1,6 @@
 package edu.wgu.tmaama;
 
-import edu.wgu.tmaama.controllers.MainController;
+import edu.wgu.tmaama.controllers.fxml.MainController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

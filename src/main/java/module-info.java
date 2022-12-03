@@ -7,4 +7,5 @@ module edu.wgu.tmaama {
     opens edu.wgu.tmaama.controllers to javafx.fxml;
     opens views to javafx.fxml;
     exports edu.wgu.tmaama;
+    opens edu.wgu.tmaama.controllers.fxml to javafx.fxml;
 }

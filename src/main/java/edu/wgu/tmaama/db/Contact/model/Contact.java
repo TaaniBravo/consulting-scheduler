@@ -1,9 +1,14 @@
-package edu.wgu.tmaama.models.Contact;
+package edu.wgu.tmaama.db.Contact.model;
 
 public class Contact {
     private int contactID;
     private String contactName;
     private String email;
+
+    public Contact(String contactName, String email) {
+        this.contactName = contactName;
+        this.email = email;
+    }
 
     public Contact(int contactID, String contactName, String email) {
         this.contactID = contactID;
