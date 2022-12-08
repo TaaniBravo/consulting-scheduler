@@ -1,6 +1,6 @@
 package edu.wgu.tmaama;
 
-import edu.wgu.tmaama.controllers.fxml.MainController;
+import edu.wgu.tmaama.controllers.fxml.LoginController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -11,11 +11,11 @@ import java.io.IOException;
 public class Scheduler extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader loader = new FXMLLoader(Scheduler.class.getResource("/views/Main.fxml"));
+        FXMLLoader loader = new FXMLLoader(Scheduler.class.getResource("/views/Login.fxml"));
         Scene scene = new Scene(loader.load(), 1000, 1000);
         stage.setScene(scene);
-        MainController mainController = loader.getController();
-        mainController.setPrimaryStage(stage);
+        LoginController loginController = loader.getController();
+        loginController.setPrimaryStage(stage);
         stage.show();
     }
 

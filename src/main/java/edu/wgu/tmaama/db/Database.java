@@ -37,6 +37,7 @@ public class Database {
     try (FileInputStream inputStream = new FileInputStream("/db/config.properties")) {
       this.props.load(inputStream);
     } catch (IOException ex) {
+      ex.printStackTrace();
       System.out.println("Please create config.properties file specified in README.");
       System.exit(Constants.ERROR_FILE_NOT_FOUND_CODE);
     }

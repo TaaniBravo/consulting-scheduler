@@ -81,3 +81,13 @@ CREATE TABLE IF NOT EXISTS Appointments (
         REFERENCES Contacts(Contact_ID)
         ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS Salts (
+    Salt_ID INT(10) PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    Salt BLOB NOT NULL,
+    User_ID INT NOT NULL,
+    FOREIGN KEY (User_ID)
+        REFERENCES Users(User_ID)
+        ON DELETE CASCADE,
+    CONSTRAINT User_ID_Unique UNIQUE (User_ID)
+);

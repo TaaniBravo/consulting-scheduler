@@ -1,17 +1,21 @@
 package edu.wgu.tmaama.db.User.model;
 
+import edu.wgu.tmaama.utils.Password;
+
 import java.sql.Timestamp;
 
 public class User {
   private int userID;
   private String username;
-  private String password;
+  private Password password;
   private Timestamp createDate;
   private String createdBy;
   private Timestamp lastUpdate;
   private String lastUpdatedBy;
 
-  public User(String username, String password, String createdBy) {
+  public User() {}
+
+  public User(String username, Password password, String createdBy) {
     this.username = username;
     this.password = password;
     this.createdBy = createdBy;
@@ -20,7 +24,7 @@ public class User {
   public User(
       int userID,
       String username,
-      String password,
+      Password password,
       Timestamp createDate,
       String createdBy,
       Timestamp lastUpdate,
@@ -34,11 +38,11 @@ public class User {
     this.lastUpdatedBy = lastUpdatedBy;
   }
 
-  public String getPassword() {
+  public Password getPassword() {
     return password;
   }
 
-  public void setPassword(String password) {
+  public void setPassword(Password password) {
     this.password = password;
   }
 

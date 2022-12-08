@@ -4,8 +4,8 @@ module edu.wgu.tmaama {
     requires java.sql;
 
     opens edu.wgu.tmaama to javafx.fxml;
-    opens edu.wgu.tmaama.controllers to javafx.fxml;
-    opens views to javafx.fxml;
-    exports edu.wgu.tmaama;
     opens edu.wgu.tmaama.controllers.fxml to javafx.fxml;
+    opens views to javafx.fxml;
+    opens db to java.sql;
+    exports edu.wgu.tmaama;
 }
