@@ -5,7 +5,6 @@ import edu.wgu.tmaama.db.Salt.model.Salt;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class ConcreteSaltDAO implements SaltDAO {
   private Database db = new Database();
@@ -20,17 +19,17 @@ public class ConcreteSaltDAO implements SaltDAO {
 
   @Override
   public Salt insert(Salt salt) throws SQLException {
-    // TODO: Need to figure out how to store the salt.
     if (!this.db.checkConnection()) this.cxn = this.db.getConnection();
     String query = "INSERT INTO Salts " + "(Salt, User_ID)" + " VALUES (?, ?)";
-    PreparedStatement stmt = this.cxn.prepareStatement(query);
+    PreparedStatement stmt = this.cxn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
     stmt.setBytes(1, salt.getSalt());
     stmt.setInt(2, salt.getUserID());
-    ResultSet results = stmt.executeQuery();
-    Salt newSalt = null;
-    if (results.next()) newSalt = this.getInstanceFromResultSet(results);
-    this.db.closeConnection();
-    return newSalt;
+    int affectedRows = stmt.executeUpdate();
+    if (affectedRows == 0)
+      throw new SQLException("ERROR: Failed to create Salt for user. Please try again.");
+    ResultSet results = stmt.getGeneratedKeys();
+    if (results.next()) salt.setSaltID(results.getInt(1));
+    return salt;
   }
 
   @Override

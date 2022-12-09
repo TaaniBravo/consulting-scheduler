@@ -6,10 +6,7 @@ import edu.wgu.tmaama.db.Salt.model.Salt;
 import edu.wgu.tmaama.db.User.model.User;
 import edu.wgu.tmaama.utils.Password;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -32,19 +29,23 @@ public class ConcreteUserDAO implements UserDAO {
       if (!this.db.checkConnection()) this.cxn = this.db.getConnection();
       this.cxn.setAutoCommit(false);
       String userQuery = "INSERT INTO Users " + "(User_Name, Password, Created_By)" + " VALUES (?, ?, ?)";
-      PreparedStatement userStmt = this.cxn.prepareStatement(userQuery);
+      PreparedStatement userStmt = this.cxn.prepareStatement(userQuery, Statement.RETURN_GENERATED_KEYS);
       userStmt.setString(1, user.getUsername());
       userStmt.setString(2, user.getPassword().getHash());
       userStmt.setString(3, user.getCreatedBy());
-      ResultSet results = userStmt.executeQuery();
-      User newUser = null;
-      if (results.next()) newUser = this.getInstanceFromResultSet(results);
-      assert newUser != null;
+      int affectedRows = userStmt.executeUpdate();
+      if (affectedRows == 0)
+        throw new SQLException("Creating a new user failed, please try again.");
+      ResultSet results = userStmt.getGeneratedKeys();
+      assert results != null;
+      if (results.next())
+        user.setUserID(results.getInt(1));
       Salt salt = user.getPassword().getSalt();
+      salt.setUserID(user.getUserID());
       ConcreteSaltDAO saltDAO = new ConcreteSaltDAO(this.db);
-      Salt insertedSalt = saltDAO.insert(salt);
-      newUser.getPassword().setSalt(insertedSalt);
-      return newUser;
+      saltDAO.insert(salt);
+      this.cxn.commit();
+      return user;
     } catch (SQLException|AssertionError ex) {
       this.cxn.rollback();
       throw ex;

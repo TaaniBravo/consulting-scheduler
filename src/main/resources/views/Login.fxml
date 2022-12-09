@@ -26,11 +26,20 @@
          <Insets top="20.0" />
       </GridPane.margin>
    </ButtonBar>
+    <Label fx:id="errorLabel" textFill="#b20b0b" wrapText="true" GridPane.rowIndex="6">
+        <GridPane.margin>
+            <Insets top="30.0" />
+        </GridPane.margin>
+        <font>
+            <Font size="14.0" />
+        </font>
+    </Label>
    <columnConstraints>
       <ColumnConstraints />
    </columnConstraints>
    <rowConstraints>
       <RowConstraints />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" />
       <RowConstraints minHeight="10.0" prefHeight="30.0" />
       <RowConstraints minHeight="10.0" prefHeight="30.0" />
       <RowConstraints minHeight="10.0" prefHeight="30.0" />

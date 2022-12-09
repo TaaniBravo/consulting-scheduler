@@ -14,6 +14,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -31,6 +32,7 @@ public class LoginController {
   @FXML private PasswordField passwordTextField;
   @FXML private Button loginButton;
   @FXML private Button signUpButton;
+  @FXML private Label errorLabel;
 
   public void initialize() {}
 
@@ -56,7 +58,7 @@ public class LoginController {
       boolean isPasswordValid = Password.comparePasswords(user.getPassword(), enteredPassword);
 
       if (!isPasswordValid) {
-        // TODO: Add error message because the password was invalid.
+        this.printError("Invalid username/password.");
         return;
       }
 
@@ -75,7 +77,7 @@ public class LoginController {
       ConcreteUserDAO userDAO = new ConcreteUserDAO(db);
       User user = userDAO.findByUsername(username);
       if (user != null) {
-        // TODO: Return error that username is taken.
+        this.printError("Username is already taken.");
         return;
       }
 
@@ -91,7 +93,7 @@ public class LoginController {
 
   private void redirectToHomePage(ActionEvent actionEvent, User user) throws IOException {
     FXMLLoader loader =
-        new FXMLLoader(Objects.requireNonNull(Scheduler.class.getResource("views/Home.fxml")));
+        new FXMLLoader(Objects.requireNonNull(Scheduler.class.getResource("/views/Home.fxml")));
     this.pane = loader.load();
     HomeController homeController = loader.getController();
     homeController.setSessionUser(user);
@@ -99,5 +101,9 @@ public class LoginController {
     this.scene = new Scene(pane);
     this.primaryStage.setScene(this.scene);
     this.primaryStage.show();
+  }
+
+  private void printError(String message) {
+    this.errorLabel.setText("ERROR: " + message);
   }
 }
