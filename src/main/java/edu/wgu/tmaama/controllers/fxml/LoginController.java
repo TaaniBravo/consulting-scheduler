@@ -22,12 +22,14 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Objects;
+import java.util.ResourceBundle;
 
 public class LoginController {
   private Parent pane;
   private Scene scene;
   private Stage primaryStage;
   private String sessionUser;
+  private ResourceBundle bundle = ResourceBundle.getBundle("bundles/translate");
   @FXML private TextField usernameTextField;
   @FXML private PasswordField passwordTextField;
   @FXML private Button loginButton;
@@ -49,7 +51,7 @@ public class LoginController {
       ConcreteSaltDAO saltDAO = new ConcreteSaltDAO(db);
       User user = userDAO.findByUsername(username);
       if (user == null) {
-        this.printError("Invalid username/password.");
+        this.printError(this.bundle.getString("login.error.username"));
         return;
       }
 
@@ -58,7 +60,7 @@ public class LoginController {
       boolean isPasswordValid = Password.comparePasswords(user.getPassword(), enteredPassword);
 
       if (!isPasswordValid) {
-        this.printError("Invalid username/password.");
+        this.printError(this.bundle.getString("login.error.username"));
         return;
       }
 
@@ -77,7 +79,7 @@ public class LoginController {
       ConcreteUserDAO userDAO = new ConcreteUserDAO(db);
       User user = userDAO.findByUsername(username);
       if (user != null) {
-        this.printError("Username is already taken.");
+        this.printError(this.bundle.getString("login.error.username.taken"));
         return;
       }
 
@@ -104,6 +106,6 @@ public class LoginController {
   }
 
   private void printError(String message) {
-    this.errorLabel.setText("ERROR: " + message);
+    this.errorLabel.setText(message);
   }
 }

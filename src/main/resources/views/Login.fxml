@@ -1,49 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-
-<GridPane alignment="CENTER" prefHeight="600.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wgu.tmaama.controllers.fxml.LoginController">
-    <Label text="%key.unspecified" textAlignment="CENTER" underline="true">
-      <font>
-         <Font name="System Bold" size="36.0" />
-      </font>
-      <GridPane.margin>
-         <Insets bottom="20.0" />
-      </GridPane.margin></Label>
-   <Label text="%login.username.label" GridPane.rowIndex="1" />
-    <TextField fx:id="usernameTextField" GridPane.rowIndex="2" />
-   <Label text="%login.password.label" GridPane.rowIndex="3" />
-    <PasswordField fx:id="passwordTextField" GridPane.rowIndex="4" />
-   <ButtonBar prefHeight="40.0" prefWidth="200.0" GridPane.rowIndex="5">
-     <buttons>
-       <Button fx:id="loginButton" mnemonicParsing="false" onAction="#handleLogin" text="%login.login.button" />
-         <Button fx:id="signUpButton" mnemonicParsing="false" onAction="#handleSignUp" text="%login.signup.button" />
-     </buttons>
-      <GridPane.margin>
-         <Insets top="20.0" />
-      </GridPane.margin>
-   </ButtonBar>
+<?import javafx.scene.text.Font?>
+<GridPane alignment="CENTER" prefHeight="600.0" prefWidth="600.0" styleClass="mainPane" stylesheets="@../css/Login.css"
+          xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1"
+          fx:controller="edu.wgu.tmaama.controllers.fxml.LoginController">
+    <Label styleClass="title" text="%app.name" textAlignment="CENTER">
+        <font>
+            <Font name="System Bold" size="36.0"/>
+        </font>
+        <GridPane.margin>
+            <Insets bottom="20.0"/>
+        </GridPane.margin>
+    </Label>
+    <Label text="%login.username.label" GridPane.rowIndex="1"/>
+    <TextField fx:id="usernameTextField" GridPane.rowIndex="2"/>
+    <Label text="%login.password.label" GridPane.rowIndex="3"/>
+    <PasswordField fx:id="passwordTextField" GridPane.rowIndex="4"/>
+    <ButtonBar prefHeight="40.0" prefWidth="400.0" GridPane.rowIndex="5">
+        <buttons>
+            <Button fx:id="loginButton" mnemonicParsing="false" onAction="#handleLogin" styleClass="button, loginButton"
+                    text="%login.login.button"/>
+            <Button fx:id="signUpButton" mnemonicParsing="false" onAction="#handleSignUp"
+                    styleClass="button, signUpButton" text="%login.signup.button"/>
+        </buttons>
+        <GridPane.margin>
+            <Insets top="20.0"/>
+        </GridPane.margin>
+    </ButtonBar>
     <Label fx:id="errorLabel" textFill="#b20b0b" wrapText="true" GridPane.rowIndex="6">
         <GridPane.margin>
-            <Insets top="30.0" />
+            <Insets top="30.0"/>
         </GridPane.margin>
         <font>
-            <Font size="14.0" />
+            <Font size="14.0"/>
         </font>
     </Label>
-   <columnConstraints>
-      <ColumnConstraints />
-   </columnConstraints>
-   <rowConstraints>
-      <RowConstraints />
-      <RowConstraints minHeight="10.0" prefHeight="30.0" />
-      <RowConstraints minHeight="10.0" prefHeight="30.0" />
-      <RowConstraints minHeight="10.0" prefHeight="30.0" />
-      <RowConstraints minHeight="10.0" prefHeight="30.0" />
-      <RowConstraints minHeight="10.0" prefHeight="30.0" />
-      <RowConstraints minHeight="10.0" prefHeight="30.0" />
-   </rowConstraints>
+    <columnConstraints>
+        <ColumnConstraints/>
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints/>
+        <RowConstraints minHeight="10.0" prefHeight="30.0"/>
+        <RowConstraints minHeight="10.0" prefHeight="30.0"/>
+        <RowConstraints minHeight="10.0" prefHeight="30.0"/>
+        <RowConstraints minHeight="10.0" prefHeight="30.0"/>
+        <RowConstraints minHeight="10.0" prefHeight="30.0"/>
+        <RowConstraints minHeight="10.0" prefHeight="30.0"/>
+    </rowConstraints>
 </GridPane>
