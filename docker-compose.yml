@@ -1,4 +1,3 @@
-version: "1.0.0"
 services:
   scheduler:
     container_name: scheduler

@@ -7,19 +7,23 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class Scheduler extends Application {
-    @Override
-    public void start(Stage stage) throws IOException {
-        FXMLLoader loader = new FXMLLoader(Scheduler.class.getResource("/views/Login.fxml"));
-        Scene scene = new Scene(loader.load(), 1000, 1000);
-        stage.setScene(scene);
-        LoginController loginController = loader.getController();
-        loginController.setPrimaryStage(stage);
-        stage.show();
-    }
+  public static void boot() {
+    launch();
+  }
 
-    public static void boot() {
-        launch();
-    }
+  @Override
+  public void start(Stage stage) throws IOException {
+    FXMLLoader loader = new FXMLLoader(Scheduler.class.getResource("/views/Login.fxml"));
+    loader.setResources(ResourceBundle.getBundle("/bundles/translate"));
+    System.out.println(Locale.getDefault().getLanguage());
+    Scene scene = new Scene(loader.load(), 500, 500);
+    stage.setScene(scene);
+    LoginController loginController = loader.getController();
+    loginController.setPrimaryStage(stage);
+    stage.show();
+  }
 }

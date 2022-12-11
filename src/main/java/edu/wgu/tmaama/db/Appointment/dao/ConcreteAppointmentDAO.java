@@ -14,6 +14,8 @@ public class ConcreteAppointmentDAO implements AppointmentDAO {
 
   @Override
   public Appointment insert(Appointment appointment) throws SQLException {
+    try {
+    if (!this.db.checkConnection()) this.db.getConnection();
     String query =
         "INSERT INTO Appointments (Title, Description, Location, Type, Start, End, Created_By, Customer_ID, User_ID, Contact_ID)"
             + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -28,15 +30,21 @@ public class ConcreteAppointmentDAO implements AppointmentDAO {
     stmt.setInt(8, appointment.getCustomerID());
     stmt.setInt(9, appointment.getUserID());
     stmt.setInt(10, appointment.getContactID());
-    ResultSet results = stmt.executeQuery();
-    Appointment insertedAppointment = null;
-    if (results.next()) insertedAppointment = this.getInstanceFromResultSet(results);
-    db.closeConnection();
-    return insertedAppointment;
+    int affectedRows = stmt.executeUpdate();
+    if (affectedRows == 0)
+      throw new SQLException("Unable to create appointment.");
+    ResultSet results = stmt.getGeneratedKeys();
+    if (results.next()) appointment.setAppointmentID(results.getInt(1));
+    return appointment;
+    } finally {
+    this.db.closeConnection();
+    }
   }
 
   @Override
   public Appointment findByID(int id) throws SQLException {
+    try {
+    if (!this.db.checkConnection()) this.db.getConnection();
     String query = "SELECT * FROM Appointments WHERE Appointment_ID = ?";
     PreparedStatement stmt = this.cxn.prepareStatement(query);
     stmt.setInt(1, id);
@@ -45,12 +53,15 @@ public class ConcreteAppointmentDAO implements AppointmentDAO {
     if (result.next()) {
       appointment = this.getInstanceFromResultSet(result);
     }
-    db.closeConnection();
     return appointment;
+    } finally {
+    this.db.closeConnection();
+    }
   }
 
   @Override
   public ArrayList<Appointment> findAll() throws SQLException {
+    try {
     if (!this.db.checkConnection()) this.db.getConnection();
     ArrayList<Appointment> appointments = new ArrayList<>();
     String query = "SELECT * FROM Appointments";
@@ -58,12 +69,15 @@ public class ConcreteAppointmentDAO implements AppointmentDAO {
     while (resultSet.next()) {
       appointments.add(this.getInstanceFromResultSet(resultSet));
     }
-    this.db.closeConnection();
     return appointments;
+    } finally {
+    this.db.closeConnection();
+    }
   }
 
   @Override
   public Appointment update(Appointment appointment) throws SQLException {
+    try{
     String query =
         "UPDATE Appointments SET "
             + "Title = ?,"
@@ -89,11 +103,13 @@ public class ConcreteAppointmentDAO implements AppointmentDAO {
     stmt.setInt(9, appointment.getUserID());
     stmt.setInt(10, appointment.getContactID());
     stmt.setInt(11, appointment.getAppointmentID());
-    ResultSet results = stmt.executeQuery();
-    Appointment updatedAppointment = null;
-    if (results.next()) updatedAppointment = this.getInstanceFromResultSet(results);
-    this.db.closeConnection();
-    return updatedAppointment;
+    int affectedRows = stmt.executeUpdate();
+    if (affectedRows == 0)
+      throw new SQLException("Unable to update appointment: " + appointment.getTitle());
+    return appointment;
+    } finally {
+      this.db.closeConnection();
+    }
   }
 
   @Override

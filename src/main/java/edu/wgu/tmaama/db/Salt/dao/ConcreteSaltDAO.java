@@ -80,11 +80,11 @@ public class ConcreteSaltDAO implements SaltDAO {
     PreparedStatement stmt = this.cxn.prepareStatement(query);
     stmt.setBytes(1, salt.getSalt());
     stmt.setInt(2, salt.getSaltID());
-    ResultSet results = stmt.executeQuery();
-    Salt updatedSalt = null;
-    if (results.next()) updatedSalt = this.getInstanceFromResultSet(results);
+    int affectedRows = stmt.executeUpdate();
+    if (affectedRows == 0)
+      throw new SQLException("Unable to update Salt: " + salt.getSaltID());
     this.db.closeConnection();
-    return updatedSalt;
+    return salt;
   }
 
   @Override

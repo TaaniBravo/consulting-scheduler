@@ -49,7 +49,7 @@ public class LoginController {
       ConcreteSaltDAO saltDAO = new ConcreteSaltDAO(db);
       User user = userDAO.findByUsername(username);
       if (user == null) {
-        // TODO: Add error message because user was not found.
+        this.printError("Invalid username/password.");
         return;
       }
 

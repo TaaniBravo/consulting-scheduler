@@ -6,21 +6,21 @@
 <?import javafx.scene.text.*?>
 
 <GridPane alignment="CENTER" prefHeight="600.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wgu.tmaama.controllers.fxml.LoginController">
-    <Label text="Consulting Scheduler" textAlignment="CENTER" underline="true">
+    <Label text="%key.unspecified" textAlignment="CENTER" underline="true">
       <font>
          <Font name="System Bold" size="36.0" />
       </font>
       <GridPane.margin>
          <Insets bottom="20.0" />
       </GridPane.margin></Label>
-   <Label text="Username" GridPane.rowIndex="1" />
+   <Label text="%login.username.label" GridPane.rowIndex="1" />
     <TextField fx:id="usernameTextField" GridPane.rowIndex="2" />
-   <Label text="Password" GridPane.rowIndex="3" />
+   <Label text="%login.password.label" GridPane.rowIndex="3" />
     <PasswordField fx:id="passwordTextField" GridPane.rowIndex="4" />
    <ButtonBar prefHeight="40.0" prefWidth="200.0" GridPane.rowIndex="5">
      <buttons>
-       <Button fx:id="loginButton" mnemonicParsing="false" onAction="#handleLogin" text="Login" />
-         <Button fx:id="signUpButton" mnemonicParsing="false" onAction="#handleSignUp" text="Sign Up" />
+       <Button fx:id="loginButton" mnemonicParsing="false" onAction="#handleLogin" text="%login.login.button" />
+         <Button fx:id="signUpButton" mnemonicParsing="false" onAction="#handleSignUp" text="%login.signup.button" />
      </buttons>
       <GridPane.margin>
          <Insets top="20.0" />
