@@ -1,53 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Font?>
-<GridPane alignment="CENTER" prefHeight="600.0" prefWidth="600.0" styleClass="mainPane" stylesheets="@../css/Login.css"
-          xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1"
-          fx:controller="edu.wgu.tmaama.controllers.fxml.LoginController">
-    <Label styleClass="title" text="%app.name" textAlignment="CENTER">
-        <font>
-            <Font name="System Bold" size="36.0"/>
-        </font>
-        <GridPane.margin>
-            <Insets bottom="20.0"/>
-        </GridPane.margin>
-    </Label>
-    <Label text="%login.username.label" GridPane.rowIndex="1"/>
-    <TextField fx:id="usernameTextField" GridPane.rowIndex="2"/>
-    <Label text="%login.password.label" GridPane.rowIndex="3"/>
-    <PasswordField fx:id="passwordTextField" GridPane.rowIndex="4"/>
-    <ButtonBar prefHeight="40.0" prefWidth="400.0" GridPane.rowIndex="5">
-        <buttons>
-            <Button fx:id="loginButton" mnemonicParsing="false" onAction="#handleLogin" styleClass="button, loginButton"
-                    text="%login.login.button"/>
-            <Button fx:id="signUpButton" mnemonicParsing="false" onAction="#handleSignUp"
-                    styleClass="button, signUpButton" text="%login.signup.button"/>
-        </buttons>
-        <GridPane.margin>
-            <Insets top="20.0"/>
-        </GridPane.margin>
-    </ButtonBar>
-    <Label fx:id="errorLabel" textFill="#b20b0b" wrapText="true" GridPane.rowIndex="6">
-        <GridPane.margin>
-            <Insets top="30.0"/>
-        </GridPane.margin>
-        <font>
-            <Font size="14.0"/>
-        </font>
-    </Label>
-    <columnConstraints>
-        <ColumnConstraints/>
-    </columnConstraints>
-    <rowConstraints>
-        <RowConstraints/>
-        <RowConstraints minHeight="10.0" prefHeight="30.0"/>
-        <RowConstraints minHeight="10.0" prefHeight="30.0"/>
-        <RowConstraints minHeight="10.0" prefHeight="30.0"/>
-        <RowConstraints minHeight="10.0" prefHeight="30.0"/>
-        <RowConstraints minHeight="10.0" prefHeight="30.0"/>
-        <RowConstraints minHeight="10.0" prefHeight="30.0"/>
-    </rowConstraints>
-</GridPane>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="800.0" styleClass="mainPane" stylesheets="@../css/Login.css"
+            xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="edu.wgu.tmaama.controllers.fxml.LoginController">
+    <VBox alignment="CENTER" prefHeight="400.0" prefWidth="375.0" styleClass="leftPane" AnchorPane.bottomAnchor="0"
+          AnchorPane.leftAnchor="0" AnchorPane.topAnchor="0">
+        <Label fx:id="titleLabel" styleClass="title" text="%app.name" textAlignment="CENTER" GridPane.rowSpan="3">
+            <font>
+                <Font name="System Bold" size="36.0"/>
+            </font>
+            <GridPane.margin>
+                <Insets bottom="20.0"/>
+            </GridPane.margin>
+        </Label>
+        <Label text="By: Taanileka Maama" GridPane.rowIndex="2"/>
+        <Label text="C195 PA" GridPane.rowIndex="3"/>
+    </VBox>
+    <VBox alignment="CENTER_LEFT" prefHeight="400.0" prefWidth="425.0" styleClass="rightPane"
+          AnchorPane.bottomAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
+        <Label text="%login.username.label" GridPane.rowIndex="3">
+            <padding>
+                <Insets bottom="5.0"/>
+            </padding>
+        </Label>
+        <TextField fx:id="usernameTextField" GridPane.rowIndex="4"/>
+        <Label text="%login.password.label" GridPane.rowIndex="5">
+            <padding>
+                <Insets bottom="5.0" top="5.0"/>
+            </padding>
+        </Label>
+        <PasswordField fx:id="passwordTextField" GridPane.rowIndex="6"/>
+        <ButtonBar prefHeight="40.0" prefWidth="400.0" GridPane.rowIndex="7">
+            <buttons>
+                <Button fx:id="loginButton" mnemonicParsing="false" onAction="#handleLogin"
+                        styleClass="button, loginButton" text="%login.login.button"/>
+                <Button fx:id="signUpButton" mnemonicParsing="false" onAction="#handleSignUp"
+                        styleClass="button, signUpButton" text="%login.signup.button"/>
+            </buttons>
+            <GridPane.margin>
+                <Insets top="20.0"/>
+            </GridPane.margin>
+            <padding>
+                <Insets top="20.0"/>
+            </padding>
+        </ButtonBar>
+        <Label fx:id="errorLabel" styleClass="errorLabel" textFill="#b20b0b" wrapText="true" GridPane.rowIndex="8">
+            <GridPane.margin>
+                <Insets top="30.0"/>
+            </GridPane.margin>
+            <font>
+                <Font size="14.0"/>
+            </font>
+            <padding>
+                <Insets top="20.0"/>
+            </padding>
+        </Label>
+        <padding>
+            <Insets left="20.0" right="20.0"/>
+        </padding>
+    </VBox>
+</AnchorPane>

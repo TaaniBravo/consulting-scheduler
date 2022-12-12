@@ -11,6 +11,8 @@ module edu.wgu.tmaama {
       javafx.fxml;
   opens css to
       javafx.fxml;
+  opens fonts to
+          javafx.fxml;
   opens db to
       java.sql;
 

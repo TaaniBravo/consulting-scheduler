@@ -1,14 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<GridPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="edu.wgu.tmaama.controllers.fxml.HomeController"
-            prefHeight="400.0" prefWidth="600.0">
-
-</GridPane>
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="edu.wgu.tmaama.controllers.fxml.HomeController">
+    <VBox AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.leftAnchor="0">
+        <GridPane>
+            <columnConstraints>
+                <ColumnConstraints minWidth="10.0" prefWidth="100.0"/>
+                <ColumnConstraints minWidth="10.0" prefWidth="100.0"/>
+                <ColumnConstraints minWidth="10.0" prefWidth="100.0"/>
+            </columnConstraints>
+            <GridPane>
+                <columnConstraints>
+                    <ColumnConstraints minWidth="10.0" prefWidth="100.0"/>
+                    <ColumnConstraints minWidth="10.0" prefWidth="100.0"/>
+                    <ColumnConstraints minWidth="10.0" prefWidth="100.0"/>
+                </columnConstraints>
+            </GridPane>
+        </GridPane>
+        <GridPane>
+            <columnConstraints>
+                <ColumnConstraints minWidth="10.0" prefWidth="100.0"/>
+                <ColumnConstraints minWidth="10.0" prefWidth="100.0"/>
+                <ColumnConstraints minWidth="10.0" prefWidth="100.0"/>
+            </columnConstraints>
+        </GridPane>
+    </VBox>
+</AnchorPane>
