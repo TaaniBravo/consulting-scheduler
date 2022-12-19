@@ -1,30 +1,82 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="edu.wgu.tmaama.controllers.fxml.HomeController">
-    <VBox AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.leftAnchor="0">
-        <GridPane>
-            <columnConstraints>
-                <ColumnConstraints minWidth="10.0" prefWidth="100.0"/>
-                <ColumnConstraints minWidth="10.0" prefWidth="100.0"/>
-                <ColumnConstraints minWidth="10.0" prefWidth="100.0"/>
-            </columnConstraints>
-            <GridPane>
-                <columnConstraints>
-                    <ColumnConstraints minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints minWidth="10.0" prefWidth="100.0"/>
-                    <ColumnConstraints minWidth="10.0" prefWidth="100.0"/>
-                </columnConstraints>
-            </GridPane>
-        </GridPane>
-        <GridPane>
-            <columnConstraints>
-                <ColumnConstraints minWidth="10.0" prefWidth="100.0"/>
-                <ColumnConstraints minWidth="10.0" prefWidth="100.0"/>
-                <ColumnConstraints minWidth="10.0" prefWidth="100.0"/>
-            </columnConstraints>
-        </GridPane>
+<AnchorPane prefHeight="1000.0" prefWidth="1000.0" stylesheets="@../css/Home.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wgu.tmaama.controllers.fxml.HomeController">
+    <VBox AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
+        <HBox spacing="50.0">
+            <Label fx:id="usernameLabel" prefWidth="331.0" text="username">
+                <graphic>
+                    <Button mnemonicParsing="false" onAction="#handleSignOut" styleClass="signOutButton" text="%home.signout" />
+                </graphic>
+                <padding>
+                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                </padding>
+                <HBox.margin>
+                    <Insets />
+                </HBox.margin>
+            </Label>
+            <HBox />
+            <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefWidth="388.0" text="%app.name" GridPane.columnIndex="2">
+                <padding>
+                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                </padding>
+            </Label>
+        </HBox>
+        <VBox fx:id="customerButtonPane" alignment="CENTER">
+            <ButtonBar buttonMinWidth="40.0">
+                <buttons>
+                    <TextField fx:id="searchCustomerTextField" prefHeight="25.0" prefWidth="461.0" text="Search for Customer ID, Name, Or Address" ButtonBar.buttonData="LEFT" />
+                    <Button onAction="#handleAddCustomer" text="%home.customer.add" />
+                    <Button onAction="#handleUpdateCustomer" text="%home.customer.update" />
+                    <Button onAction="#handleDeleteCustomer" styleClass="deleteButton" text="%home.customer.delete" />
+                </buttons>
+            </ButtonBar>
+            <TableView fx:id="customerTableView">
+            <VBox.margin>
+               <Insets top="20.0" />
+            </VBox.margin>
+            <columns>
+                <TableColumn fx:id="customerIdTableCol" text="Customer ID"/>
+                <TableColumn fx:id="customerNameTableCol" text="Customer Name"/>
+                <TableColumn fx:id="customerAddressTableCol" text="Address"/>
+                <TableColumn fx:id="customerPostalCodeTableCol" text="Postal Code"/>
+                <TableColumn fx:id="customerPhoneTableCol" text="Phone"/>
+                <TableColumn fx:id="customerDivisionTableCol" text="Division" />
+            </columns>
+            </TableView>
+            <padding>
+                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+            </padding>
+        </VBox>
+        <VBox fx:id="appointmentButtonPane" alignment="CENTER">
+            <ButtonBar buttonMinWidth="40.0">
+                <buttons>
+                    <TextField fx:id="searchAppointmentTextField" prefHeight="25.0" prefWidth="381.0" text="Search for Appointment ID, Start, End" ButtonBar.buttonData="LEFT" />
+                    <Button text="%home.appointment.add" />
+                    <Button text="%home.appointment.update" />
+                    <Button styleClass="deleteButton" text="%home.appointment.delete" />
+                </buttons>
+            </ButtonBar>
+            <TableView>
+            <VBox.margin>
+               <Insets top="20.0" />
+            </VBox.margin>
+            <columns>
+                <TableColumn fx:id="appointmentIdTableCol" text="Appointment ID"/>
+                <TableColumn fx:id="appointmentTitleTableCol" text="Title"/>
+                <TableColumn fx:id="appointmentDescTableCol" text="Description"/>
+                <TableColumn fx:id="appointmentLocationTableCol" text="Location"/>
+                <TableColumn fx:id="appointmentTypeTableCol" text="Type"/>
+                <TableColumn fx:id="appointmentStartTableCol" text="Start" />
+                <TableColumn fx:id="appointmentEndTableCol" text="End" />
+            </columns>
+            </TableView>
+            <padding>
+                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+            </padding>
+        </VBox>
     </VBox>
 </AnchorPane>

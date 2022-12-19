@@ -1,6 +1,5 @@
 package edu.wgu.tmaama.db.Customer.dao;
 
-import edu.wgu.tmaama.db.Appointment.model.Appointment;
 import edu.wgu.tmaama.db.Customer.model.Customer;
 import edu.wgu.tmaama.db.Database;
 
@@ -9,8 +8,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class ConcreteCustomerDAO implements CustomerDAO {
+  public static final String CUSTOMER_ID = "Customer_ID";
+  public static final String CUSTOMER_NAME = "Customer_Name";
+  public static final String LIMIT = "LIMIT";
+  public static final String OFFSET = "OFFSET";
   private final Database db = new Database();
   private Connection cxn = db.getConnection();
 
@@ -53,15 +58,42 @@ public class ConcreteCustomerDAO implements CustomerDAO {
 
   @Override
   public ArrayList<Customer> findAll() throws SQLException {
-    if (!this.db.checkConnection()) this.db.getConnection();
-    ArrayList<Customer> customers = new ArrayList<>();
-    String query = "SELECT * FROM Customers";
-    ResultSet resultSet = this.cxn.createStatement().executeQuery(query);
-    while (resultSet.next()) {
-      customers.add(this.getInstanceFromResultSet(resultSet));
+    try {
+      if (!this.db.checkConnection()) this.db.getConnection();
+      ArrayList<Customer> customers = new ArrayList<>();
+      String query = "SELECT * FROM Customers";
+      ResultSet resultSet = this.cxn.createStatement().executeQuery(query);
+      while (resultSet.next()) {
+        customers.add(this.getInstanceFromResultSet(resultSet));
+      }
+      return customers;
+    } finally {
+      this.db.closeConnection();
     }
-    this.db.closeConnection();
-    return customers;
+  }
+
+  public List<Customer> findAll(HashMap<String, String> options) throws SQLException {
+    try {
+      if (!this.db.checkConnection()) this.db.getConnection();
+      ArrayList<Customer> customers = new ArrayList<>();
+      StringBuilder query =
+          new StringBuilder(
+              "SELECT c.*, fld.Division "
+                  + "FROM Customers c "
+                  + "JOIN First_Level_Divisions fld "
+                  + "ON c.Division_ID = fld.Division_ID");
+
+      String queryOptions = this.buildOptions(options);
+      query.append(queryOptions);
+
+      ResultSet resultSet = this.cxn.createStatement().executeQuery(query.toString());
+      while (resultSet.next()) {
+        customers.add(this.getInstanceFromResultSet(resultSet));
+      }
+      return customers;
+    } finally {
+      this.db.closeConnection();
+    }
   }
 
   @Override
@@ -102,7 +134,7 @@ public class ConcreteCustomerDAO implements CustomerDAO {
 
   @Override
   public Customer getInstanceFromResultSet(ResultSet resultSet) throws SQLException {
-    return new Customer(
+    Customer customer = new Customer(
         resultSet.getInt("Customer_ID"),
         resultSet.getString("Customer_Name"),
         resultSet.getString("Address"),
@@ -113,5 +145,34 @@ public class ConcreteCustomerDAO implements CustomerDAO {
         resultSet.getTimestamp("Last_Update"),
         resultSet.getString("Last_Updated_By"),
         resultSet.getInt("Division_ID"));
+
+    String division = resultSet.getString("Division");
+    if (division != null) customer.setDivision(division);
+    return customer;
+  }
+
+  private String buildOptions(HashMap<String, String> options) {
+    if (options == null) return "";
+    StringBuilder queryOptions = new StringBuilder();
+
+    if (options.containsKey(CUSTOMER_NAME)) {
+      if (!queryOptions.toString().contains("WHERE")) queryOptions.append("WHERE ");
+      else queryOptions.append("AND ");
+
+      queryOptions.append(CUSTOMER_NAME).append(" = '").append(options.get(CUSTOMER_NAME)).append("'");
+    }
+
+    if (options.containsKey(LIMIT))
+      try {
+        String limit = options.get(LIMIT);
+        int value = Integer.parseInt(limit);
+        queryOptions.append(" LIMIT ").append(value);
+        if (options.containsKey(OFFSET))
+          queryOptions.append(", ").append(options.get(OFFSET));
+      } catch (NumberFormatException ex) {
+        ex.printStackTrace();
+      }
+
+    return queryOptions.toString();
   }
 }

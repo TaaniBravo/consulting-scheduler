@@ -1,10 +1,5 @@
-@font-face {
-  font-family: 'Dancing Script Regular', cursive;
-  src: url('../fonts/DancingScript-Regular.ttf');
-}
-
 * {
-  -white: #FFFFFF;
+  -white: #FFFFF6;
   -purple: #C55FFC;
   -purple-hover: #9b58bf;
   -purple-haze: #EFDCF9;
@@ -25,8 +20,8 @@
 }
 
 .title {
-  -fx-font-size: 72;
   -fx-font-family: 'Dancing Script Regular';
+  -fx-font-size: 72;
   -fx-text-fill: -main-font-color;
 }
 
@@ -46,31 +41,25 @@
   -fx-cursor: hand;
   -fx-border-color: black;
   -fx-border-width: 1px;
+  -fx-padding: 7px 15px;
   -fx-border-radius: 2em;
   -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
 }
 
-.loginButton {
-  -fx-background-color: -purple;
-  -fx-text-fill: -white;
-  -fx-border: none;
-}
-
-.loginButton:hover, .loginButton:focused {
-  -fx-background-color: -purple-hover;
-}
-
-.signUpButton {
+.signOutButton {
   -fx-background-color: -violet;
   -fx-text-fill: -white;
   -fx-border: none;
 }
 
-.signUpButton:hover, .signUpButton:focused {
+.signOutButton:hover, .signOutButton:focused {
   -fx-background-color: -violet-hover;
+  -fx-border-radius: 2em;
+  -fx-padding: 7px 15px;
 }
 
-.errorLabel {
-  -fx-text-fill: -red;
+.deleteButton {
+  -fx-text-fill: -white;
+  -fx-font-weight: bold;
+  -fx-background-color: -red;
 }
-
