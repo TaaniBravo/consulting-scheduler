@@ -28,10 +28,10 @@
         <VBox fx:id="customerButtonPane" alignment="CENTER">
             <ButtonBar buttonMinWidth="40.0">
                 <buttons>
-                    <TextField fx:id="searchCustomerTextField" prefHeight="25.0" prefWidth="461.0" text="Search for Customer ID, Name, Or Address" ButtonBar.buttonData="LEFT" />
+                    <TextField fx:id="searchCustomerTextField" prefHeight="25.0" prefWidth="461.0" promptText="Search for Customer ID or Name" ButtonBar.buttonData="LEFT" />
                     <Button onAction="#handleAddCustomer" text="%home.customer.add" />
-                    <Button onAction="#handleUpdateCustomer" text="%home.customer.update" />
-                    <Button onAction="#handleDeleteCustomer" styleClass="deleteButton" text="%home.customer.delete" />
+                    <Button onAction="#handleUpdateCustomer" text="%home.customer.update" disable="true" />
+                    <Button onAction="#handleDeleteCustomer" styleClass="deleteButton" text="%home.customer.delete" disable="true" />
                 </buttons>
             </ButtonBar>
             <TableView fx:id="customerTableView">
@@ -39,12 +39,12 @@
                <Insets top="20.0" />
             </VBox.margin>
             <columns>
-                <TableColumn fx:id="customerIdTableCol" text="Customer ID"/>
-                <TableColumn fx:id="customerNameTableCol" text="Customer Name"/>
-                <TableColumn fx:id="customerAddressTableCol" text="Address"/>
-                <TableColumn fx:id="customerPostalCodeTableCol" text="Postal Code"/>
-                <TableColumn fx:id="customerPhoneTableCol" text="Phone"/>
-                <TableColumn fx:id="customerDivisionTableCol" text="Division" />
+                <TableColumn fx:id="customerIdTableCol" text="%home.customer.id" prefWidth="100"/>
+                <TableColumn fx:id="customerNameTableCol" text="%home.customer.name" prefWidth="200"/>
+                <TableColumn fx:id="customerAddressTableCol" text="%home.customer.address" prefWidth="200"/>
+                <TableColumn fx:id="customerPostalCodeTableCol" text="%home.customer.postal" prefWidth="100"/>
+                <TableColumn fx:id="customerPhoneTableCol" text="%home.customer.phone" prefWidth="150"/>
+                <TableColumn fx:id="customerDivisionTableCol" text="%home.customer.division" prefWidth="200"/>
             </columns>
             </TableView>
             <padding>
@@ -54,24 +54,24 @@
         <VBox fx:id="appointmentButtonPane" alignment="CENTER">
             <ButtonBar buttonMinWidth="40.0">
                 <buttons>
-                    <TextField fx:id="searchAppointmentTextField" prefHeight="25.0" prefWidth="381.0" text="Search for Appointment ID, Start, End" ButtonBar.buttonData="LEFT" />
+                    <TextField fx:id="searchAppointmentTextField" prefHeight="25.0" prefWidth="381.0" promptText="Search for Appointment ID, Start, or End" ButtonBar.buttonData="LEFT" />
                     <Button text="%home.appointment.add" />
-                    <Button text="%home.appointment.update" />
-                    <Button styleClass="deleteButton" text="%home.appointment.delete" />
+                    <Button text="%home.appointment.update" disable="true" />
+                    <Button styleClass="deleteButton" text="%home.appointment.delete" disable="true" />
                 </buttons>
             </ButtonBar>
-            <TableView>
+            <TableView fx:id="appointmentTableView">
             <VBox.margin>
                <Insets top="20.0" />
             </VBox.margin>
             <columns>
-                <TableColumn fx:id="appointmentIdTableCol" text="Appointment ID"/>
-                <TableColumn fx:id="appointmentTitleTableCol" text="Title"/>
-                <TableColumn fx:id="appointmentDescTableCol" text="Description"/>
-                <TableColumn fx:id="appointmentLocationTableCol" text="Location"/>
-                <TableColumn fx:id="appointmentTypeTableCol" text="Type"/>
-                <TableColumn fx:id="appointmentStartTableCol" text="Start" />
-                <TableColumn fx:id="appointmentEndTableCol" text="End" />
+                <TableColumn fx:id="appointmentIdTableCol" text="%home.appointment.id"/>
+                <TableColumn fx:id="appointmentTitleTableCol" text="%home.appointment.title"/>
+                <TableColumn fx:id="appointmentDescTableCol" text="%home.appointment.desc"/>
+                <TableColumn fx:id="appointmentLocationTableCol" text="%home.appointment.location"/>
+                <TableColumn fx:id="appointmentTypeTableCol" text="%home.appointment.type"/>
+                <TableColumn fx:id="appointmentStartTableCol" text="%home.appointment.start" />
+                <TableColumn fx:id="appointmentEndTableCol" text="%home.appointment.end" />
             </columns>
             </TableView>
             <padding>

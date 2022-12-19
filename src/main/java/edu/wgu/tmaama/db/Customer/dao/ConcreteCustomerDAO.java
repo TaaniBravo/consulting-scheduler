@@ -86,6 +86,7 @@ public class ConcreteCustomerDAO implements CustomerDAO {
       String queryOptions = this.buildOptions(options);
       query.append(queryOptions);
 
+      System.out.println(query);
       ResultSet resultSet = this.cxn.createStatement().executeQuery(query.toString());
       while (resultSet.next()) {
         customers.add(this.getInstanceFromResultSet(resultSet));
@@ -156,10 +157,10 @@ public class ConcreteCustomerDAO implements CustomerDAO {
     StringBuilder queryOptions = new StringBuilder();
 
     if (options.containsKey(CUSTOMER_NAME)) {
-      if (!queryOptions.toString().contains("WHERE")) queryOptions.append("WHERE ");
+      if (!queryOptions.toString().contains("WHERE")) queryOptions.append(" WHERE ");
       else queryOptions.append("AND ");
 
-      queryOptions.append(CUSTOMER_NAME).append(" = '").append(options.get(CUSTOMER_NAME)).append("'");
+      queryOptions.append(CUSTOMER_NAME).append(" LIKE '%").append(options.get(CUSTOMER_NAME)).append("%'");
     }
 
     if (options.containsKey(LIMIT))
