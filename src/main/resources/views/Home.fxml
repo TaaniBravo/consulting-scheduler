@@ -4,78 +4,86 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="1000.0" prefWidth="1000.0" stylesheets="@../css/Home.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wgu.tmaama.controllers.fxml.HomeController">
+<AnchorPane prefHeight="1000.0" prefWidth="1000.0" stylesheets="@../css/Home.css" xmlns="http://javafx.com/javafx/16"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wgu.tmaama.controllers.fxml.HomeController">
     <VBox AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
         <HBox spacing="50.0">
             <Label fx:id="usernameLabel" prefWidth="331.0" text="username">
                 <graphic>
-                    <Button mnemonicParsing="false" onAction="#handleSignOut" styleClass="signOutButton" text="%home.signout" />
+                    <Button mnemonicParsing="false" onAction="#handleSignOut" styleClass="signOutButton"
+                            text="%home.signout"/>
                 </graphic>
                 <padding>
-                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
                 </padding>
                 <HBox.margin>
-                    <Insets />
+                    <Insets/>
                 </HBox.margin>
             </Label>
-            <HBox />
-            <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefWidth="388.0" text="%app.name" GridPane.columnIndex="2">
+            <HBox/>
+            <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefWidth="388.0" text="%app.name"
+                   GridPane.columnIndex="2">
                 <padding>
-                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
                 </padding>
             </Label>
         </HBox>
         <VBox fx:id="customerButtonPane" alignment="CENTER">
             <ButtonBar buttonMinWidth="40.0">
                 <buttons>
-                    <TextField fx:id="searchCustomerTextField" prefHeight="25.0" prefWidth="461.0" promptText="Search for Customer ID or Name" ButtonBar.buttonData="LEFT" />
-                    <Button onAction="#handleAddCustomer" text="%home.customer.add" />
-                    <Button onAction="#handleUpdateCustomer" text="%home.customer.update" disable="true" />
-                    <Button onAction="#handleDeleteCustomer" styleClass="deleteButton" text="%home.customer.delete" disable="true" />
+                    <TextField fx:id="searchCustomerTextField" prefHeight="25.0" prefWidth="461.0"
+                               promptText="Search for Customer ID or Name" ButtonBar.buttonData="LEFT"/>
+                    <Button onAction="#handleAddCustomer" text="%home.customer.add"/>
+                    <Button fx:id="updateCustomerButton" onAction="#handleUpdateCustomer" text="%home.customer.update"
+                            disable="true"/>
+                    <Button fx:id="deleteCustomerButton" onAction="#handleDeleteCustomer" styleClass="deleteButton"
+                            text="%home.customer.delete" disable="true"/>
                 </buttons>
             </ButtonBar>
-            <TableView fx:id="customerTableView">
-            <VBox.margin>
-               <Insets top="20.0" />
-            </VBox.margin>
-            <columns>
-                <TableColumn fx:id="customerIdTableCol" text="%home.customer.id" prefWidth="100"/>
-                <TableColumn fx:id="customerNameTableCol" text="%home.customer.name" prefWidth="200"/>
-                <TableColumn fx:id="customerAddressTableCol" text="%home.customer.address" prefWidth="200"/>
-                <TableColumn fx:id="customerPostalCodeTableCol" text="%home.customer.postal" prefWidth="100"/>
-                <TableColumn fx:id="customerPhoneTableCol" text="%home.customer.phone" prefWidth="150"/>
-                <TableColumn fx:id="customerDivisionTableCol" text="%home.customer.division" prefWidth="200"/>
-            </columns>
+            <TableView fx:id="customerTableView" onKeyPressed="#handleSelectedCustomer" onMouseClicked="#handleSelectedCustomer">
+                <VBox.margin>
+                    <Insets top="20.0"/>
+                </VBox.margin>
+                <columns>
+                    <TableColumn fx:id="customerIdTableCol" text="%home.customer.id" prefWidth="100"/>
+                    <TableColumn fx:id="customerNameTableCol" text="%home.customer.name" prefWidth="200"/>
+                    <TableColumn fx:id="customerAddressTableCol" text="%home.customer.address" prefWidth="200"/>
+                    <TableColumn fx:id="customerPostalCodeTableCol" text="%home.customer.postal" prefWidth="100"/>
+                    <TableColumn fx:id="customerPhoneTableCol" text="%home.customer.phone" prefWidth="150"/>
+                    <TableColumn fx:id="customerDivisionTableCol" text="%home.customer.division" prefWidth="200"/>
+                </columns>
             </TableView>
             <padding>
-                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
             </padding>
         </VBox>
         <VBox fx:id="appointmentButtonPane" alignment="CENTER">
             <ButtonBar buttonMinWidth="40.0">
                 <buttons>
-                    <TextField fx:id="searchAppointmentTextField" prefHeight="25.0" prefWidth="381.0" promptText="Search for Appointment ID, Start, or End" ButtonBar.buttonData="LEFT" />
-                    <Button text="%home.appointment.add" />
-                    <Button text="%home.appointment.update" disable="true" />
-                    <Button styleClass="deleteButton" text="%home.appointment.delete" disable="true" />
+                    <TextField fx:id="searchAppointmentTextField" prefHeight="25.0" prefWidth="381.0"
+                               promptText="Search for Appointment ID, Start, or End" ButtonBar.buttonData="LEFT"/>
+                    <Button text="%home.appointment.add"/>
+                    <Button fx:id="updateAppointmentButton" text="%home.appointment.update" disable="true"/>
+                    <Button fx:id="deleteAppointmentButton" styleClass="deleteButton" text="%home.appointment.delete"
+                            disable="true"/>
                 </buttons>
             </ButtonBar>
-            <TableView fx:id="appointmentTableView">
-            <VBox.margin>
-               <Insets top="20.0" />
-            </VBox.margin>
-            <columns>
-                <TableColumn fx:id="appointmentIdTableCol" text="%home.appointment.id"/>
-                <TableColumn fx:id="appointmentTitleTableCol" text="%home.appointment.title"/>
-                <TableColumn fx:id="appointmentDescTableCol" text="%home.appointment.desc"/>
-                <TableColumn fx:id="appointmentLocationTableCol" text="%home.appointment.location"/>
-                <TableColumn fx:id="appointmentTypeTableCol" text="%home.appointment.type"/>
-                <TableColumn fx:id="appointmentStartTableCol" text="%home.appointment.start" />
-                <TableColumn fx:id="appointmentEndTableCol" text="%home.appointment.end" />
-            </columns>
+            <TableView fx:id="appointmentTableView" onKeyPressed="#handleSelectedAppointment" onMouseClicked="#handleSelectedAppointment">
+                <VBox.margin>
+                    <Insets top="20.0"/>
+                </VBox.margin>
+                <columns>
+                    <TableColumn fx:id="appointmentIdTableCol" text="%home.appointment.id"/>
+                    <TableColumn fx:id="appointmentTitleTableCol" text="%home.appointment.title"/>
+                    <TableColumn fx:id="appointmentDescTableCol" text="%home.appointment.desc"/>
+                    <TableColumn fx:id="appointmentLocationTableCol" text="%home.appointment.location"/>
+                    <TableColumn fx:id="appointmentTypeTableCol" text="%home.appointment.type"/>
+                    <TableColumn fx:id="appointmentStartTableCol" text="%home.appointment.start"/>
+                    <TableColumn fx:id="appointmentEndTableCol" text="%home.appointment.end"/>
+                </columns>
             </TableView>
             <padding>
-                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
             </padding>
         </VBox>
     </VBox>

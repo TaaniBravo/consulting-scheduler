@@ -1,6 +1,7 @@
 package edu.wgu.tmaama.controllers.fxml;
 
 import edu.wgu.tmaama.Scheduler;
+import edu.wgu.tmaama.db.Appointment.dao.ConcreteAppointmentDAO;
 import edu.wgu.tmaama.db.Appointment.model.Appointment;
 import edu.wgu.tmaama.db.Customer.dao.ConcreteCustomerDAO;
 import edu.wgu.tmaama.db.Customer.model.Customer;
@@ -15,11 +16,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -41,6 +40,10 @@ public class HomeController {
     private TableView<Customer> customerTableView;
     @FXML
     private VBox customerButtonPane;
+    @FXML
+    private Button updateCustomerButton;
+    @FXML
+    private Button deleteCustomerButton;
     @FXML
     private TableColumn<Customer, Integer> customerIdTableCol;
     @FXML
@@ -72,25 +75,37 @@ public class HomeController {
     @FXML
     private TableColumn<Appointment, Timestamp> appointmentEndTableCol;
     @FXML
+    private Button updateAppointmentButton;
+    @FXML
+    private Button deleteAppointmentButton;
+    @FXML
     private Label usernameLabel;
     private Parent pane;
     private Scene scene;
     private Stage primaryStage;
     private User sessionUser;
+    private Customer selectedCustomer;
     private ObservableList<Customer> customers;
-    private ArrayList<Appointment> appointments;
+    private ObservableList<Appointment> appointments;
+    private Appointment selectedAppointment;
 
     public void initialize() {
         this.initializeCustomerTable();
         this.initializeCustomerSearchBar();
         this.initializeAppointmentTable();
+        this.initializeAppointmentSearchBar();
 
         //    this.searchAppointmentTextField.textProperty().addListener();
     }
 
     private void setCustomers(ObservableList<Customer> customers) {
         this.customers = customers;
-        this.customerTableView.setItems(customers);
+        this.customerTableView.setItems(this.customers);
+    }
+
+    private void setAppointments(ObservableList<Appointment> appointments) {
+        this.appointments = appointments;
+        this.appointmentTableView.setItems(this.appointments);
     }
 
     public User getSessionUser() {
@@ -226,9 +241,21 @@ public class HomeController {
     }
 
     private void initializeAppointmentTable() {
+        this.appointmentIdTableCol.setCellValueFactory(new PropertyValueFactory<>("appointmentID"));
+        this.appointmentTitleTableCol.setCellValueFactory(new PropertyValueFactory<>("title"));
+        this.appointmentDescTableCol.setCellValueFactory(new PropertyValueFactory<>("description"));
+        this.appointmentLocationTableCol.setCellValueFactory(new PropertyValueFactory<>("location"));
+        this.appointmentTypeTableCol.setCellValueFactory(new PropertyValueFactory<>("type"));
+        this.appointmentStartTableCol.setCellValueFactory(new PropertyValueFactory<>("start"));
+        this.appointmentEndTableCol.setCellValueFactory(new PropertyValueFactory<>("end"));
+
         Platform.runLater(() -> {
             this.setTableWidth(this.appointmentTableView);
         });
+    }
+
+    private void initializeAppointmentSearchBar() {
+
     }
 
     private void setTableWidth(TableView<?> table) {
@@ -238,6 +265,44 @@ public class HomeController {
         double calcColWidth = tableWidth / columns.size();
         for (var col : columns) {
             col.setPrefWidth(calcColWidth);
+        }
+    }
+
+    @FXML
+    private void handleSelectedCustomer() {
+        this.selectedCustomer = this.customerTableView.getSelectionModel().getSelectedItem();
+        if (this.selectedCustomer == null) {
+            this.updateCustomerButton.setDisable(true);
+            this.deleteCustomerButton.setDisable(true);
+            this.appointmentTableView.getItems().clear();
+            return;
+        }
+
+        this.updateCustomerButton.setDisable(false);
+        this.deleteCustomerButton.setDisable(false);
+        this.loadCustomerAppointments();
+    }
+
+    @FXML
+    private void handleSelectedAppointment() {
+        this.selectedAppointment = this.appointmentTableView.getSelectionModel().getSelectedItem();
+        if (this.selectedAppointment == null) {
+            this.updateAppointmentButton.setDisable(true);
+            this.deleteAppointmentButton.setDisable(true);
+            return;
+        }
+
+        this.updateAppointmentButton.setDisable(false);
+        this.deleteAppointmentButton.setDisable(false);
+    }
+
+    private void loadCustomerAppointments() {
+        try {
+            ConcreteAppointmentDAO appointmentDAO = new ConcreteAppointmentDAO();
+            ObservableList<Appointment> appointments = FXCollections.observableArrayList(appointmentDAO.findAppointmentsByCustomerID(this.selectedCustomer.getCustomerID()));
+            this.setAppointments(appointments);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
     }
 }
