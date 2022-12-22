@@ -19,9 +19,9 @@ public class Scheduler extends Application {
         FXMLLoader loader = new FXMLLoader(Scheduler.class.getResource("/views/Login.fxml"));
         loader.setResources(ResourceBundle.getBundle("bundles/translate"));
         Scene scene = new Scene(loader.load());
-//        scene.getStylesheets().add(String.valueOf(getClass().getResource("/css/Login.css")));
         scene.getStylesheets().add(String.valueOf(getClass().getResource("/fonts/DancingScript-Regular.ttf")));
         stage.setScene(scene);
+        stage.setTitle("Client Scheduler");
         LoginController loginController = loader.getController();
         loginController.setPrimaryStage(stage);
         stage.show();

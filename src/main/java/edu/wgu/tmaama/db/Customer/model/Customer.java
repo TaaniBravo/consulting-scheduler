@@ -54,17 +54,17 @@ public class Customer {
   }
 
   public Customer(
-    int customerID,
-    String customerName,
-    String address,
-    String postalCode,
-    String phone,
-    Timestamp createDate,
-    String createdBy,
-    Timestamp lastUpdate,
-    String lastUpdatedBy,
-    int divisionID,
-    String division) {
+      int customerID,
+      String customerName,
+      String address,
+      String postalCode,
+      String phone,
+      Timestamp createDate,
+      String createdBy,
+      Timestamp lastUpdate,
+      String lastUpdatedBy,
+      int divisionID,
+      String division) {
     this.customerID = customerID;
     this.customerName = customerName;
     this.address = address;
@@ -77,6 +77,8 @@ public class Customer {
     this.divisionID = divisionID;
     this.division = division;
   }
+
+  public Customer() {}
 
   public int getCustomerID() {
     return customerID;

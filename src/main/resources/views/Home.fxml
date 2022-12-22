@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="1000.0" prefWidth="1000.0" stylesheets="@../css/Home.css" xmlns="http://javafx.com/javafx/16"
+<AnchorPane styleClass="mainPane" prefHeight="1000.0" prefWidth="1000.0" stylesheets="@../css/Home.css" xmlns="http://javafx.com/javafx/16"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wgu.tmaama.controllers.fxml.HomeController">
     <VBox AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
         <HBox spacing="50.0">
@@ -45,12 +45,12 @@
                     <Insets top="20.0"/>
                 </VBox.margin>
                 <columns>
-                    <TableColumn fx:id="customerIdTableCol" text="%home.customer.id" prefWidth="100"/>
-                    <TableColumn fx:id="customerNameTableCol" text="%home.customer.name" prefWidth="200"/>
-                    <TableColumn fx:id="customerAddressTableCol" text="%home.customer.address" prefWidth="200"/>
-                    <TableColumn fx:id="customerPostalCodeTableCol" text="%home.customer.postal" prefWidth="100"/>
-                    <TableColumn fx:id="customerPhoneTableCol" text="%home.customer.phone" prefWidth="150"/>
-                    <TableColumn fx:id="customerDivisionTableCol" text="%home.customer.division" prefWidth="200"/>
+                    <TableColumn fx:id="customerIdTableCol" text="%shared.customer.id" prefWidth="100"/>
+                    <TableColumn fx:id="customerNameTableCol" text="%shared.customer.name" prefWidth="200"/>
+                    <TableColumn fx:id="customerAddressTableCol" text="%shared.customer.address" prefWidth="200"/>
+                    <TableColumn fx:id="customerPostalCodeTableCol" text="%shared.customer.postal" prefWidth="100"/>
+                    <TableColumn fx:id="customerPhoneTableCol" text="%shared.customer.phone" prefWidth="150"/>
+                    <TableColumn fx:id="customerDivisionTableCol" text="%shared.customer.division" prefWidth="200"/>
                 </columns>
             </TableView>
             <padding>
@@ -73,13 +73,13 @@
                     <Insets top="20.0"/>
                 </VBox.margin>
                 <columns>
-                    <TableColumn fx:id="appointmentIdTableCol" text="%home.appointment.id"/>
-                    <TableColumn fx:id="appointmentTitleTableCol" text="%home.appointment.title"/>
-                    <TableColumn fx:id="appointmentDescTableCol" text="%home.appointment.desc"/>
-                    <TableColumn fx:id="appointmentLocationTableCol" text="%home.appointment.location"/>
-                    <TableColumn fx:id="appointmentTypeTableCol" text="%home.appointment.type"/>
-                    <TableColumn fx:id="appointmentStartTableCol" text="%home.appointment.start"/>
-                    <TableColumn fx:id="appointmentEndTableCol" text="%home.appointment.end"/>
+                    <TableColumn fx:id="appointmentIdTableCol" text="%shared.appointment.id"/>
+                    <TableColumn fx:id="appointmentTitleTableCol" text="%shared.appointment.title"/>
+                    <TableColumn fx:id="appointmentDescTableCol" text="%shared.appointment.desc"/>
+                    <TableColumn fx:id="appointmentLocationTableCol" text="%shared.appointment.location"/>
+                    <TableColumn fx:id="appointmentTypeTableCol" text="%shared.appointment.type"/>
+                    <TableColumn fx:id="appointmentStartTableCol" text="%shared.appointment.start"/>
+                    <TableColumn fx:id="appointmentEndTableCol" text="%shared.appointment.end"/>
                 </columns>
             </TableView>
             <padding>

@@ -3,10 +3,7 @@ package edu.wgu.tmaama.db.Customer.dao;
 import edu.wgu.tmaama.db.Customer.model.Customer;
 import edu.wgu.tmaama.db.Database;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,23 +20,30 @@ public class ConcreteCustomerDAO implements CustomerDAO {
 
   @Override
   public Customer insert(Customer customer) throws SQLException {
-    if (!this.db.checkConnection()) this.cxn = this.db.getConnection();
-    String query =
-        "INSERT INTO Customers "
-            + "(Customer_Name, Address, Postal_Code, Phone, Created_By, Division_ID) "
-            + "VALUES (?, ?, ?, ?, ?, ?)";
-    PreparedStatement stmt = this.cxn.prepareStatement(query);
-    stmt.setString(1, customer.getCustomerName());
-    stmt.setString(2, customer.getAddress());
-    stmt.setString(3, customer.getPostalCode());
-    stmt.setString(4, customer.getPhone());
-    stmt.setString(5, customer.getCreatedBy());
-    stmt.setInt(6, customer.getDivisionID());
-    ResultSet resultSet = stmt.executeQuery();
-    Customer newCustomer = null;
-    if (resultSet.next()) newCustomer = this.getInstanceFromResultSet(resultSet);
-    this.db.closeConnection();
-    return newCustomer;
+    try {
+      if (!this.db.checkConnection()) this.cxn = this.db.getConnection();
+      String query =
+          "INSERT INTO Customers "
+              + "(Customer_Name, Address, Postal_Code, Phone, Created_By, Last_Updated_By, Division_ID) "
+              + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+      PreparedStatement stmt = this.cxn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+      stmt.setString(1, customer.getCustomerName());
+      stmt.setString(2, customer.getAddress());
+      stmt.setString(3, customer.getPostalCode());
+      stmt.setString(4, customer.getPhone());
+      stmt.setString(5, customer.getCreatedBy());
+      stmt.setString(6, customer.getCreatedBy());
+      stmt.setInt(7, customer.getDivisionID());
+      int affectedRows = stmt.executeUpdate();
+      if (affectedRows == 0)
+        throw new SQLException("Creating a new customer failed, please try again.");
+      ResultSet results = stmt.getGeneratedKeys();
+      assert results != null;
+      if (results.next()) customer.setCustomerID(results.getInt(1));
+      return customer;
+    } finally {
+      this.db.closeConnection();
+    }
   }
 
   @Override
@@ -99,53 +103,64 @@ public class ConcreteCustomerDAO implements CustomerDAO {
 
   @Override
   public Customer update(Customer customer) throws SQLException {
-    String query =
-        "UPDATE Customers SET "
-            + "Customer_Name = ?,"
-            + "Address = ?,"
-            + "Postal_Code = ?,"
-            + "Phone = ?,"
-            + "Last_Updated_By = ?,"
-            + "Division_ID = ?,"
-            + "WHERE Customer_ID = ?";
-    PreparedStatement stmt = this.cxn.prepareStatement(query);
-    stmt.setString(1, customer.getCustomerName());
-    stmt.setString(2, customer.getAddress());
-    stmt.setString(3, customer.getPostalCode());
-    stmt.setString(4, customer.getPhone());
-    stmt.setString(5, customer.getLastUpdatedBy());
-    stmt.setInt(6, customer.getDivisionID());
-    stmt.setInt(7, customer.getCustomerID());
-    ResultSet results = stmt.executeQuery();
-    Customer updatedCustomer = null;
-    if (results.next()) updatedCustomer = this.getInstanceFromResultSet(results);
-    this.db.closeConnection();
-    return updatedCustomer;
+    try {
+      String query =
+          "UPDATE Customers SET "
+              + "Customer_Name = ?, "
+              + "Address = ?, "
+              + "Postal_Code = ?, "
+              + "Phone = ?, "
+              + "Last_Updated_By = ?, "
+              + "Division_ID = ? "
+              + "WHERE Customer_ID = ?";
+      PreparedStatement stmt = this.cxn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+      stmt.setString(1, customer.getCustomerName());
+      stmt.setString(2, customer.getAddress());
+      stmt.setString(3, customer.getPostalCode());
+      stmt.setString(4, customer.getPhone());
+      stmt.setString(5, customer.getLastUpdatedBy());
+      stmt.setInt(6, customer.getDivisionID());
+      stmt.setInt(7, customer.getCustomerID());
+      int affectedRows = stmt.executeUpdate();
+      if (affectedRows == 0)
+        throw new SQLException("Creating a new customer failed, please try again.");
+      ResultSet results = stmt.getGeneratedKeys();
+      assert results != null;
+      return customer;
+    } finally {
+      this.db.closeConnection();
+    }
   }
 
   @Override
   public boolean deleteByID(int id) throws SQLException {
-    String query = "DELETE FROM Customer WHERE Customer_ID = ?";
-    PreparedStatement stmt = this.cxn.prepareStatement(query);
-    stmt.setInt(1, id);
-    boolean success = stmt.execute();
-    this.db.closeConnection();
-    return success;
+    try {
+      String query = "DELETE FROM Customers WHERE Customer_ID = ?";
+      PreparedStatement stmt = this.cxn.prepareStatement(query);
+      stmt.setInt(1, id);
+      stmt.execute();
+      return true;
+    } catch (SQLException ex) {
+      return false;
+    } finally {
+      this.db.closeConnection();
+    }
   }
 
   @Override
   public Customer getInstanceFromResultSet(ResultSet resultSet) throws SQLException {
-    Customer customer = new Customer(
-        resultSet.getInt("Customer_ID"),
-        resultSet.getString("Customer_Name"),
-        resultSet.getString("Address"),
-        resultSet.getString("Postal_Code"),
-        resultSet.getString("Phone"),
-        resultSet.getTimestamp("Create_Date"),
-        resultSet.getString("Created_By"),
-        resultSet.getTimestamp("Last_Update"),
-        resultSet.getString("Last_Updated_By"),
-        resultSet.getInt("Division_ID"));
+    Customer customer =
+        new Customer(
+            resultSet.getInt("Customer_ID"),
+            resultSet.getString("Customer_Name"),
+            resultSet.getString("Address"),
+            resultSet.getString("Postal_Code"),
+            resultSet.getString("Phone"),
+            resultSet.getTimestamp("Create_Date"),
+            resultSet.getString("Created_By"),
+            resultSet.getTimestamp("Last_Update"),
+            resultSet.getString("Last_Updated_By"),
+            resultSet.getInt("Division_ID"));
 
     String division = resultSet.getString("Division");
     if (division != null) customer.setDivision(division);
@@ -160,7 +175,11 @@ public class ConcreteCustomerDAO implements CustomerDAO {
       if (!queryOptions.toString().contains("WHERE")) queryOptions.append(" WHERE ");
       else queryOptions.append("AND ");
 
-      queryOptions.append(CUSTOMER_NAME).append(" LIKE '%").append(options.get(CUSTOMER_NAME)).append("%'");
+      queryOptions
+          .append(CUSTOMER_NAME)
+          .append(" LIKE '%")
+          .append(options.get(CUSTOMER_NAME))
+          .append("%'");
     }
 
     if (options.containsKey(LIMIT))
@@ -168,8 +187,7 @@ public class ConcreteCustomerDAO implements CustomerDAO {
         String limit = options.get(LIMIT);
         int value = Integer.parseInt(limit);
         queryOptions.append(" LIMIT ").append(value);
-        if (options.containsKey(OFFSET))
-          queryOptions.append(", ").append(options.get(OFFSET));
+        if (options.containsKey(OFFSET)) queryOptions.append(", ").append(options.get(OFFSET));
       } catch (NumberFormatException ex) {
         ex.printStackTrace();
       }

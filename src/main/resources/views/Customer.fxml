@@ -1,14 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<AnchorPane prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="edu.wgu.tmaama.controllers.fxml.CustomerController">
+    <Label alignment="CENTER" contentDisplay="CENTER" text="%customer.title.add" textAlignment="CENTER"
+           AnchorPane.leftAnchor="40.0" AnchorPane.topAnchor="40.0"/>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="edu.wgu.tmaama.controllers.fxml.CustomerController"
-            prefHeight="400.0" prefWidth="600.0">
-
+    <VBox alignment="CENTER_LEFT" layoutY="-8.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="50.0"
+          AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="0.0">
+        <Label text="%shared.customer.id"/>
+        <TextField fx:id="idTextField" disable="true" editable="false" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="200.0"
+                   text="Auto Generated">
+            <VBox.margin>
+                <Insets bottom="16.0" top="4.0"/>
+            </VBox.margin>
+        </TextField>
+        <Label text="%shared.customer.name"/>
+        <TextField fx:id="nameTextField" maxWidth="-Infinity" prefWidth="200.0">
+            <VBox.margin>
+                <Insets bottom="16.0" top="4.0"/>
+            </VBox.margin>
+        </TextField>
+        <Label text="%shared.customer.address">
+            <VBox.margin>
+                <Insets/>
+            </VBox.margin>
+        </Label>
+        <TextField fx:id="addressTextField" prefWidth="200.0">
+            <VBox.margin>
+                <Insets bottom="16.0" top="4.0"/>
+            </VBox.margin>
+        </TextField>
+        <Label text="%shared.customer.postal"/>
+        <TextField fx:id="postalCodeTextField" prefWidth="200.0">
+            <VBox.margin>
+                <Insets bottom="16.0" left="1.0" top="4.0"/>
+            </VBox.margin>
+        </TextField>
+        <Label text="%shared.customer.phone"/>
+        <TextField fx:id="phoneTextField" prefWidth="200.0">
+            <VBox.margin>
+                <Insets bottom="16.0" top="4.0"/>
+            </VBox.margin>
+        </TextField>
+        <Label text="%shared.customer.division"/>
+        <ChoiceBox fx:id="divisionChoiceBox">
+            <VBox.margin>
+                <Insets bottom="16.0" top="4.0"/>
+            </VBox.margin>
+        </ChoiceBox>
+        <ButtonBar buttonMinWidth="32.0">
+            <buttons>
+                <Button onAction="#handleSubmit" mnemonicParsing="false" text="%shared.button.add"/>
+                <Button onAction="#handleReset" mnemonicParsing="false" text="%shared.button.reset"/>
+                <Button onAction="#handleCancel" cancelButton="true" mnemonicParsing="false" text="%shared.button.cancel"/>
+            </buttons>
+        </ButtonBar>
+    </VBox>
 </AnchorPane>

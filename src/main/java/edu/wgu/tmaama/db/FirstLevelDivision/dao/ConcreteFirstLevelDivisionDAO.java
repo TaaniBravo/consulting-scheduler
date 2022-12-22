@@ -1,6 +1,5 @@
 package edu.wgu.tmaama.db.FirstLevelDivision.dao;
 
-import edu.wgu.tmaama.db.Appointment.model.Appointment;
 import edu.wgu.tmaama.db.Database;
 import edu.wgu.tmaama.db.FirstLevelDivision.model.FirstLevelDivision;
 
@@ -10,17 +9,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class ConcreteFirstLevelDivision implements FirstLevelDivisionDAO {
+public class ConcreteFirstLevelDivisionDAO implements FirstLevelDivisionDAO {
   private final Database db = new Database();
   private Connection cxn = db.getConnection();
 
-  public ConcreteFirstLevelDivision() throws SQLException {}
+  public ConcreteFirstLevelDivisionDAO() throws SQLException {}
 
   @Override
   public FirstLevelDivision insert(FirstLevelDivision firstLevelDivision) throws SQLException {
     if (!this.db.checkConnection()) this.cxn = this.db.getConnection();
     String query =
-        "INSERT INTO Appointments " + "(Division, Created_By, Country_ID)" + " VALUES (?, ?, ?)";
+        "INSERT INTO First_Level_Divisions " + "(Division, Created_By, Country_ID)" + " VALUES (?, ?, ?)";
     PreparedStatement stmt = this.cxn.prepareStatement(query);
     stmt.setString(1, firstLevelDivision.getDivision());
     stmt.setString(2, firstLevelDivision.getCreatedBy());
@@ -35,7 +34,7 @@ public class ConcreteFirstLevelDivision implements FirstLevelDivisionDAO {
   @Override
   public FirstLevelDivision findByID(int id) throws SQLException {
     if (!this.db.checkConnection()) this.cxn = this.db.getConnection();
-    String query = "SELECT * FROM FirstLevelDivisions WHERE Division_ID = ?";
+    String query = "SELECT * FROM First_Level_Divisions WHERE Division_ID = ?";
     PreparedStatement stmt = this.cxn.prepareStatement(query);
     stmt.setInt(1, id);
     ResultSet result = stmt.executeQuery();
@@ -49,7 +48,7 @@ public class ConcreteFirstLevelDivision implements FirstLevelDivisionDAO {
   public ArrayList<FirstLevelDivision> findAll() throws SQLException {
     if (!this.db.checkConnection()) this.cxn = this.db.getConnection();
     ArrayList<FirstLevelDivision> divisions = new ArrayList<>();
-    String query = "SELECT * FROM FirstLevelDivision";
+    String query = "SELECT * FROM First_Level_Divisions";
     ResultSet resultSet = this.cxn.createStatement().executeQuery(query);
     while (resultSet.next()) {
       divisions.add(this.getInstanceFromResultSet(resultSet));
@@ -61,7 +60,7 @@ public class ConcreteFirstLevelDivision implements FirstLevelDivisionDAO {
   @Override
   public FirstLevelDivision update(FirstLevelDivision division) throws SQLException {
     String query =
-        "UPDATE FirstLevelDivisions SET "
+        "UPDATE First_Level_Divisions SET "
             + "Division = ?,"
             + "Last_Updated_By = ?,"
             + "Country_ID = ?,"
@@ -80,7 +79,7 @@ public class ConcreteFirstLevelDivision implements FirstLevelDivisionDAO {
 
   @Override
   public boolean deleteByID(int id) throws SQLException {
-    String query = "DELETE FROM FirstLevelDivisions WHERE Division_ID = ?";
+    String query = "DELETE FROM First_Level_Divisions WHERE Division_ID = ?";
     PreparedStatement stmt = this.cxn.prepareStatement(query);
     stmt.setInt(1, id);
     boolean success = stmt.execute();
