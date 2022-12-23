@@ -46,11 +46,11 @@
             </VBox.margin>
         </TextField>
         <Label text="%shared.customer.division"/>
-        <ChoiceBox fx:id="divisionChoiceBox">
+        <ComboBox fx:id="divisionComboBox">
             <VBox.margin>
                 <Insets bottom="16.0" top="4.0"/>
             </VBox.margin>
-        </ChoiceBox>
+        </ComboBox>
         <ButtonBar buttonMinWidth="32.0">
             <buttons>
                 <Button onAction="#handleSubmit" mnemonicParsing="false" text="%shared.button.add"/>

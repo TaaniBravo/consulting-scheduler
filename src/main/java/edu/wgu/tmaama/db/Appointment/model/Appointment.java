@@ -18,6 +18,8 @@ public class Appointment {
   private int userID;
   private int contactID;
 
+  public Appointment() {}
+
   public Appointment(
       String title,
       String description,

@@ -51,12 +51,10 @@ public class HomeController {
   @FXML private TableColumn<Appointment, String> appointmentTypeTableCol;
   @FXML private TableColumn<Appointment, Timestamp> appointmentStartTableCol;
   @FXML private TableColumn<Appointment, Timestamp> appointmentEndTableCol;
+  @FXML private Button addAppointmentButton;
   @FXML private Button updateAppointmentButton;
   @FXML private Button deleteAppointmentButton;
   @FXML private Label usernameLabel;
-  private Parent pane;
-  private Scene scene;
-  private Stage primaryStage;
   private User sessionUser;
   private Customer selectedCustomer;
   private ObservableList<Customer> customers;
@@ -98,11 +96,11 @@ public class HomeController {
     FXMLLoader loader =
         new FXMLLoader(Objects.requireNonNull(Scheduler.class.getResource("/views/Login.fxml")));
     loader.setResources(this.bundle);
-    this.pane = loader.load();
-    this.primaryStage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-    this.scene = new Scene(pane);
-    this.primaryStage.setScene(this.scene);
-    this.primaryStage.show();
+    Parent pane = loader.load();
+    Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+    Scene scene = new Scene(pane);
+    stage.setScene(scene);
+    stage.show();
   }
 
   private void redirectToCustomerPage(ActionEvent actionEvent, Customer customer)
@@ -129,16 +127,20 @@ public class HomeController {
     FXMLLoader loader =
         new FXMLLoader(
             Objects.requireNonNull(Scheduler.class.getResource("/views/Appointment.fxml")));
-    if (appointment != null) {
-      AppointmentController appointmentController = loader.getController();
-      appointmentController.setAppointment(appointment);
-    }
     loader.setResources(this.bundle);
-    this.pane = loader.load();
-    this.primaryStage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-    this.scene = new Scene(pane);
-    this.primaryStage.setScene(this.scene);
-    this.primaryStage.show();
+    Parent pane = loader.load();
+    AppointmentController appointmentController = loader.getController();
+    if (appointment != null) {
+      appointmentController.setAppointment(appointment);
+      appointmentController.setIsUpdating(true);
+    }
+    appointmentController.setSessionUser(this.getSessionUser());
+    Customer customer = this.customerTableView.getSelectionModel().getSelectedItem();
+    appointmentController.setCustomer(customer);
+    Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+    Scene scene = new Scene(pane);
+    stage.setScene(scene);
+    stage.show();
   }
 
   @FXML
@@ -192,7 +194,7 @@ public class HomeController {
       HashMap<String, String> options = new HashMap<>();
       options.put("LIMIT", "50");
       ObservableList<Customer> customers =
-        FXCollections.observableArrayList(customerDAO.findAll(options));
+          FXCollections.observableArrayList(customerDAO.findAll(options));
       this.setCustomers(customers);
     } catch (SQLException ex) {
       ex.printStackTrace();
@@ -265,12 +267,14 @@ public class HomeController {
     if (this.selectedCustomer == null) {
       this.updateCustomerButton.setDisable(true);
       this.deleteCustomerButton.setDisable(true);
+      this.addAppointmentButton.setDisable(true);
       this.appointmentTableView.getItems().clear();
       return;
     }
 
     this.updateCustomerButton.setDisable(false);
     this.deleteCustomerButton.setDisable(false);
+    this.addAppointmentButton.setDisable(false);
     this.loadCustomerAppointments();
   }
 
@@ -285,6 +289,19 @@ public class HomeController {
 
     this.updateAppointmentButton.setDisable(false);
     this.deleteAppointmentButton.setDisable(false);
+  }
+
+  @FXML
+  private void handleAddAppointment(ActionEvent event) throws IOException {
+    this.redirectToAppointmentPage(event, null);
+  }
+
+  @FXML
+  private void handleUpdateAppointment(ActionEvent event) throws IOException {
+    Appointment selectedAppointment = this.appointmentTableView.getSelectionModel().getSelectedItem();
+    if (selectedAppointment != null) {
+      this.redirectToAppointmentPage(event, selectedAppointment);
+    }
   }
 
   private void loadCustomerAppointments() {

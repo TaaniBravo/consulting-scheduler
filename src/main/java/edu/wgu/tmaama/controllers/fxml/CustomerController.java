@@ -15,6 +15,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -30,7 +31,7 @@ public class CustomerController {
   @FXML private TextField addressTextField;
   @FXML private TextField phoneTextField;
   @FXML private TextField postalCodeTextField;
-  @FXML private ChoiceBox<FirstLevelDivision> divisionChoiceBox;
+  @FXML private ComboBox<FirstLevelDivision> divisionComboBox;
   private Customer customer;
   private User sessionUser;
   private boolean isUpdating = false;
@@ -57,7 +58,7 @@ public class CustomerController {
     if (optional.isEmpty())
       throw new RuntimeException(
           "Customer's division could not be found. Contact administration to resolve.");
-    this.divisionChoiceBox.getSelectionModel().select(optional.get());
+    this.divisionComboBox.getSelectionModel().select(optional.get());
   }
 
   public void setSessionUser(User user) {
@@ -81,7 +82,7 @@ public class CustomerController {
     this.addressTextField.setText("");
     this.postalCodeTextField.setText("");
     this.phoneTextField.setText("");
-    this.divisionChoiceBox.getSelectionModel().clearSelection();
+    this.divisionComboBox.getSelectionModel().clearSelection();
   }
 
   @FXML
@@ -115,7 +116,7 @@ public class CustomerController {
     this.customer.setAddress(addressTextField.getText());
     this.customer.setPostalCode(postalCodeTextField.getText());
     this.customer.setPhone(phoneTextField.getText());
-    FirstLevelDivision selectedDivision = divisionChoiceBox.getSelectionModel().getSelectedItem();
+    FirstLevelDivision selectedDivision = divisionComboBox.getSelectionModel().getSelectedItem();
     this.customer.setDivision(selectedDivision.getDivision());
     this.customer.setDivisionID(selectedDivision.getDivisionID());
     this.customer.setLastUpdatedBy(sessionUser.getUsername());
@@ -131,7 +132,7 @@ public class CustomerController {
     try {
       ConcreteFirstLevelDivisionDAO divisionDAO = new ConcreteFirstLevelDivisionDAO();
       this.divisions = FXCollections.observableArrayList(divisionDAO.findAll());
-      this.divisionChoiceBox.setItems(this.divisions);
+      this.divisionComboBox.setItems(this.divisions);
     } catch (SQLException e) {
       throw new RuntimeException(e);
     }

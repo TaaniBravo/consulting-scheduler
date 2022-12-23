@@ -92,6 +92,6 @@ public class FirstLevelDivision {
 
   @Override
   public String toString() {
-    return this.division;
+    return this.divisionID + ". " + this.division;
   }
 }

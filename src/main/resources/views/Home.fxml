@@ -62,8 +62,8 @@
                 <buttons>
                     <TextField fx:id="searchAppointmentTextField" prefHeight="25.0" prefWidth="381.0"
                                promptText="Search for Appointment ID, Start, or End" ButtonBar.buttonData="LEFT"/>
-                    <Button text="%home.appointment.add"/>
-                    <Button fx:id="updateAppointmentButton" text="%home.appointment.update" disable="true"/>
+                    <Button fx:id="addAppointmentButton" onAction="#handleAddAppointment" text="%home.appointment.add" disable="true"/>
+                    <Button fx:id="updateAppointmentButton" onAction="#handleUpdateAppointment" text="%home.appointment.update" disable="true"/>
                     <Button fx:id="deleteAppointmentButton" styleClass="deleteButton" text="%home.appointment.delete"
                             disable="true"/>
                 </buttons>
