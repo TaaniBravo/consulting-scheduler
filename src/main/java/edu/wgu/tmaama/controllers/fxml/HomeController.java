@@ -267,14 +267,12 @@ public class HomeController {
     if (this.selectedCustomer == null) {
       this.updateCustomerButton.setDisable(true);
       this.deleteCustomerButton.setDisable(true);
-      this.addAppointmentButton.setDisable(true);
       this.appointmentTableView.getItems().clear();
       return;
     }
 
     this.updateCustomerButton.setDisable(false);
     this.deleteCustomerButton.setDisable(false);
-    this.addAppointmentButton.setDisable(false);
     this.loadCustomerAppointments();
   }
 

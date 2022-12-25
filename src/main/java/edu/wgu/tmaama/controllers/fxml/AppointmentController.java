@@ -10,6 +10,7 @@ import edu.wgu.tmaama.db.Customer.model.Customer;
 import edu.wgu.tmaama.db.Database;
 import edu.wgu.tmaama.db.User.dao.ConcreteUserDAO;
 import edu.wgu.tmaama.db.User.model.User;
+import edu.wgu.tmaama.utils.Modal;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -46,7 +47,7 @@ public class AppointmentController {
   @FXML private TextField startDate;
   @FXML private TextField endDate;
   @FXML private Label appointmentTitleLabel;
-  private ResourceBundle bundle;
+  private final ResourceBundle bundle = ResourceBundle.getBundle("/bundles/translate");
   private boolean isUpdating = false;
   private User sessionUser;
   private Customer customer;
@@ -92,7 +93,7 @@ public class AppointmentController {
       ConcreteCustomerDAO customerDAO = new ConcreteCustomerDAO(db);
       ObservableList<Customer> customers;
 
-      if (this.isUpdating) {
+      if (this.customer == null) {
         customers = FXCollections.observableArrayList(customerDAO.findAll());
       } else {
         Customer customer = customerDAO.findByID(this.customer.getCustomerID());
@@ -146,7 +147,14 @@ public class AppointmentController {
   }
 
   @FXML
-  private void handleSubmit(ActionEvent event) {
+  private void handleSubmit(ActionEvent event) throws Exception {
+    String validationStack = this.validateForm();
+    if (!validationStack.isBlank()) {
+      Modal modal = new Modal(Modal.ERROR, validationStack);
+      modal.display();
+      return;
+    }
+
     this.appointment.setTitle(this.titleTextField.getText());
     this.appointment.setDescription(this.descTextField.getText());
     this.appointment.setLocation(this.locationTextField.getText());
@@ -156,12 +164,8 @@ public class AppointmentController {
     this.appointment.setUserID(this.userComboBox.getSelectionModel().getSelectedItem().getUserID());
     this.appointment.setContactID(
         this.contactComboBox.getSelectionModel().getSelectedItem().getContactID());
-    try {
-      this.appointment.setStart(this.convertStringIntoTimestamp(this.startDate.getText()));
-      this.appointment.setEnd(this.convertStringIntoTimestamp(this.endDate.getText()));
-    } catch (Exception ex) {
-      // TODO: Handle error message to user.
-    }
+    this.appointment.setStart(this.convertStringIntoTimestamp(this.startDate.getText()));
+    this.appointment.setEnd(this.convertStringIntoTimestamp(this.endDate.getText()));
 
     if (this.isUpdating) this.updateAppointment(event);
     else this.addAppointment(event);
@@ -178,24 +182,33 @@ public class AppointmentController {
         Pattern.compile("\\d{4}-[0-1]\\d-[0-3]\\d [0-2]\\d:[0-5]\\d:[0-5]\\d");
     Matcher matcher = timestampPattern.matcher(datetime);
     boolean isValidTimestamp = matcher.find();
-    if (!isValidTimestamp) throw new Exception("Date and time given are not valid.");
+    if (!isValidTimestamp)
+      throw new Exception("Date and time given are not valid. Format is YYYY-MM-DD HH:MM:SS");
     return Timestamp.valueOf(datetime);
   }
 
   private void addAppointment(ActionEvent event) {
     try {
+      this.appointment.setCreatedBy(this.sessionUser.getUsername());
+      this.appointment.setLastUpdatedBy(this.sessionUser.getUsername());
       ConcreteAppointmentDAO appointmentDAO = new ConcreteAppointmentDAO();
       appointmentDAO.insert(this.appointment);
+      Modal modal = new Modal(Modal.SUCCESS, "Appointment was created.");
+      modal.display();
       this.redirectToHomePage(event);
     } catch (SQLException | IOException ex) {
       // TODO: display error message.
+      ex.printStackTrace();
     }
   }
 
   private void updateAppointment(ActionEvent event) {
     try {
+      this.appointment.setLastUpdatedBy(this.sessionUser.getUsername());
       ConcreteAppointmentDAO appointmentDAO = new ConcreteAppointmentDAO();
       appointmentDAO.update(this.appointment);
+      Modal modal = new Modal(Modal.SUCCESS, "Appointment was updated.");
+      modal.display();
       this.redirectToHomePage(event);
     } catch (SQLException | IOException ex) {
       // TODO: display error message.
@@ -205,7 +218,7 @@ public class AppointmentController {
   private void redirectToHomePage(ActionEvent event) throws IOException {
     FXMLLoader loader =
         new FXMLLoader(Objects.requireNonNull(Scheduler.class.getResource("/views/Home.fxml")));
-    loader.setResources(this.bundle);
+    loader.setResources(ResourceBundle.getBundle("bundles/translate"));
     Parent pane = loader.load();
     HomeController homeController = loader.getController();
     homeController.setSessionUser(this.sessionUser);
@@ -213,6 +226,42 @@ public class AppointmentController {
     Scene scene = new Scene(pane);
     stage.setScene(scene);
     stage.show();
+  }
+
+  private String validateForm() {
+    StringBuilder stringBuilder = new StringBuilder();
+    if (this.titleTextField.getText().isBlank()) stringBuilder.append("Title must be filled in.\n");
+    if (this.descTextField.getText().isBlank())
+      stringBuilder.append("Description must be filled in.\n");
+    if (this.locationTextField.getText().isBlank())
+      stringBuilder.append("Location must be filled in.\n");
+    if (this.typeTextField.getText().isBlank()) stringBuilder.append("Type must be filled in.\n");
+    if (this.startDate.getText().isBlank()) {
+      stringBuilder.append("Start date must be filled in.\n");
+    } else {
+      try {
+        this.convertStringIntoTimestamp(this.startDate.getText());
+      } catch (Exception ex) {
+        stringBuilder.append("Start ").append(ex.getMessage());
+      }
+    }
+    if (this.endDate.getText().isBlank()) {
+      stringBuilder.append("End date must be filled in.\n");
+    } else {
+      try {
+        this.convertStringIntoTimestamp(this.endDate.getText());
+      } catch (Exception ex) {
+        stringBuilder.append("End ").append(ex.getMessage());
+      }
+    }
+    if (this.customerComboBox.getSelectionModel().getSelectedItem() == null)
+      stringBuilder.append("Customer must be selected.\n");
+    if (this.userComboBox.getSelectionModel().getSelectedItem() == null)
+      stringBuilder.append("User must be selected.\n");
+    if (this.contactComboBox.getSelectionModel().getSelectedItem() == null)
+      stringBuilder.append("Contact must be selected.\n");
+
+    return stringBuilder.toString();
   }
 
   public void setSessionUser(User sessionUser) {

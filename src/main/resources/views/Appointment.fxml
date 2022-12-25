@@ -3,12 +3,16 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
 <AnchorPane prefWidth="800.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wgu.tmaama.controllers.fxml.AppointmentController">
     <Label fx:id="appointmentTitleLabel" alignment="CENTER" contentDisplay="CENTER" text="%appointment.title.add" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <padding>
          <Insets top="16.0" />
-      </padding></Label>
+      </padding>
+      <font>
+         <Font size="18.0" />
+      </font></Label>
     <VBox alignment="CENTER_LEFT" layoutY="-8.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="0.0">
         <Label text="%shared.appointment.id" />
         <TextField fx:id="idTextField" disable="true" editable="false" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="200.0" text="Auto Generated">
@@ -80,6 +84,9 @@
                 <Button mnemonicParsing="false" onAction="#handleReset" text="%shared.button.reset" />
                 <Button cancelButton="true" mnemonicParsing="false" onAction="#handleCancel" text="%shared.button.cancel" />
             </buttons>
+         <VBox.margin>
+            <Insets bottom="16.0" />
+         </VBox.margin>
         </ButtonBar>
       <padding>
          <Insets top="48.0" />
