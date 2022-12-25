@@ -10,10 +10,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class ConcreteContactDAO implements ContactDAO {
-  private final Database db = new Database();
+  private Database db = new Database();
   private Connection cxn = db.getConnection();
 
   public ConcreteContactDAO() throws SQLException {}
+
+  public ConcreteContactDAO(Database db) throws SQLException {
+    this.db = db;
+  }
 
   @Override
   public Contact insert(Contact contact) throws SQLException {

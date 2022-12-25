@@ -4,86 +4,85 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefWidth="800.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="edu.wgu.tmaama.controllers.fxml.AppointmentController">
-    <Label alignment="CENTER" contentDisplay="CENTER" text="%appointment.title.add" textAlignment="CENTER"
-           AnchorPane.leftAnchor="40.0" AnchorPane.topAnchor="40.0"/>
-
-    <VBox alignment="CENTER_LEFT" layoutY="-8.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="50.0"
-          AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="0.0">
-        <Label text="%shared.appointment.id"/>
-        <TextField fx:id="idTextField" disable="true" editable="false" maxWidth="-Infinity" minWidth="-Infinity"
-                   prefWidth="200.0" text="Auto Generated">
+<AnchorPane prefWidth="800.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wgu.tmaama.controllers.fxml.AppointmentController">
+    <Label fx:id="appointmentTitleLabel" alignment="CENTER" contentDisplay="CENTER" text="%appointment.title.add" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <padding>
+         <Insets top="16.0" />
+      </padding></Label>
+    <VBox alignment="CENTER_LEFT" layoutY="-8.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="0.0">
+        <Label text="%shared.appointment.id" />
+        <TextField fx:id="idTextField" disable="true" editable="false" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="200.0" text="Auto Generated">
             <VBox.margin>
-                <Insets bottom="16.0" top="4.0"/>
+                <Insets bottom="16.0" top="4.0" />
             </VBox.margin>
         </TextField>
-        <Label text="%shared.appointment.title"/>
-        <TextField fx:id="titleTextField" maxWidth="-Infinity" prefWidth="200.0">
+        <Label text="%shared.appointment.title" />
+        <TextField fx:id="titleTextField">
             <VBox.margin>
-                <Insets bottom="16.0" top="4.0"/>
+                <Insets bottom="16.0" top="4.0" />
             </VBox.margin>
         </TextField>
         <Label text="%shared.appointment.desc">
             <VBox.margin>
-                <Insets/>
+                <Insets />
             </VBox.margin>
         </Label>
         <TextField fx:id="descTextField" prefWidth="200.0">
             <VBox.margin>
-                <Insets bottom="16.0" top="4.0"/>
+                <Insets bottom="16.0" top="4.0" />
             </VBox.margin>
         </TextField>
-        <Label text="%shared.appointment.location"/>
+        <Label text="%shared.appointment.location" />
         <TextField fx:id="locationTextField" prefWidth="200.0">
             <VBox.margin>
-                <Insets bottom="16.0" left="1.0" top="4.0"/>
+                <Insets bottom="16.0" left="1.0" top="4.0" />
             </VBox.margin>
         </TextField>
-        <Label text="%shared.appointment.type"/>
+        <Label text="%shared.appointment.type" />
         <TextField fx:id="typeTextField" prefWidth="200.0">
             <VBox.margin>
-                <Insets bottom="16.0" top="4.0"/>
+                <Insets bottom="16.0" top="4.0" />
             </VBox.margin>
         </TextField>
         <FlowPane alignment="CENTER_LEFT" hgap="20.0">
-            <opaqueInsets>
-                <Insets/>
-            </opaqueInsets>
             <VBox.margin>
-                <Insets bottom="16.0"/>
+                <Insets bottom="16.0" />
             </VBox.margin>
-            <Label text="%shared.appointment.start"/>
-            <TextField fx:id="startDate" promptText="YYYY-MM-DD HH:MM:SS"/>
-            <Label text="%shared.appointment.end"/>
-            <TextField fx:id="endDate" promptText="YYYY-MM-DD HH:MM:SS"/>
+            <Label text="%shared.appointment.start" />
+            <TextField fx:id="startDate" promptText="YYYY-MM-DD HH:MM:SS" />
+            <Label text="%shared.appointment.end" />
+            <TextField fx:id="endDate" promptText="YYYY-MM-DD HH:MM:SS" />
         </FlowPane>
-        <FlowPane prefWidth="200.0">
+        <HBox alignment="CENTER_LEFT">
             <VBox.margin>
-                <Insets bottom="16.0"/>
+                <Insets bottom="16.0" />
             </VBox.margin>
-            <Label text="%shared.appointment.customer.id"/>
-            <ComboBox fx:id="customerIDTextField" prefWidth="200.0"/>
-        </FlowPane>
-        <Label text="%shared.appointment.user.id"/>
-        <TextField fx:id="userIDTextField" prefWidth="200.0">
+            <Label prefWidth="100.0" text="%shared.appointment.customer.id" />
+            <ComboBox fx:id="customerComboBox" prefWidth="200.0" promptText="Select a Customer" />
+        </HBox>
+        <HBox alignment="CENTER_LEFT">
             <VBox.margin>
-                <Insets bottom="16.0" top="4.0"/>
+                <Insets bottom="16.0" />
             </VBox.margin>
-        </TextField>
-        <Label text="%shared.appointment.contact.id"/>
-        <TextField fx:id="contactIDTextField" prefWidth="200.0">
+            <Label prefWidth="100.0" text="%shared.appointment.user.id" />
+            <ComboBox fx:id="userComboBox" prefWidth="200.0" promptText="Select a User" />
+        </HBox>
+        <HBox alignment="CENTER_LEFT">
             <VBox.margin>
-                <Insets bottom="16.0" top="4.0"/>
+                <Insets bottom="16.0" />
             </VBox.margin>
-        </TextField>
+            <Label prefWidth="100.0" text="%shared.appointment.contact.id" />
+            <ComboBox fx:id="contactComboBox" prefWidth="200.0" promptText="Select a Contact" />
+        </HBox>
         <ButtonBar buttonMinWidth="32.0">
             <buttons>
-                <Button mnemonicParsing="false" onAction="#handleSubmit" text="%shared.button.add"/>
-                <Button mnemonicParsing="false" onAction="#handleReset" text="%shared.button.reset"/>
-                <Button cancelButton="true" mnemonicParsing="false" onAction="#handleCancel"
-                        text="%shared.button.cancel"/>
+                <Button mnemonicParsing="false" onAction="#handleSubmit" text="%shared.button.add" />
+                <Button mnemonicParsing="false" onAction="#handleReset" text="%shared.button.reset" />
+                <Button cancelButton="true" mnemonicParsing="false" onAction="#handleCancel" text="%shared.button.cancel" />
             </buttons>
         </ButtonBar>
+      <padding>
+         <Insets top="48.0" />
+      </padding>
     </VBox>
 </AnchorPane>

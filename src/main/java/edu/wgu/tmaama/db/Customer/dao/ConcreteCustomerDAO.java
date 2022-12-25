@@ -13,10 +13,14 @@ public class ConcreteCustomerDAO implements CustomerDAO {
   public static final String CUSTOMER_NAME = "Customer_Name";
   public static final String LIMIT = "LIMIT";
   public static final String OFFSET = "OFFSET";
-  private final Database db = new Database();
+  private Database db = new Database();
   private Connection cxn = db.getConnection();
 
   public ConcreteCustomerDAO() throws SQLException {}
+
+  public ConcreteCustomerDAO(Database db) throws SQLException {
+    this.db = db;
+  }
 
   @Override
   public Customer insert(Customer customer) throws SQLException {
@@ -48,16 +52,23 @@ public class ConcreteCustomerDAO implements CustomerDAO {
 
   @Override
   public Customer findByID(int id) throws SQLException {
-    String query = "SELECT * FROM Customers WHERE Customer_ID = ?";
-    PreparedStatement stmt = this.cxn.prepareStatement(query);
-    stmt.setInt(1, id);
-    ResultSet result = stmt.executeQuery();
-    Customer customer = null;
-    if (result.next()) {
-      customer = this.getInstanceFromResultSet(result);
+    try {
+      String query =
+          "SELECT c.*, fld.Division "
+              + "FROM Customers c "
+              + "JOIN First_Level_Divisions fld ON fld.Division_ID = c.Division_ID "
+              + "WHERE Customer_ID = ?";
+      PreparedStatement stmt = this.cxn.prepareStatement(query);
+      stmt.setInt(1, id);
+      ResultSet result = stmt.executeQuery();
+      Customer customer = null;
+      if (result.next()) {
+        customer = this.getInstanceFromResultSet(result);
+      }
+      return customer;
+    } finally {
+      db.closeConnection();
     }
-    db.closeConnection();
-    return null;
   }
 
   @Override
@@ -162,8 +173,12 @@ public class ConcreteCustomerDAO implements CustomerDAO {
             resultSet.getString("Last_Updated_By"),
             resultSet.getInt("Division_ID"));
 
-    String division = resultSet.getString("Division");
-    if (division != null) customer.setDivision(division);
+    try {
+      String division = resultSet.getString("Division");
+      if (division != null) customer.setDivision(division);
+    } catch (SQLException ex) {
+      //
+    }
     return customer;
   }
 
