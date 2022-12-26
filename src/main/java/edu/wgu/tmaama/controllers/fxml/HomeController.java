@@ -7,6 +7,9 @@ import edu.wgu.tmaama.db.Customer.dao.ConcreteCustomerDAO;
 import edu.wgu.tmaama.db.Customer.model.Customer;
 import edu.wgu.tmaama.db.FirstLevelDivision.model.FirstLevelDivision;
 import edu.wgu.tmaama.db.User.model.User;
+import edu.wgu.tmaama.utils.AlertModal;
+import edu.wgu.tmaama.utils.ConfirmMessages;
+import edu.wgu.tmaama.utils.Modal;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -29,7 +32,7 @@ import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class HomeController {
-  private final ResourceBundle bundle = ResourceBundle.getBundle("bundles/translate");
+  private final ResourceBundle bundle = ResourceBundle.getBundle("bundles/main");
   @FXML private TextField searchCustomerTextField;
   @FXML private TextField searchAppointmentTextField;
   @FXML private TableView<Customer> customerTableView;
@@ -160,6 +163,10 @@ public class HomeController {
   private void handleDeleteCustomer() throws SQLException {
     Customer customer = this.customerTableView.getSelectionModel().getSelectedItem();
     if (customer == null) return;
+    AlertModal alertModal = new AlertModal(Alert.AlertType.CONFIRMATION);
+    String header = Modal.DELETE;
+    String content = ConfirmMessages.confirmDeleteCustomer(customer.getCustomerName());
+    if (!alertModal.displayAndConfirm(header, content)) return;
     ConcreteCustomerDAO customerDAO = new ConcreteCustomerDAO();
     boolean success = customerDAO.deleteByID(customer.getCustomerID());
     if (!success) {
@@ -296,7 +303,8 @@ public class HomeController {
 
   @FXML
   private void handleUpdateAppointment(ActionEvent event) throws IOException {
-    Appointment selectedAppointment = this.appointmentTableView.getSelectionModel().getSelectedItem();
+    Appointment selectedAppointment =
+        this.appointmentTableView.getSelectionModel().getSelectedItem();
     if (selectedAppointment != null) {
       this.redirectToAppointmentPage(event, selectedAppointment);
     }

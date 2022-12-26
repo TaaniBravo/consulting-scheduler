@@ -10,6 +10,8 @@ import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.util.ResourceBundle;
+
 /**
  * Simple modal to display alert messages
  * @author Taanileka Maama
@@ -17,8 +19,10 @@ import javafx.stage.Stage;
 public class Modal {
 	private final String title;
 	private final String message;
-	public static final String ERROR = "Error";
-	public static final String SUCCESS = "Success";
+	private static final ResourceBundle resources = ResourceBundle.getBundle("bundles/messages");
+	public static final String ERROR = resources.getString("modal.header.error");
+	public static final String SUCCESS = resources.getString("modal.header.success");
+	public static final String DELETE = resources.getString("modal.header.delete");
 
 	public Modal(String title, String message) {
 		this.title = title;
@@ -53,13 +57,9 @@ public class Modal {
 	}
 
 	private void handleColorText(Label label) {
-		switch (this.title) {
-			case ERROR:
-				label.setTextFill(Color.rgb(148, 0, 0));
-			case SUCCESS:
-				label.setTextFill(Color.rgb(0, 148, 0));
-			default:
-				break;
-		}
+		if (this.title.equals(ERROR))
+			label.setTextFill(Color.rgb(148, 0, 0));
+		if (this.title.equals(SUCCESS))
+			label.setTextFill(Color.rgb(0, 148, 0));
 	}
 }

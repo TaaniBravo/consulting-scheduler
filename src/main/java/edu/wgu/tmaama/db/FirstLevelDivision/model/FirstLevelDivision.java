@@ -1,5 +1,9 @@
 package edu.wgu.tmaama.db.FirstLevelDivision.model;
 
+import edu.wgu.tmaama.db.Country.dao.ConcreteCountryDAO;
+import edu.wgu.tmaama.db.Country.model.Country;
+
+import java.sql.SQLException;
 import java.sql.Timestamp;
 
 public class FirstLevelDivision {
@@ -10,6 +14,7 @@ public class FirstLevelDivision {
   private Timestamp lastUpdate;
   private String lastUpdatedBy;
   private int countryID;
+  private Country country;
 
   public FirstLevelDivision(String division, String createdBy, int countryID) {
     this.division = division;
@@ -93,5 +98,17 @@ public class FirstLevelDivision {
   @Override
   public String toString() {
     return this.divisionID + ". " + this.division;
+  }
+
+  public Country getCountry() throws SQLException {
+    if (country == null) {
+      ConcreteCountryDAO countryDAO = new ConcreteCountryDAO();
+      this.setCountry(countryDAO.findByID(this.countryID));
+    }
+    return country;
+  }
+
+  public void setCountry(Country country) {
+    this.country = country;
   }
 }

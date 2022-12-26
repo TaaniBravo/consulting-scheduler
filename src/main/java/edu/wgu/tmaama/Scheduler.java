@@ -17,7 +17,7 @@ public class Scheduler extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader loader = new FXMLLoader(Scheduler.class.getResource("/views/Login.fxml"));
-        loader.setResources(ResourceBundle.getBundle("bundles/translate"));
+        loader.setResources(ResourceBundle.getBundle("bundles/main"));
         Scene scene = new Scene(loader.load());
         scene.getStylesheets().add(String.valueOf(getClass().getResource("/fonts/DancingScript-Regular.ttf")));
         stage.setScene(scene);

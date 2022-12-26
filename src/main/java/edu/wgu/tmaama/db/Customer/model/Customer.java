@@ -1,5 +1,10 @@
 package edu.wgu.tmaama.db.Customer.model;
 
+import edu.wgu.tmaama.db.Country.dao.ConcreteCountryDAO;
+import edu.wgu.tmaama.db.FirstLevelDivision.dao.ConcreteFirstLevelDivisionDAO;
+import edu.wgu.tmaama.db.FirstLevelDivision.model.FirstLevelDivision;
+
+import java.sql.SQLException;
 import java.sql.Timestamp;
 
 public class Customer {
@@ -13,6 +18,7 @@ public class Customer {
   private Timestamp lastUpdate;
   private String lastUpdatedBy;
   private int divisionID;
+  private FirstLevelDivision firstLevelDivision;
   private String division;
 
   public Customer(
@@ -171,5 +177,17 @@ public class Customer {
   @Override
   public String toString() {
     return this.customerID + ". " + this.customerName;
+  }
+
+  public FirstLevelDivision getFirstLevelDivision() throws SQLException {
+    if (this.firstLevelDivision == null) {
+      ConcreteFirstLevelDivisionDAO fldDAO = new ConcreteFirstLevelDivisionDAO();
+      this.setFirstLevelDivision(fldDAO.findByID(this.divisionID));
+    }
+    return this.firstLevelDivision;
+  }
+
+  public void setFirstLevelDivision(FirstLevelDivision firstLevelDivision) {
+    this.firstLevelDivision = firstLevelDivision;
   }
 }

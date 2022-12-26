@@ -10,6 +10,7 @@ import edu.wgu.tmaama.db.Customer.model.Customer;
 import edu.wgu.tmaama.db.Database;
 import edu.wgu.tmaama.db.User.dao.ConcreteUserDAO;
 import edu.wgu.tmaama.db.User.model.User;
+import edu.wgu.tmaama.utils.ErrorMessages;
 import edu.wgu.tmaama.utils.Modal;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -28,6 +29,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -47,7 +49,7 @@ public class AppointmentController {
   @FXML private TextField startDate;
   @FXML private TextField endDate;
   @FXML private Label appointmentTitleLabel;
-  private final ResourceBundle bundle = ResourceBundle.getBundle("/bundles/translate");
+  private final ResourceBundle bundle = ResourceBundle.getBundle("/bundles/main");
   private boolean isUpdating = false;
   private User sessionUser;
   private Customer customer;
@@ -218,7 +220,7 @@ public class AppointmentController {
   private void redirectToHomePage(ActionEvent event) throws IOException {
     FXMLLoader loader =
         new FXMLLoader(Objects.requireNonNull(Scheduler.class.getResource("/views/Home.fxml")));
-    loader.setResources(ResourceBundle.getBundle("bundles/translate"));
+    loader.setResources(ResourceBundle.getBundle("bundles/main"));
     Parent pane = loader.load();
     HomeController homeController = loader.getController();
     homeController.setSessionUser(this.sessionUser);
@@ -230,36 +232,46 @@ public class AppointmentController {
 
   private String validateForm() {
     StringBuilder stringBuilder = new StringBuilder();
-    if (this.titleTextField.getText().isBlank()) stringBuilder.append("Title must be filled in.\n");
+    Timestamp start = null;
+    Timestamp end = null;
+    if (this.titleTextField.getText().isBlank())
+      stringBuilder.append(ErrorMessages.APPOINTMENT_BLANK_TITLE).append("\n");
     if (this.descTextField.getText().isBlank())
-      stringBuilder.append("Description must be filled in.\n");
+      stringBuilder.append(ErrorMessages.APPOINTMENT_BLANK_DESC).append("\n");
     if (this.locationTextField.getText().isBlank())
-      stringBuilder.append("Location must be filled in.\n");
-    if (this.typeTextField.getText().isBlank()) stringBuilder.append("Type must be filled in.\n");
+      stringBuilder.append(ErrorMessages.APPOINTMENT_BLANK_LOCATION).append("\n");
+    if (this.typeTextField.getText().isBlank())
+      stringBuilder.append(ErrorMessages.APPOINTMENT_BLANK_TYPE).append("\n");
     if (this.startDate.getText().isBlank()) {
-      stringBuilder.append("Start date must be filled in.\n");
+      stringBuilder.append(ErrorMessages.APPOINTMENT_BLANK_START).append("\n");
     } else {
       try {
-        this.convertStringIntoTimestamp(this.startDate.getText());
+        start = this.convertStringIntoTimestamp(this.startDate.getText());
       } catch (Exception ex) {
-        stringBuilder.append("Start ").append(ex.getMessage());
+        stringBuilder.append(ErrorMessages.APPOINTMENT_START_FORMAT).append("\n");
       }
     }
     if (this.endDate.getText().isBlank()) {
-      stringBuilder.append("End date must be filled in.\n");
+      stringBuilder.append(ErrorMessages.APPOINTMENT_BLANK_END).append("\n");
     } else {
       try {
-        this.convertStringIntoTimestamp(this.endDate.getText());
+        end = this.convertStringIntoTimestamp(this.endDate.getText());
       } catch (Exception ex) {
-        stringBuilder.append("End ").append(ex.getMessage());
+        stringBuilder.append(ErrorMessages.APPOINTMENT_END_FORMAT).append("\n");
       }
     }
     if (this.customerComboBox.getSelectionModel().getSelectedItem() == null)
-      stringBuilder.append("Customer must be selected.\n");
+      stringBuilder.append(ErrorMessages.APPOINTMENT_SELECT_CUSTOMER).append("\n");
     if (this.userComboBox.getSelectionModel().getSelectedItem() == null)
-      stringBuilder.append("User must be selected.\n");
+      stringBuilder.append(ErrorMessages.APPOINTMENT_SELECT_USER).append("\n");
     if (this.contactComboBox.getSelectionModel().getSelectedItem() == null)
-      stringBuilder.append("Contact must be selected.\n");
+      stringBuilder.append(ErrorMessages.APPOINTMENT_SELECT_CONTACT).append("\n");
+    if (start != null && end != null && start.getTime() > end.getTime())
+      stringBuilder.append(ErrorMessages.APPOINTMENT_START_AFTER_END).append("\n");
+    if (start != null) {
+      if (start.getTime() > Instant.now().toEpochMilli())
+        stringBuilder.append(ErrorMessages.APPOINTMENT_START_AFTER_NOW).append("\n");
+    }
 
     return stringBuilder.toString();
   }

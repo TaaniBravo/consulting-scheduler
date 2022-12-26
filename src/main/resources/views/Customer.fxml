@@ -3,16 +3,16 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+
 <AnchorPane prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="edu.wgu.tmaama.controllers.fxml.CustomerController">
-    <Label alignment="CENTER" contentDisplay="CENTER" text="%customer.title.add" textAlignment="CENTER"
-           AnchorPane.leftAnchor="40.0" AnchorPane.topAnchor="40.0"/>
-
+    <Label fx:id="titleLabel" alignment="CENTER" contentDisplay="CENTER" text="%customer.title.add" textAlignment="CENTER"
+           AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="40.0"/>
     <VBox alignment="CENTER_LEFT" layoutY="-8.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="50.0"
           AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="0.0">
         <Label text="%shared.customer.id"/>
-        <TextField fx:id="idTextField" disable="true" editable="false" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="200.0"
-                   text="Auto Generated">
+        <TextField fx:id="idTextField" disable="true" editable="false" maxWidth="-Infinity" minWidth="-Infinity"
+                   prefWidth="200.0" text="Auto Generated">
             <VBox.margin>
                 <Insets bottom="16.0" top="4.0"/>
             </VBox.margin>
@@ -45,17 +45,21 @@
                 <Insets bottom="16.0" top="4.0"/>
             </VBox.margin>
         </TextField>
-        <Label text="%shared.customer.division"/>
-        <ComboBox fx:id="divisionComboBox">
+        <FlowPane hgap="16.0">
             <VBox.margin>
                 <Insets bottom="16.0" top="4.0"/>
             </VBox.margin>
-        </ComboBox>
+            <Label text="%shared.customer.country"/>
+            <ComboBox fx:id="countryComboBox" onAction="#handleSelectedCountry"/>
+            <Label text="%shared.customer.division"/>
+            <ComboBox fx:id="divisionComboBox"/>
+        </FlowPane>
         <ButtonBar buttonMinWidth="32.0">
             <buttons>
-                <Button onAction="#handleSubmit" mnemonicParsing="false" text="%shared.button.add"/>
-                <Button onAction="#handleReset" mnemonicParsing="false" text="%shared.button.reset"/>
-                <Button onAction="#handleCancel" cancelButton="true" mnemonicParsing="false" text="%shared.button.cancel"/>
+                <Button mnemonicParsing="false" onAction="#handleSubmit" text="%shared.button.add"/>
+                <Button mnemonicParsing="false" onAction="#handleReset" text="%shared.button.reset"/>
+                <Button cancelButton="true" mnemonicParsing="false" onAction="#handleCancel"
+                        text="%shared.button.cancel"/>
             </buttons>
         </ButtonBar>
     </VBox>

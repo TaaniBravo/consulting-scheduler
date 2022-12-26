@@ -29,7 +29,7 @@ public class LoginController {
   private Scene scene;
   private Stage primaryStage;
   private String sessionUser;
-  private ResourceBundle bundle = ResourceBundle.getBundle("bundles/translate");
+  private ResourceBundle bundle = ResourceBundle.getBundle("bundles/main");
   @FXML private Label titleLabel;
   @FXML private TextField usernameTextField;
   @FXML private PasswordField passwordTextField;
