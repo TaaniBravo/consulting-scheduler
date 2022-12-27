@@ -10,6 +10,7 @@ import edu.wgu.tmaama.db.Customer.model.Customer;
 import edu.wgu.tmaama.db.Database;
 import edu.wgu.tmaama.db.User.dao.ConcreteUserDAO;
 import edu.wgu.tmaama.db.User.model.User;
+import edu.wgu.tmaama.utils.DateTimeConverter;
 import edu.wgu.tmaama.utils.ErrorMessages;
 import edu.wgu.tmaama.utils.Modal;
 import javafx.application.Platform;
@@ -25,21 +26,22 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import javafx.util.converter.LocalDateTimeStringConverter;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
+import java.time.LocalTime;
+import java.time.ZoneOffset;
+import java.time.chrono.ChronoZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class AppointmentController {
+  private final ResourceBundle bundle = ResourceBundle.getBundle("/bundles/main");
   private Appointment appointment = new Appointment();
   @FXML private TextField idTextField;
   @FXML private TextField titleTextField;
@@ -52,7 +54,6 @@ public class AppointmentController {
   @FXML private TextField startDate;
   @FXML private TextField endDate;
   @FXML private Label appointmentTitleLabel;
-  private final ResourceBundle bundle = ResourceBundle.getBundle("/bundles/main");
   private boolean isUpdating = false;
   private User sessionUser;
   private Customer customer;
@@ -68,8 +69,10 @@ public class AppointmentController {
     this.descTextField.setText(this.appointment.getDescription());
     this.locationTextField.setText(this.appointment.getLocation());
     this.typeTextField.setText(this.appointment.getType());
-    this.startDate.setText(this.appointment.getStart().toString());
-    this.endDate.setText(this.appointment.getEnd().toString());
+    DateTimeConverter startConverter = new DateTimeConverter(this.appointment.getStart());
+    this.startDate.setText(startConverter.getLocalDateTime().format(DateTimeFormatter.ofPattern(DateTimeConverter.DISPLAY_FORMAT)));
+    DateTimeConverter endConverter = new DateTimeConverter(this.appointment.getEnd());
+    this.endDate.setText(endConverter.getLocalDateTime().format(DateTimeFormatter.ofPattern(DateTimeConverter.DISPLAY_FORMAT)));
   }
 
   public void setIsUpdating(boolean isUpdating) {
@@ -88,7 +91,11 @@ public class AppointmentController {
       this.loadUserComboBox(db);
       this.loadContactComboBox(db);
     } catch (SQLException ex) {
-      // TODO: Handle display db connection error
+      Modal modal =
+          new Modal(
+              Modal.ERROR,
+              "Cannot access database. Contact administration to fix:\n" + ex.getMessage());
+      modal.display();
     }
   }
 
@@ -152,7 +159,7 @@ public class AppointmentController {
   }
 
   @FXML
-  private void handleSubmit(ActionEvent event) throws Exception {
+  private void handleSubmit(ActionEvent event) throws IOException {
     String validationStack = this.validateForm();
     if (!validationStack.isBlank()) {
       Modal modal = new Modal(Modal.ERROR, validationStack);
@@ -169,35 +176,38 @@ public class AppointmentController {
     this.appointment.setUserID(this.userComboBox.getSelectionModel().getSelectedItem().getUserID());
     this.appointment.setContactID(
         this.contactComboBox.getSelectionModel().getSelectedItem().getContactID());
-    this.appointment.setStart(this.convertStringIntoTimestamp(this.startDate.getText()));
-    this.appointment.setEnd(this.convertStringIntoTimestamp(this.endDate.getText()));
+    DateTimeConverter startConverter = new DateTimeConverter(this.startDate.getText(), false);
+    DateTimeConverter endConverter = new DateTimeConverter(this.endDate.getText(), false);
+    this.appointment.setStart(
+        this.convertDateTimeToTimestamp(startConverter.getUtcDateTime().toLocalDateTime()));
+    this.appointment.setEnd(
+        this.convertDateTimeToTimestamp(endConverter.getUtcDateTime().toLocalDateTime()));
 
     if (this.isUpdating) this.updateAppointment(event);
     else this.addAppointment(event);
   }
 
   @FXML
-  private void handleReset() {}
-
-  @FXML
-  private void handleCancel() {}
-
-  private Timestamp convertStringIntoTimestamp(String datetime) throws Exception {
-    Pattern timestampPattern =
-        Pattern.compile("\\d{4}-[0-1]\\d-[0-3]\\d [0-2]\\d:[0-5]\\d:[0-5]\\d");
-    Matcher matcher = timestampPattern.matcher(datetime);
-    boolean isValidTimestamp = matcher.find();
-    if (!isValidTimestamp)
-      throw new Exception("Date and time given are not valid. Format is YYYY-MM-DD HH:MM:SS");
-    return Timestamp.valueOf(datetime);
+  private void handleReset() {
+    this.titleTextField.setText("");
+    this.descTextField.setText("");
+    this.locationTextField.setText("");
+    this.typeTextField.setText("");
+    this.startDate.setText("");
+    this.endDate.setText("");
+    if (!this.customerComboBox.isDisabled())
+      this.customerComboBox.getSelectionModel().clearSelection();
+    this.userComboBox.getSelectionModel().clearSelection();
+    this.contactComboBox.getSelectionModel().clearSelection();
   }
 
-  private LocalDateTime convertStringIntoZonedDateTime(String datetime) {
-    Pattern timestampPattern =
-            Pattern.compile("\\d{4}-[0-1]\\d-[0-3]\\d [0-2]\\d:[0-5]\\d:[0-5]\\d");
-    Matcher matcher = timestampPattern.matcher(datetime);
-    boolean isValidTimestamp = matcher.find();
-    return LocalDateTimeStringConverter
+  @FXML
+  private void handleCancel(ActionEvent event) throws IOException {
+    this.redirectToHomePage(event);
+  }
+
+  private Timestamp convertDateTimeToTimestamp(LocalDateTime datetime) {
+    return Timestamp.valueOf(datetime);
   }
 
   private void addAppointment(ActionEvent event) {
@@ -215,16 +225,20 @@ public class AppointmentController {
     }
   }
 
-  private void updateAppointment(ActionEvent event) {
+  private void updateAppointment(ActionEvent event) throws IOException {
     try {
       this.appointment.setLastUpdatedBy(this.sessionUser.getUsername());
       ConcreteAppointmentDAO appointmentDAO = new ConcreteAppointmentDAO();
       appointmentDAO.update(this.appointment);
       Modal modal = new Modal(Modal.SUCCESS, "Appointment was updated.");
       modal.display();
-      this.redirectToHomePage(event);
-    } catch (SQLException | IOException ex) {
+    } catch (SQLException ex) {
       // TODO: display error message.
+      ex.printStackTrace();
+      Modal modal = new Modal(Modal.ERROR, "ERROR: There was an issue updating the appointment:\n" + ex.getMessage());
+      modal.display();
+    } finally {
+      this.redirectToHomePage(event);
     }
   }
 
@@ -243,8 +257,14 @@ public class AppointmentController {
 
   private String validateForm() {
     StringBuilder stringBuilder = new StringBuilder();
-    Timestamp start = null;
-    Timestamp end = null;
+    this.validateTextFields(stringBuilder);
+    this.validateComboBoxes(stringBuilder);
+    this.validateDates(stringBuilder);
+
+    return stringBuilder.toString();
+  }
+
+  private void validateTextFields(StringBuilder stringBuilder) {
     if (this.titleTextField.getText().isBlank())
       stringBuilder.append(ErrorMessages.APPOINTMENT_BLANK_TITLE).append("\n");
     if (this.descTextField.getText().isBlank())
@@ -253,38 +273,82 @@ public class AppointmentController {
       stringBuilder.append(ErrorMessages.APPOINTMENT_BLANK_LOCATION).append("\n");
     if (this.typeTextField.getText().isBlank())
       stringBuilder.append(ErrorMessages.APPOINTMENT_BLANK_TYPE).append("\n");
-    if (this.startDate.getText().isBlank()) {
-      stringBuilder.append(ErrorMessages.APPOINTMENT_BLANK_START).append("\n");
-    } else {
-      try {
-        start = this.convertStringIntoTimestamp(this.startDate.getText());
-      } catch (Exception ex) {
-        stringBuilder.append(ErrorMessages.APPOINTMENT_START_FORMAT).append("\n");
-      }
-    }
-    if (this.endDate.getText().isBlank()) {
-      stringBuilder.append(ErrorMessages.APPOINTMENT_BLANK_END).append("\n");
-    } else {
-      try {
-        end = this.convertStringIntoTimestamp(this.endDate.getText());
-      } catch (Exception ex) {
-        stringBuilder.append(ErrorMessages.APPOINTMENT_END_FORMAT).append("\n");
-      }
-    }
+  }
+
+  private void validateComboBoxes(StringBuilder stringBuilder) {
     if (this.customerComboBox.getSelectionModel().getSelectedItem() == null)
       stringBuilder.append(ErrorMessages.APPOINTMENT_SELECT_CUSTOMER).append("\n");
     if (this.userComboBox.getSelectionModel().getSelectedItem() == null)
       stringBuilder.append(ErrorMessages.APPOINTMENT_SELECT_USER).append("\n");
     if (this.contactComboBox.getSelectionModel().getSelectedItem() == null)
       stringBuilder.append(ErrorMessages.APPOINTMENT_SELECT_CONTACT).append("\n");
-    if (start != null && end != null && start.getTime() > end.getTime())
-      stringBuilder.append(ErrorMessages.APPOINTMENT_START_AFTER_END).append("\n");
-    if (start != null) {
-      if (start.getTime() > Instant.now().toEpochMilli())
-        stringBuilder.append(ErrorMessages.APPOINTMENT_START_AFTER_NOW).append("\n");
+  }
+
+  private void validateDates(StringBuilder stringBuilder) {
+    DateTimeConverter startConverter = null;
+    DateTimeConverter endConverter = null;
+    DateTimeFormatter dateTimeFormatter =
+        DateTimeFormatter.ofPattern(DateTimeConverter.DATE_FORMAT);
+    ChronoZonedDateTime<LocalDate> chronoZonedDateTime = LocalDateTime.now().atZone(ZoneOffset.UTC);
+
+    // Validate start date
+    if (this.startDate.getText().isBlank()) {
+      stringBuilder.append(ErrorMessages.APPOINTMENT_BLANK_START).append("\n");
+    } else {
+      try {
+        LocalDateTime localDateTime =
+            LocalDateTime.parse(this.startDate.getText(), dateTimeFormatter);
+        startConverter = new DateTimeConverter(localDateTime);
+        if (startConverter.getUtcDateTime().isBefore(chronoZonedDateTime))
+          stringBuilder.append(ErrorMessages.APPOINTMENT_START_BEFORE_NOW).append("\n");
+      } catch (Exception ex) {
+        ex.printStackTrace();
+        stringBuilder.append(ErrorMessages.APPOINTMENT_START_FORMAT).append("\n");
+      }
     }
 
-    return stringBuilder.toString();
+    // Validate end date.
+    if (this.endDate.getText().isBlank()) {
+      stringBuilder.append(ErrorMessages.APPOINTMENT_BLANK_END).append("\n");
+    } else {
+      try {
+        LocalDateTime localDateTime =
+            LocalDateTime.parse(this.endDate.getText(), dateTimeFormatter);
+        endConverter = new DateTimeConverter(localDateTime);
+        if (endConverter.getUtcDateTime().isBefore(chronoZonedDateTime))
+          stringBuilder
+              .append(ErrorMessages.APPOINTMENT_START_BEFORE_NOW.replace("Start", "End"))
+              .append("\n");
+      } catch (Exception ex) {
+        ex.printStackTrace();
+        stringBuilder.append(ErrorMessages.APPOINTMENT_END_FORMAT).append("\n");
+      }
+    }
+
+    assert startConverter != null;
+    assert endConverter != null;
+
+    // Validation with both converters successfully parsing string.
+    if (startConverter.getUtcDateTime().isAfter(endConverter.getUtcDateTime()))
+      stringBuilder.append(ErrorMessages.APPOINTMENT_START_AFTER_END).append("\n");
+
+    LocalTime startTime = startConverter.getEstDateTime().toLocalTime();
+    LocalTime endTime = endConverter.getEstDateTime().toLocalTime();
+    if (this.isLocalTimeOutsideBusinessHours(startTime)
+        || this.isLocalTimeOutsideBusinessHours(endTime))
+      stringBuilder.append(ErrorMessages.APPOINTMENT_OUTSIDE_OF_BUSINESS_HOURS).append("\n");
+  }
+
+  /**
+   * Business hours are 8:00 AM - 10:00 PM EST.
+   *
+   * @param time - The time to compare to the opening and closing times of the business.
+   * @return true if the appointment time is outside business hours and false if it falls within.
+   */
+  private boolean isLocalTimeOutsideBusinessHours(LocalTime time) {
+    LocalTime openingTime = LocalTime.of(8, 0);
+    LocalTime closingTime = LocalTime.of(20, 0);
+    return time.isBefore(openingTime) || time.isAfter(closingTime);
   }
 
   public void setSessionUser(User sessionUser) {

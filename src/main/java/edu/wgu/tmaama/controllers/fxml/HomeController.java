@@ -247,8 +247,8 @@ public class HomeController {
     this.appointmentDescTableCol.setCellValueFactory(new PropertyValueFactory<>("description"));
     this.appointmentLocationTableCol.setCellValueFactory(new PropertyValueFactory<>("location"));
     this.appointmentTypeTableCol.setCellValueFactory(new PropertyValueFactory<>("type"));
-    this.appointmentStartTableCol.setCellValueFactory(new PropertyValueFactory<>("start"));
-    this.appointmentEndTableCol.setCellValueFactory(new PropertyValueFactory<>("end"));
+    this.appointmentStartTableCol.setCellValueFactory(new PropertyValueFactory<>("localStart"));
+    this.appointmentEndTableCol.setCellValueFactory(new PropertyValueFactory<>("localEnd"));
 
     Platform.runLater(
         () -> {
@@ -307,6 +307,27 @@ public class HomeController {
         this.appointmentTableView.getSelectionModel().getSelectedItem();
     if (selectedAppointment != null) {
       this.redirectToAppointmentPage(event, selectedAppointment);
+    }
+  }
+
+  @FXML
+  private void handleDeleteAppointment(ActionEvent event) {
+    try {
+      Appointment appointment = this.appointmentTableView.getSelectionModel().getSelectedItem();
+      assert appointment != null;
+      AlertModal alertModal = new AlertModal(Alert.AlertType.CONFIRMATION);
+      String header = Modal.DELETE;
+      String content = ConfirmMessages.CONFIRM_DELETE_APPOINTMENT;
+      if (!alertModal.displayAndConfirm(header, content)) return;
+      ConcreteAppointmentDAO appointmentDAO = new ConcreteAppointmentDAO();
+      boolean success = appointmentDAO.deleteByID(appointment.getAppointmentID());
+      // TODO: Display error.
+      if (!success) return;
+
+      this.appointments.remove(appointment);
+      this.appointmentTableView.getItems().remove(appointment);
+    } catch (SQLException ex) {
+      ex.printStackTrace();
     }
   }
 

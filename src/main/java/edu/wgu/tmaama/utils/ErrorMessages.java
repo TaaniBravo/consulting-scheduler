@@ -17,9 +17,9 @@ public class ErrorMessages {
   public static final String APPOINTMENT_BLANK_END =
       resources.getString("error.appointment.end.blank");
   public static final String APPOINTMENT_START_FORMAT =
-      resources.getString("error.appointment.start.format");
+      resources.getString("error.appointment.start.format").replace("$format", DateTimeConverter.DATE_FORMAT);
   public static final String APPOINTMENT_END_FORMAT =
-      resources.getString("error.appointment.end.format");
+    resources.getString("error.appointment.start.format").replace("$format", DateTimeConverter.DATE_FORMAT);
   public static final String APPOINTMENT_SELECT_CUSTOMER =
       resources.getString("error.appointment.customer");
   public static final String APPOINTMENT_SELECT_USER =
@@ -28,7 +28,7 @@ public class ErrorMessages {
       resources.getString("error.appointment.contact");
   public static final String APPOINTMENT_START_AFTER_END =
       resources.getString("error.appointment.start.after.end");
-  public static final String APPOINTMENT_START_AFTER_NOW =
+  public static final String APPOINTMENT_START_BEFORE_NOW =
       resources.getString("error.appointment.start.after.now");
   public static final String APPOINTMENT_OUTSIDE_OF_BUSINESS_HOURS =
       resources.getString("error.appointment.outside.business.hours");

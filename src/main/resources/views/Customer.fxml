@@ -56,7 +56,7 @@
         </FlowPane>
         <ButtonBar buttonMinWidth="32.0">
             <buttons>
-                <Button mnemonicParsing="false" onAction="#handleSubmit" text="%shared.button.add"/>
+                <Button mnemonicParsing="false" onAction="#handleSubmit" text="%shared.button.submit"/>
                 <Button mnemonicParsing="false" onAction="#handleReset" text="%shared.button.reset"/>
                 <Button cancelButton="true" mnemonicParsing="false" onAction="#handleCancel"
                         text="%shared.button.cancel"/>

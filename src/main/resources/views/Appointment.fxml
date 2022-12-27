@@ -49,14 +49,16 @@
             </VBox.margin>
         </TextField>
         <FlowPane alignment="CENTER_LEFT" hgap="20.0">
-            <VBox.margin>
-                <Insets bottom="16.0" />
-            </VBox.margin>
             <Label text="%shared.appointment.start" />
             <TextField fx:id="startDate" promptText="YYYY-MM-DD HH:MM:SS" />
             <Label text="%shared.appointment.end" />
             <TextField fx:id="endDate" promptText="YYYY-MM-DD HH:MM:SS" />
         </FlowPane>
+      <Label text="%appointment.business.hours.note" >
+        <VBox.margin>
+            <Insets bottom="16.0" />
+        </VBox.margin>
+      </Label>
         <HBox alignment="CENTER_LEFT">
             <VBox.margin>
                 <Insets bottom="16.0" />
@@ -80,7 +82,7 @@
         </HBox>
         <ButtonBar buttonMinWidth="32.0">
             <buttons>
-                <Button mnemonicParsing="false" onAction="#handleSubmit" text="%shared.button.add" />
+                <Button mnemonicParsing="false" onAction="#handleSubmit" text="%shared.button.submit" />
                 <Button mnemonicParsing="false" onAction="#handleReset" text="%shared.button.reset" />
                 <Button cancelButton="true" mnemonicParsing="false" onAction="#handleCancel" text="%shared.button.cancel" />
             </buttons>

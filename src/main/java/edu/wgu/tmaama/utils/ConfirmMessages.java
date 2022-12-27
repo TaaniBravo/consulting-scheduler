@@ -8,4 +8,6 @@ public class ConfirmMessages {
   public static String confirmDeleteCustomer(String customerName) {
     return resources.getString("confirm.customer.delete").replace("$customerName", customerName);
   }
+
+  public static final String CONFIRM_DELETE_APPOINTMENT = resources.getString("confirm.appointment.delete");
 }

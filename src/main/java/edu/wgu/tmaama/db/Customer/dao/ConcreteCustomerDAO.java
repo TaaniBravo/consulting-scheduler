@@ -101,7 +101,6 @@ public class ConcreteCustomerDAO implements CustomerDAO {
       String queryOptions = this.buildOptions(options);
       query.append(queryOptions);
 
-      System.out.println(query);
       ResultSet resultSet = this.cxn.createStatement().executeQuery(query.toString());
       while (resultSet.next()) {
         customers.add(this.getInstanceFromResultSet(resultSet));

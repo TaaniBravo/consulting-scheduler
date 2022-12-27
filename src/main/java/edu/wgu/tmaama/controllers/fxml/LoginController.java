@@ -32,8 +32,7 @@ public class LoginController {
   @FXML private Label zoneLabel;
 
   public void initialize() {
-    ZoneId zoneId = ZoneId.systemDefault();
-    zoneLabel.setText(zoneId.toString());
+    zoneLabel.setText(ZoneId.systemDefault().toString());
   }
 
   @FXML

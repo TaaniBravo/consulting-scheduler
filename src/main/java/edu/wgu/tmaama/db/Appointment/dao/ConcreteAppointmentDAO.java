@@ -98,16 +98,16 @@ public class ConcreteAppointmentDAO implements AppointmentDAO {
     try {
       String query =
           "UPDATE Appointments SET "
-              + "Title = ?,"
-              + "Description = ?,"
-              + "Location = ?,"
-              + "Type = ?,"
-              + "Start = ?,"
-              + "End = ?,"
-              + "Last_Updated_By = ?,"
-              + "Customer_ID = ?,"
-              + "User_ID = ?,"
-              + "Contact_ID = ?"
+              + "Title = ?, "
+              + "Description = ?, "
+              + "Location = ?, "
+              + "Type = ?, "
+              + "Start = ?, "
+              + "End = ?, "
+              + "Last_Updated_By = ?, "
+              + "Customer_ID = ?, "
+              + "User_ID = ?, "
+              + "Contact_ID = ? "
               + "WHERE Appointment_ID = ?";
       PreparedStatement stmt = this.cxn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
       stmt.setString(1, appointment.getTitle());

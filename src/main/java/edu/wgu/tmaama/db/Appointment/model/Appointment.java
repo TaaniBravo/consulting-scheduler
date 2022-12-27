@@ -1,6 +1,10 @@
 package edu.wgu.tmaama.db.Appointment.model;
 
+import edu.wgu.tmaama.utils.DateTimeConverter;
+
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Appointment {
   private int appointmentID;
@@ -10,6 +14,8 @@ public class Appointment {
   private String type;
   private Timestamp start;
   private Timestamp end;
+  private LocalDateTime localStart;
+  private LocalDateTime localEnd;
   private Timestamp createDate;
   private String createdBy;
   private Timestamp lastUpdate;
@@ -72,6 +78,11 @@ public class Appointment {
     this.customerID = customerID;
     this.userID = userID;
     this.contactID = contactID;
+
+    DateTimeConverter startConverter = new DateTimeConverter(this.start);
+    DateTimeConverter endConverter = new DateTimeConverter(this.end);
+    this.localStart = startConverter.getLocalDateTime();
+    this.localEnd = endConverter.getLocalDateTime();
   }
 
   public int getAppointmentID() {
@@ -120,6 +131,8 @@ public class Appointment {
 
   public void setStart(Timestamp start) {
     this.start = start;
+    DateTimeConverter dateTimeConverter = new DateTimeConverter(this.start);
+    this.localStart = dateTimeConverter.getLocalDateTime();
   }
 
   public Timestamp getEnd() {
@@ -128,6 +141,8 @@ public class Appointment {
 
   public void setEnd(Timestamp end) {
     this.end = end;
+    DateTimeConverter dateTimeConverter = new DateTimeConverter(this.end);
+    this.localEnd = dateTimeConverter.getLocalDateTime();
   }
 
   public Timestamp getCreateDate() {
@@ -180,5 +195,13 @@ public class Appointment {
 
   public void setContactID(int contactID) {
     this.contactID = contactID;
+  }
+
+  public String getLocalStart() {
+    return localStart.format(DateTimeFormatter.ofPattern(DateTimeConverter.DISPLAY_FORMAT));
+  }
+
+  public String getLocalEnd() {
+    return localEnd.format(DateTimeFormatter.ofPattern(DateTimeConverter.DISPLAY_FORMAT));
   }
 }
