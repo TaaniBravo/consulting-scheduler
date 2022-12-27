@@ -13,7 +13,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -21,26 +20,20 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.ZoneId;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class LoginController {
-  private Parent pane;
-  private Scene scene;
-  private Stage primaryStage;
-  private String sessionUser;
-  private ResourceBundle bundle = ResourceBundle.getBundle("bundles/main");
-  @FXML private Label titleLabel;
+  private final ResourceBundle resources = ResourceBundle.getBundle("bundles/main");
   @FXML private TextField usernameTextField;
   @FXML private PasswordField passwordTextField;
-  @FXML private Button loginButton;
-  @FXML private Button signUpButton;
   @FXML private Label errorLabel;
+  @FXML private Label zoneLabel;
 
-  public void initialize() {}
-
-  public void setPrimaryStage(Stage stage) {
-    this.primaryStage = stage;
+  public void initialize() {
+    ZoneId zoneId = ZoneId.systemDefault();
+    zoneLabel.setText(zoneId.toString());
   }
 
   @FXML
@@ -52,7 +45,7 @@ public class LoginController {
       ConcreteSaltDAO saltDAO = new ConcreteSaltDAO(db);
       User user = userDAO.findByUsername(username);
       if (user == null) {
-        this.printError(this.bundle.getString("login.error.username"));
+        this.printError(this.resources.getString("login.error.username"));
         return;
       }
 
@@ -61,7 +54,7 @@ public class LoginController {
       boolean isPasswordValid = Password.comparePasswords(user.getPassword(), enteredPassword);
 
       if (!isPasswordValid) {
-        this.printError(this.bundle.getString("login.error.username"));
+        this.printError(this.resources.getString("login.error.username"));
         return;
       }
 
@@ -80,7 +73,7 @@ public class LoginController {
       ConcreteUserDAO userDAO = new ConcreteUserDAO(db);
       User user = userDAO.findByUsername(username);
       if (user != null) {
-        this.printError(this.bundle.getString("login.error.username.taken"));
+        this.printError(this.resources.getString("login.error.username.taken"));
         return;
       }
 
@@ -97,14 +90,14 @@ public class LoginController {
   private void redirectToHomePage(ActionEvent actionEvent, User user) throws IOException {
     FXMLLoader loader =
         new FXMLLoader(Objects.requireNonNull(Scheduler.class.getResource("/views/Home.fxml")));
-    loader.setResources(this.bundle);
-    this.pane = loader.load();
+    loader.setResources(this.resources);
+    Parent pane = loader.load();
     HomeController homeController = loader.getController();
     homeController.setSessionUser(user);
-    this.primaryStage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-    this.scene = new Scene(pane);
-    this.primaryStage.setScene(this.scene);
-    this.primaryStage.show();
+    Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+    Scene scene = new Scene(pane);
+    stage.setScene(scene);
+    stage.show();
   }
 
   private void printError(String message) {

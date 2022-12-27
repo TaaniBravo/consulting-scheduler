@@ -25,11 +25,14 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import javafx.util.converter.LocalDateTimeStringConverter;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -187,6 +190,14 @@ public class AppointmentController {
     if (!isValidTimestamp)
       throw new Exception("Date and time given are not valid. Format is YYYY-MM-DD HH:MM:SS");
     return Timestamp.valueOf(datetime);
+  }
+
+  private LocalDateTime convertStringIntoZonedDateTime(String datetime) {
+    Pattern timestampPattern =
+            Pattern.compile("\\d{4}-[0-1]\\d-[0-3]\\d [0-2]\\d:[0-5]\\d:[0-5]\\d");
+    Matcher matcher = timestampPattern.matcher(datetime);
+    boolean isValidTimestamp = matcher.find();
+    return LocalDateTimeStringConverter
   }
 
   private void addAppointment(ActionEvent event) {

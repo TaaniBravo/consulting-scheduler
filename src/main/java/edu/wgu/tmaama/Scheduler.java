@@ -23,7 +23,6 @@ public class Scheduler extends Application {
         stage.setScene(scene);
         stage.setTitle("Client Scheduler");
         LoginController loginController = loader.getController();
-        loginController.setPrimaryStage(stage);
         stage.show();
     }
 }
