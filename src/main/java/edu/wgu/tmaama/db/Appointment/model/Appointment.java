@@ -201,7 +201,16 @@ public class Appointment {
     return localStart.format(DateTimeFormatter.ofPattern(DateTimeConverter.DISPLAY_FORMAT));
   }
 
+  public LocalDateTime getLocalStartDateTime() {
+    return localStart;
+  }
+
   public String getLocalEnd() {
     return localEnd.format(DateTimeFormatter.ofPattern(DateTimeConverter.DISPLAY_FORMAT));
   }
+
+  public LocalDateTime getLocalEndDateTime() {
+    return localEnd;
+  }
+
 }

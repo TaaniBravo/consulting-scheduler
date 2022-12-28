@@ -93,6 +93,23 @@ public class ConcreteAppointmentDAO implements AppointmentDAO {
     }
   }
 
+  public ArrayList<Appointment> findAppointmentsByUserID(int userID) throws SQLException {
+    try {
+      if (!this.db.checkConnection()) this.db.getConnection();
+      ArrayList<Appointment> appointments = new ArrayList<>();
+      String query = "SELECT * FROM Appointments WHERE User_ID = ?";
+      PreparedStatement stmt = this.cxn.prepareStatement(query);
+      stmt.setInt(1, userID);
+      ResultSet resultSet = stmt.executeQuery();
+      while (resultSet.next()) {
+        appointments.add(this.getInstanceFromResultSet(resultSet));
+      }
+      return appointments;
+    } finally {
+      this.db.closeConnection();
+    }
+  }
+
   @Override
   public Appointment update(Appointment appointment) throws SQLException {
     try {

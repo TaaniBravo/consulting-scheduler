@@ -6,8 +6,11 @@ public class ConfirmMessages {
   private static final ResourceBundle resources = ResourceBundle.getBundle("/bundles/messages");
 
   public static String confirmDeleteCustomer(String customerName) {
-    return resources.getString("confirm.customer.delete").replace("$customerName", customerName);
+    return String.format(resources.getString("confirm.customer.delete"), customerName);
   }
 
-  public static final String CONFIRM_DELETE_APPOINTMENT = resources.getString("confirm.appointment.delete");
+  public static String confirmDeleteAppointment(int appointmentID, String appointmentType) {
+    return String.format(
+        resources.getString("confirm.appointment.delete"), appointmentID, appointmentType);
+  }
 }

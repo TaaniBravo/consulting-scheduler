@@ -22,7 +22,6 @@ public class Scheduler extends Application {
         scene.getStylesheets().add(String.valueOf(getClass().getResource("/fonts/DancingScript-Regular.ttf")));
         stage.setScene(scene);
         stage.setTitle("Client Scheduler");
-        LoginController loginController = loader.getController();
         stage.show();
     }
 }

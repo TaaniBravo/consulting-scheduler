@@ -317,7 +317,9 @@ public class HomeController {
       assert appointment != null;
       AlertModal alertModal = new AlertModal(Alert.AlertType.CONFIRMATION);
       String header = Modal.DELETE;
-      String content = ConfirmMessages.CONFIRM_DELETE_APPOINTMENT;
+      String content =
+          ConfirmMessages.confirmDeleteAppointment(
+              appointment.getAppointmentID(), appointment.getType());
       if (!alertModal.displayAndConfirm(header, content)) return;
       ConcreteAppointmentDAO appointmentDAO = new ConcreteAppointmentDAO();
       boolean success = appointmentDAO.deleteByID(appointment.getAppointmentID());

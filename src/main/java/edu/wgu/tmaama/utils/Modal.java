@@ -23,6 +23,8 @@ public class Modal {
 	public static final String ERROR = resources.getString("modal.header.error");
 	public static final String SUCCESS = resources.getString("modal.header.success");
 	public static final String DELETE = resources.getString("modal.header.delete");
+	public static final String CANCEL = resources.getString("modal.header.cancel");
+	public static final String INFO = resources.getString("modal.header.info");
 
 	public Modal(String title, String message) {
 		this.title = title;

@@ -1,12 +1,14 @@
 package edu.wgu.tmaama.controllers.fxml;
 
 import edu.wgu.tmaama.Scheduler;
+import edu.wgu.tmaama.db.Appointment.dao.ConcreteAppointmentDAO;
+import edu.wgu.tmaama.db.Appointment.model.Appointment;
 import edu.wgu.tmaama.db.Database;
 import edu.wgu.tmaama.db.Salt.dao.ConcreteSaltDAO;
 import edu.wgu.tmaama.db.Salt.model.Salt;
 import edu.wgu.tmaama.db.User.dao.ConcreteUserDAO;
 import edu.wgu.tmaama.db.User.model.User;
-import edu.wgu.tmaama.utils.Password;
+import edu.wgu.tmaama.utils.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,9 +22,14 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.ResourceBundle;
+import java.util.stream.Stream;
 
 public class LoginController {
   private final ResourceBundle resources = ResourceBundle.getBundle("bundles/main");
@@ -38,6 +45,8 @@ public class LoginController {
   @FXML
   private void handleLogin(ActionEvent actionEvent) throws IOException {
     String username = usernameTextField.getText();
+    Logger logger = new Logger();
+    Instant currentTime = Instant.now();
     try {
       Database db = new Database();
       ConcreteUserDAO userDAO = new ConcreteUserDAO(db);
@@ -45,6 +54,8 @@ public class LoginController {
       User user = userDAO.findByUsername(username);
       if (user == null) {
         this.printError(this.resources.getString("login.error.username"));
+        String logInfo = String.format("%s - %s - success: false", currentTime.toString(), username);
+        logger.log(logInfo);
         return;
       }
 
@@ -54,9 +65,13 @@ public class LoginController {
 
       if (!isPasswordValid) {
         this.printError(this.resources.getString("login.error.username"));
+        String logInfo = String.format("%s - %s - success: false", currentTime.toString(), username);
+        logger.log(logInfo);
         return;
       }
 
+      String logInfo = String.format("%s - %s - success: true", currentTime.toString(), username);
+      logger.log(logInfo);
       this.redirectToHomePage(actionEvent, user);
     } catch (SQLException e) {
       e.printStackTrace();
@@ -97,9 +112,61 @@ public class LoginController {
     Scene scene = new Scene(pane);
     stage.setScene(scene);
     stage.show();
+    this.alertUpcomingAppointments(user);
   }
 
   private void printError(String message) {
     this.errorLabel.setText(message);
+  }
+
+  private void alertUpcomingAppointments(User user) {
+    try {
+      ConcreteAppointmentDAO appointmentDAO = new ConcreteAppointmentDAO();
+      ArrayList<Appointment> appointments =
+          appointmentDAO.findAppointmentsByUserID(user.getUserID());
+
+      LocalDateTime currentTime = LocalDateTime.now();
+      DateTimeConverter dateTimeConverter = new DateTimeConverter(currentTime);
+      ZonedDateTime rangeStart = dateTimeConverter.getUtcDateTime().minusMinutes(15);
+
+      Stream<Appointment> filteredAppointments =
+          appointments.stream()
+              .filter(
+                  appointment -> {
+                    DateTimeConverter appointmentConverter =
+                        new DateTimeConverter(appointment.getStart());
+                    long appointmentEpoch = appointmentConverter.getUtcDateTime().toEpochSecond();
+                    return appointmentEpoch >= rangeStart.toEpochSecond()
+                        && appointmentEpoch <= dateTimeConverter.getUtcDateTime().toEpochSecond();
+                  });
+
+      if (filteredAppointments.findAny().isEmpty()) {
+        Modal modal = new Modal(Modal.INFO, InfoMessages.NO_UPCOMING_APPOINTMENTS);
+        modal.display();
+        return;
+      }
+
+      StringBuilder stringBuilder = new StringBuilder(InfoMessages.UPCOMING_APPOINTMENTS);
+      stringBuilder.append("\n");
+      filteredAppointments.forEach(
+          appointment -> {
+            stringBuilder
+                .append(appointment.getAppointmentID())
+                .append(". ")
+                .append(appointment.getTitle())
+                .append(": ")
+                .append(appointment.getLocalStartDateTime().toLocalTime().toString())
+                .append("-")
+                .append(appointment.getLocalEndDateTime().toLocalTime().toString())
+                .append("\n");
+          });
+
+      Modal modal = new Modal(Modal.INFO, stringBuilder.toString());
+      modal.display();
+    } catch (SQLException ex) {
+      ex.printStackTrace();
+      Modal modal = new Modal(Modal.ERROR, ErrorMessages.GET_USER_APPOINTMENTS);
+      modal.display();
+    }
   }
 }
