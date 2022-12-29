@@ -29,7 +29,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -40,6 +39,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+/** Controller for Appointment.fxml stage. */
 public class AppointmentController {
   private final ResourceBundle bundle = ResourceBundle.getBundle("/bundles/main");
   private Appointment appointment = new Appointment();
@@ -58,10 +58,16 @@ public class AppointmentController {
   private User sessionUser;
   private Customer customer;
 
+  /** Initializes the controller by loading the combo boxes with the correct data. */
   public void initialize() {
     Platform.runLater(this::loadComboBoxes);
   }
 
+  /**
+   * Sets an appointment.
+   *
+   * @param appointment - The appointment to be updated
+   */
   public void setAppointment(Appointment appointment) {
     this.appointment = appointment;
     this.idTextField.setText(String.valueOf(this.appointment.getAppointmentID()));
@@ -70,20 +76,29 @@ public class AppointmentController {
     this.locationTextField.setText(this.appointment.getLocation());
     this.typeTextField.setText(this.appointment.getType());
     DateTimeConverter startConverter = new DateTimeConverter(this.appointment.getStart());
-    this.startDate.setText(startConverter.getLocalDateTime().format(DateTimeFormatter.ofPattern(DateTimeConverter.DISPLAY_FORMAT)));
+    this.startDate.setText(
+        startConverter
+            .getLocalDateTime()
+            .format(DateTimeFormatter.ofPattern(DateTimeConverter.DISPLAY_FORMAT)));
     DateTimeConverter endConverter = new DateTimeConverter(this.appointment.getEnd());
-    this.endDate.setText(endConverter.getLocalDateTime().format(DateTimeFormatter.ofPattern(DateTimeConverter.DISPLAY_FORMAT)));
+    this.endDate.setText(
+        endConverter
+            .getLocalDateTime()
+            .format(DateTimeFormatter.ofPattern(DateTimeConverter.DISPLAY_FORMAT)));
   }
 
+  /** Sets the flag isUpdating */
   public void setIsUpdating(boolean isUpdating) {
     this.isUpdating = isUpdating;
     this.appointmentTitleLabel.setText(this.bundle.getString("appointment.title.update"));
   }
 
+  /** If there was a customer selected from the Home.fxml stage then set this customer. */
   public void setCustomer(Customer customer) {
     this.customer = customer;
   }
 
+  /** Load all three ComboBoxes */
   private void loadComboBoxes() {
     try {
       Database db = new Database();
@@ -99,29 +114,31 @@ public class AppointmentController {
     }
   }
 
+  /**
+   * Fetches the customers from the database and loads them into the Customer ComboBox
+   *
+   * @param db
+   */
   private void loadCustomerComboBox(Database db) {
     try {
       // Load customers. Only load the customer selected if applicable.
       ConcreteCustomerDAO customerDAO = new ConcreteCustomerDAO(db);
       ObservableList<Customer> customers;
-
-      if (this.customer == null) {
-        customers = FXCollections.observableArrayList(customerDAO.findAll());
-      } else {
-        Customer customer = customerDAO.findByID(this.customer.getCustomerID());
-        customers = FXCollections.observableArrayList();
-        customers.add(customer);
-        this.customerComboBox.getSelectionModel().select(customer);
-        this.customerComboBox.setDisable(true);
-      }
-
+      customers = FXCollections.observableArrayList(customerDAO.findAll());
       this.customerComboBox.setItems(customers);
+      assert this.customer != null;
+      this.customerComboBox.getSelectionModel().select(this.customer);
     } catch (SQLException ex) {
       // TODO: Handle errors;
       ex.printStackTrace();
     }
   }
 
+  /**
+   * Fetches the users from the database and loads them into the User ComboBox
+   *
+   * @param db
+   */
   private void loadUserComboBox(Database db) {
     try {
       ConcreteUserDAO userDAO = new ConcreteUserDAO(db);
@@ -136,10 +153,15 @@ public class AppointmentController {
               .findFirst();
       optional.ifPresent(user -> this.userComboBox.getSelectionModel().select(user));
     } catch (SQLException ex) {
-      // TODO: Handle errors;
+      ex.printStackTrace();
     }
   }
 
+  /**
+   * Fetches the contacts from the database and loads them into the Contact ComboBox
+   *
+   * @param db
+   */
   private void loadContactComboBox(Database db) {
     try {
       ConcreteContactDAO contactDAO = new ConcreteContactDAO(db);
@@ -154,10 +176,15 @@ public class AppointmentController {
               .findFirst();
       optional.ifPresent(contact -> this.contactComboBox.getSelectionModel().select(contact));
     } catch (SQLException ex) {
-      // TODO: Handle display loading contacts errors;
+      ex.printStackTrace();
     }
   }
 
+  /**
+   * Handles when the submit button is clicked. Will validate the form before submitting to database.
+   * @param event
+   * @throws IOException
+   */
   @FXML
   private void handleSubmit(ActionEvent event) throws IOException {
     String validationStack = this.validateForm();
@@ -179,14 +206,19 @@ public class AppointmentController {
     DateTimeConverter startConverter = new DateTimeConverter(this.startDate.getText(), false);
     DateTimeConverter endConverter = new DateTimeConverter(this.endDate.getText(), false);
     this.appointment.setStart(
-        this.convertDateTimeToTimestamp(startConverter.getUtcDateTime().toLocalDateTime()));
+        DateTimeConverter.convertDateTimeToTimestamp(
+            startConverter.getUtcDateTime().toLocalDateTime()));
     this.appointment.setEnd(
-        this.convertDateTimeToTimestamp(endConverter.getUtcDateTime().toLocalDateTime()));
+        DateTimeConverter.convertDateTimeToTimestamp(
+            endConverter.getUtcDateTime().toLocalDateTime()));
 
     if (this.isUpdating) this.updateAppointment(event);
     else this.addAppointment(event);
   }
 
+  /**
+   * Handles the reset of the form, clearing out any text and selected ComboBoxes besides the Appointment's ID.
+   */
   @FXML
   private void handleReset() {
     this.titleTextField.setText("");
@@ -201,15 +233,20 @@ public class AppointmentController {
     this.contactComboBox.getSelectionModel().clearSelection();
   }
 
+  /**
+   * Handles the cancel button. Will send the user back to the Home stage.
+   * @param event
+   * @throws IOException
+   */
   @FXML
   private void handleCancel(ActionEvent event) throws IOException {
     this.redirectToHomePage(event);
   }
 
-  private Timestamp convertDateTimeToTimestamp(LocalDateTime datetime) {
-    return Timestamp.valueOf(datetime);
-  }
-
+  /**
+   * Handles the actions of INSERTING an appointment into the database.
+   * @param event
+   */
   private void addAppointment(ActionEvent event) {
     try {
       this.appointment.setCreatedBy(this.sessionUser.getUsername());
@@ -225,6 +262,11 @@ public class AppointmentController {
     }
   }
 
+  /**
+   * Handles the action of UPDATING an existing appointment into the database.
+   * @param event
+   * @throws IOException
+   */
   private void updateAppointment(ActionEvent event) throws IOException {
     try {
       this.appointment.setLastUpdatedBy(this.sessionUser.getUsername());
@@ -235,13 +277,21 @@ public class AppointmentController {
     } catch (SQLException ex) {
       // TODO: display error message.
       ex.printStackTrace();
-      Modal modal = new Modal(Modal.ERROR, "ERROR: There was an issue updating the appointment:\n" + ex.getMessage());
+      Modal modal =
+          new Modal(
+              Modal.ERROR,
+              "ERROR: There was an issue updating the appointment:\n" + ex.getMessage());
       modal.display();
     } finally {
       this.redirectToHomePage(event);
     }
   }
 
+  /**
+   * Redirects the user to the Home stage.
+   * @param event
+   * @throws IOException
+   */
   private void redirectToHomePage(ActionEvent event) throws IOException {
     FXMLLoader loader =
         new FXMLLoader(Objects.requireNonNull(Scheduler.class.getResource("/views/Home.fxml")));
@@ -255,6 +305,10 @@ public class AppointmentController {
     stage.show();
   }
 
+  /**
+   * Entry level validation function that returns a string of the errors to present to the user.
+   * @return
+   */
   private String validateForm() {
     StringBuilder stringBuilder = new StringBuilder();
     this.validateTextFields(stringBuilder);
@@ -264,6 +318,10 @@ public class AppointmentController {
     return stringBuilder.toString();
   }
 
+  /**
+   * Handles the validation of the TextFields (minus the dates).
+   * @param stringBuilder
+   */
   private void validateTextFields(StringBuilder stringBuilder) {
     if (this.titleTextField.getText().isBlank())
       stringBuilder.append(ErrorMessages.APPOINTMENT_BLANK_TITLE).append("\n");
@@ -275,6 +333,10 @@ public class AppointmentController {
       stringBuilder.append(ErrorMessages.APPOINTMENT_BLANK_TYPE).append("\n");
   }
 
+  /**
+   * Handles the validation of the ComboBoxes
+   * @param stringBuilder
+   */
   private void validateComboBoxes(StringBuilder stringBuilder) {
     if (this.customerComboBox.getSelectionModel().getSelectedItem() == null)
       stringBuilder.append(ErrorMessages.APPOINTMENT_SELECT_CUSTOMER).append("\n");
@@ -284,6 +346,10 @@ public class AppointmentController {
       stringBuilder.append(ErrorMessages.APPOINTMENT_SELECT_CONTACT).append("\n");
   }
 
+  /**
+   * Handles the validation of the dates are the logic around this is much more complex than the other validations.
+   * @param stringBuilder
+   */
   private void validateDates(StringBuilder stringBuilder) {
     DateTimeConverter startConverter = null;
     DateTimeConverter endConverter = null;
@@ -351,6 +417,10 @@ public class AppointmentController {
     return time.isBefore(openingTime) || time.isAfter(closingTime);
   }
 
+  /**
+   * Sets the session user for the current stage.
+   * @param sessionUser
+   */
   public void setSessionUser(User sessionUser) {
     this.sessionUser = sessionUser;
   }

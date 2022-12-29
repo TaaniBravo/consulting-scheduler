@@ -110,6 +110,82 @@ public class ConcreteAppointmentDAO implements AppointmentDAO {
     }
   }
 
+  public ArrayList<Appointment> findAppointmentsForCurrentWeek() throws SQLException {
+    try {
+      if (!this.db.checkConnection()) this.db.getConnection();
+      ArrayList<Appointment> appointments = new ArrayList<>();
+      String query = "SELECT * FROM Appointments " +
+              "WHERE Start BETWEEN NOW() " +
+              "AND DATE_ADD(NOW(), INTERVAL 6 DAY)";
+      PreparedStatement stmt = this.cxn.prepareStatement(query);
+      ResultSet resultSet = stmt.executeQuery();
+      while (resultSet.next()) {
+        appointments.add(this.getInstanceFromResultSet(resultSet));
+      }
+      return appointments;
+    } finally {
+      this.db.closeConnection();
+    }
+  }
+
+  public ArrayList<Appointment> findAppointmentsForCurrentWeek(int customerID) throws SQLException {
+    try {
+      if (!this.db.checkConnection()) this.db.getConnection();
+      ArrayList<Appointment> appointments = new ArrayList<>();
+      String query = "SELECT * FROM Appointments " +
+              "WHERE Start BETWEEN NOW() " +
+              "AND DATE_ADD(NOW(), INTERVAL 6 DAY) " +
+              "AND Customer_ID = ?";
+      PreparedStatement stmt = this.cxn.prepareStatement(query);
+      stmt.setInt(1, customerID);
+      ResultSet resultSet = stmt.executeQuery();
+      while (resultSet.next()) {
+        appointments.add(this.getInstanceFromResultSet(resultSet));
+      }
+      return appointments;
+    } finally {
+      this.db.closeConnection();
+    }
+  }
+
+  public ArrayList<Appointment> findAppointmentsForCurrentMonth() throws SQLException {
+    try {
+      if (!this.db.checkConnection()) this.db.getConnection();
+      ArrayList<Appointment> appointments = new ArrayList<>();
+      String query = "SELECT * FROM Appointments " +
+              "WHERE MONTH(Start) = MONTH(now())";
+      PreparedStatement stmt = this.cxn.prepareStatement(query);
+      ResultSet resultSet = stmt.executeQuery();
+      while (resultSet.next()) {
+        appointments.add(this.getInstanceFromResultSet(resultSet));
+      }
+      return appointments;
+    } finally {
+      this.db.closeConnection();
+    }
+  }
+
+  public ArrayList<Appointment> findAppointmentsForCurrentMonth(int customerID) throws SQLException {
+    try {
+      if (!this.db.checkConnection()) this.db.getConnection();
+      ArrayList<Appointment> appointments = new ArrayList<>();
+      String query = "SELECT * FROM Appointments " +
+              "WHERE MONTH(Start) = MONTH(now()) " +
+              "AND Customer_ID = ?";
+      PreparedStatement stmt = this.cxn.prepareStatement(query);
+      stmt.setInt(1, customerID);
+      ResultSet resultSet = stmt.executeQuery();
+      while (resultSet.next()) {
+        appointments.add(this.getInstanceFromResultSet(resultSet));
+      }
+      return appointments;
+    } finally {
+      this.db.closeConnection();
+    }
+  }
+
+
+
   @Override
   public Appointment update(Appointment appointment) throws SQLException {
     try {

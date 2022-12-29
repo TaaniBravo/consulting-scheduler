@@ -20,6 +20,7 @@ public class Customer {
   private int divisionID;
   private FirstLevelDivision firstLevelDivision;
   private String division;
+  private int countryID;
 
   public Customer(
       String customerName,
@@ -189,5 +190,13 @@ public class Customer {
 
   public void setFirstLevelDivision(FirstLevelDivision firstLevelDivision) {
     this.firstLevelDivision = firstLevelDivision;
+  }
+
+  public int getCountryID() {
+    return countryID;
+  }
+
+  public void setCountryID(int countryID) {
+    this.countryID = countryID;
   }
 }

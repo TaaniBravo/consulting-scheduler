@@ -21,12 +21,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -34,9 +34,7 @@ import java.util.ResourceBundle;
 public class HomeController {
   private final ResourceBundle bundle = ResourceBundle.getBundle("bundles/main");
   @FXML private TextField searchCustomerTextField;
-  @FXML private TextField searchAppointmentTextField;
   @FXML private TableView<Customer> customerTableView;
-  @FXML private VBox customerButtonPane;
   @FXML private Button updateCustomerButton;
   @FXML private Button deleteCustomerButton;
   @FXML private TableColumn<Customer, Integer> customerIdTableCol;
@@ -44,8 +42,9 @@ public class HomeController {
   @FXML private TableColumn<Customer, String> customerAddressTableCol;
   @FXML private TableColumn<Customer, String> customerPostalCodeTableCol;
   @FXML private TableColumn<Customer, String> customerPhoneTableCol;
+  @FXML private TableColumn<Customer, Integer> customerDivisionIDTableCol;
   @FXML private TableColumn<FirstLevelDivision, String> customerDivisionTableCol;
-  @FXML private VBox appointmentButtonPane;
+  @FXML private TableColumn<Customer, Integer> customerCountryIDTableCol;
   @FXML private TableView<Appointment> appointmentTableView;
   @FXML private TableColumn<Appointment, Integer> appointmentIdTableCol;
   @FXML private TableColumn<Appointment, String> appointmentTitleTableCol;
@@ -54,15 +53,17 @@ public class HomeController {
   @FXML private TableColumn<Appointment, String> appointmentTypeTableCol;
   @FXML private TableColumn<Appointment, Timestamp> appointmentStartTableCol;
   @FXML private TableColumn<Appointment, Timestamp> appointmentEndTableCol;
-  @FXML private Button addAppointmentButton;
+  @FXML private TableColumn<Appointment, Integer> appointmentCustomerIDTableCol;
+  @FXML private TableColumn<Appointment, Integer> appointmentUserIDTableCol;
   @FXML private Button updateAppointmentButton;
   @FXML private Button deleteAppointmentButton;
   @FXML private Label usernameLabel;
+  @FXML private RadioButton monthRadioButton;
+  @FXML private RadioButton weekRadioButton;
   private User sessionUser;
   private Customer selectedCustomer;
   private ObservableList<Customer> customers;
   private ObservableList<Appointment> appointments;
-  private Appointment selectedAppointment;
 
   public void initialize() {
     this.initializeCustomerTable();
@@ -186,7 +187,9 @@ public class HomeController {
     this.customerAddressTableCol.setCellValueFactory(new PropertyValueFactory<>("address"));
     this.customerPostalCodeTableCol.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
     this.customerPhoneTableCol.setCellValueFactory(new PropertyValueFactory<>("phone"));
+    this.customerDivisionIDTableCol.setCellValueFactory(new PropertyValueFactory<>("divisionID"));
     this.customerDivisionTableCol.setCellValueFactory(new PropertyValueFactory<>("division"));
+    this.customerCountryIDTableCol.setCellValueFactory(new PropertyValueFactory<>("countryID"));
 
     Platform.runLater(
         () -> {
@@ -249,6 +252,9 @@ public class HomeController {
     this.appointmentTypeTableCol.setCellValueFactory(new PropertyValueFactory<>("type"));
     this.appointmentStartTableCol.setCellValueFactory(new PropertyValueFactory<>("localStart"));
     this.appointmentEndTableCol.setCellValueFactory(new PropertyValueFactory<>("localEnd"));
+    this.appointmentCustomerIDTableCol.setCellValueFactory(
+        new PropertyValueFactory<>("customerID"));
+    this.appointmentUserIDTableCol.setCellValueFactory(new PropertyValueFactory<>("userID"));
 
     Platform.runLater(
         () -> {
@@ -270,23 +276,24 @@ public class HomeController {
 
   @FXML
   private void handleSelectedCustomer() {
-    this.selectedCustomer = this.customerTableView.getSelectionModel().getSelectedItem();
-    if (this.selectedCustomer == null) {
-      this.updateCustomerButton.setDisable(true);
-      this.deleteCustomerButton.setDisable(true);
-      this.appointmentTableView.getItems().clear();
-      return;
+    Customer customer = this.customerTableView.getSelectionModel().getSelectedItem();
+    if (customer.equals(this.selectedCustomer)) {
+      this.selectedCustomer = null;
+      this.customerTableView.getSelectionModel().clearSelection();
+    } else {
+      this.selectedCustomer = this.customerTableView.getSelectionModel().getSelectedItem();
     }
 
-    this.updateCustomerButton.setDisable(false);
-    this.deleteCustomerButton.setDisable(false);
-    this.loadCustomerAppointments();
+    this.updateCustomerButton.setDisable(this.selectedCustomer == null);
+    this.deleteCustomerButton.setDisable(this.selectedCustomer == null);
+    this.fetchAppointments();
   }
 
   @FXML
   private void handleSelectedAppointment() {
-    this.selectedAppointment = this.appointmentTableView.getSelectionModel().getSelectedItem();
-    if (this.selectedAppointment == null) {
+    Appointment selectedAppointment =
+        this.appointmentTableView.getSelectionModel().getSelectedItem();
+    if (selectedAppointment == null) {
       this.updateAppointmentButton.setDisable(true);
       this.deleteAppointmentButton.setDisable(true);
       return;
@@ -311,7 +318,7 @@ public class HomeController {
   }
 
   @FXML
-  private void handleDeleteAppointment(ActionEvent event) {
+  private void handleDeleteAppointment() {
     try {
       Appointment appointment = this.appointmentTableView.getSelectionModel().getSelectedItem();
       assert appointment != null;
@@ -333,13 +340,44 @@ public class HomeController {
     }
   }
 
-  private void loadCustomerAppointments() {
+  @FXML
+  private void handleAppointmentMonthRadio() {
+    if (weekRadioButton.isSelected()) weekRadioButton.setSelected(false);
+    this.fetchAppointments();
+  }
+
+  @FXML
+  private void handleAppointmentWeekRadio() {
+    if (monthRadioButton.isSelected()) monthRadioButton.setSelected(false);
+    this.fetchAppointments();
+  }
+
+  private void fetchAppointments() {
     try {
       ConcreteAppointmentDAO appointmentDAO = new ConcreteAppointmentDAO();
-      ObservableList<Appointment> appointments =
-          FXCollections.observableArrayList(
-              appointmentDAO.findAppointmentsByCustomerID(this.selectedCustomer.getCustomerID()));
-      this.setAppointments(appointments);
+      ArrayList<Appointment> appointments;
+
+      if (monthRadioButton.isSelected()) {
+        appointments =
+            this.selectedCustomer == null
+                ? appointmentDAO.findAppointmentsForCurrentMonth()
+                : appointmentDAO.findAppointmentsForCurrentMonth(
+                    this.selectedCustomer.getCustomerID());
+      } else if (weekRadioButton.isSelected()) {
+        appointments =
+            this.selectedCustomer == null
+                ? appointmentDAO.findAppointmentsForCurrentWeek()
+                : appointmentDAO.findAppointmentsForCurrentWeek(
+                    this.selectedCustomer.getCustomerID());
+      } else {
+        appointments =
+            this.selectedCustomer == null
+                ? appointmentDAO.findAll()
+                : appointmentDAO.findAppointmentsByCustomerID(
+                    this.selectedCustomer.getCustomerID());
+      }
+
+      this.setAppointments(FXCollections.observableArrayList(appointments));
     } catch (SQLException ex) {
       ex.printStackTrace();
     }

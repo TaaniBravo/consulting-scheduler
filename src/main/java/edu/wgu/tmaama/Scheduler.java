@@ -9,11 +9,19 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.ResourceBundle;
 
+/**
+ * JavaFX application class. Called from Main to remove jar issues.
+ */
 public class Scheduler extends Application {
     public static void boot() {
         launch();
     }
 
+    /**
+     * Starts the application
+     * @param stage
+     * @throws IOException
+     */
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader loader = new FXMLLoader(Scheduler.class.getResource("/views/Login.fxml"));

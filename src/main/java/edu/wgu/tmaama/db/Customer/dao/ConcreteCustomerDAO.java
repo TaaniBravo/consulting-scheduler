@@ -54,7 +54,7 @@ public class ConcreteCustomerDAO implements CustomerDAO {
   public Customer findByID(int id) throws SQLException {
     try {
       String query =
-          "SELECT c.*, fld.Division "
+          "SELECT c.*, fld.Division, fld.Country_ID "
               + "FROM Customers c "
               + "JOIN First_Level_Divisions fld ON fld.Division_ID = c.Division_ID "
               + "WHERE Customer_ID = ?";
@@ -93,7 +93,7 @@ public class ConcreteCustomerDAO implements CustomerDAO {
       ArrayList<Customer> customers = new ArrayList<>();
       StringBuilder query =
           new StringBuilder(
-              "SELECT c.*, fld.Division "
+              "SELECT c.*, fld.Division, fld.Country_ID "
                   + "FROM Customers c "
                   + "JOIN First_Level_Divisions fld "
                   + "ON c.Division_ID = fld.Division_ID");
@@ -175,8 +175,9 @@ public class ConcreteCustomerDAO implements CustomerDAO {
     try {
       String division = resultSet.getString("Division");
       if (division != null) customer.setDivision(division);
+      customer.setCountryID(resultSet.getInt("Country_ID"));
     } catch (SQLException ex) {
-      //
+      // We don't want to handle this exception
     }
     return customer;
   }

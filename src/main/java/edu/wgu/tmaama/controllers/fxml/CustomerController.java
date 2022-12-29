@@ -29,6 +29,9 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+/**
+ * Controller for the Customer stage.
+ */
 public class CustomerController {
   @FXML private Label titleLabel;
   @FXML private TextField idTextField;
@@ -45,12 +48,19 @@ public class CustomerController {
   private ObservableList<Country> countries;
   private final ResourceBundle resources = ResourceBundle.getBundle("/bundles/main");
 
+  /**
+   * Initializes the controller by establishing a customer, loading the Country, and Division ComboBoxes with data.
+   */
   public void initialize() {
     this.customer = new Customer();
     this.loadCountryComboBox();
     this.loadDivisionsIntoComboBox();
   }
 
+  /**
+   * Set an existing customer's data into the form if we're updating.
+   * @param customer
+   */
   public void setCustomer(Customer customer) {
     this.customer = customer;
     this.setIsUpdating(true);
@@ -80,15 +90,28 @@ public class CustomerController {
     this.countryComboBox.getSelectionModel().select(optionalCountry.get());
   }
 
+  /**
+   * Sets the session user for the stage.
+   * @param user
+   */
   public void setSessionUser(User user) {
     this.sessionUser = user;
   }
 
+  /**
+   * Sets the flag isUpdating to help other functions determine whether we are updating or inserting.
+   * @param isUpdating
+   */
   public void setIsUpdating(boolean isUpdating) {
     this.isUpdating = isUpdating;
     this.titleLabel.setText(this.resources.getString("customer.title.update"));
   }
 
+  /**
+   * Handles the submit button.
+   * @param event
+   * @throws IOException
+   */
   @FXML
   private void handleSubmit(ActionEvent event) throws IOException {
     if (this.isUpdating) this.updateCustomer();
@@ -96,6 +119,10 @@ public class CustomerController {
     this.redirectToHomePage(event);
   }
 
+  /**
+   * Handles the reset button. Will clear the form besides the customer's ID if applicable.
+   * @param event
+   */
   @FXML
   private void handleReset(ActionEvent event) {
     this.nameTextField.setText("");
@@ -105,11 +132,19 @@ public class CustomerController {
     this.divisionComboBox.getSelectionModel().clearSelection();
   }
 
+  /**
+   * Handles the cancel button. Returns the user to the Home stage.
+   * @param event
+   * @throws IOException
+   */
   @FXML
   private void handleCancel(ActionEvent event) throws IOException {
     this.redirectToHomePage(event);
   }
 
+  /**
+   * Handles the selected country by updating the division ComboBox to only contain divisions that match the selected country's countryID
+   */
   @FXML
   private void handleSelectedCountry() {
     Country country = this.countryComboBox.getSelectionModel().getSelectedItem();
@@ -132,6 +167,9 @@ public class CustomerController {
     }
   }
 
+  /**
+   * Will try to update the customer's data to the database.
+   */
   private void updateCustomer() {
     this.setCustomerValuesFromForm();
     try {
@@ -144,6 +182,9 @@ public class CustomerController {
     }
   }
 
+  /**
+   * Will try to assign to customer's data from the form into the customer object to be sent to the database
+   */
   private void setCustomerValuesFromForm() {
     if (!this.validateForm()) return;
     this.customer.setCustomerName(nameTextField.getText());
@@ -157,11 +198,18 @@ public class CustomerController {
     if (!this.isUpdating) this.customer.setCreatedBy(sessionUser.getUsername());
   }
 
+  /**
+   * Validates that the form was entered correctly.
+   * @return
+   */
   private boolean validateForm() {
     // TODO: Validate the values in form to make sure their applicable (not empty).
     return true;
   }
 
+  /**
+   * Fetches the countries from the database and loads them into the ComboBox.
+   */
   private void loadCountryComboBox() {
     try {
       ConcreteCountryDAO countryDAO = new ConcreteCountryDAO();
@@ -173,6 +221,9 @@ public class CustomerController {
     }
   }
 
+  /**
+   * Fetches the First Level Divisions from the database and then based on the country selected in countryComboBox it will filter out the correct divisions to be available to be selected.
+   */
   private void loadDivisionsIntoComboBox() {
     try {
       ConcreteFirstLevelDivisionDAO divisionDAO = new ConcreteFirstLevelDivisionDAO();
@@ -183,6 +234,11 @@ public class CustomerController {
     }
   }
 
+  /**
+   * Redirects to the Home stage.
+   * @param event
+   * @throws IOException
+   */
   private void redirectToHomePage(ActionEvent event) throws IOException {
     FXMLLoader loader =
         new FXMLLoader(Objects.requireNonNull(Scheduler.class.getResource("/views/Home.fxml")));

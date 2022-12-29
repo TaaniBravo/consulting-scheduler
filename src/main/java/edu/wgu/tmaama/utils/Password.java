@@ -11,6 +11,9 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.Random;
 
+/**
+ * Class for properly holding onto a password hash and salt.
+ */
 public class Password {
   private final Random RANDOM = new SecureRandom();
   private String hash;
@@ -20,11 +23,6 @@ public class Password {
 
   public Password(String password) {
     this.salt = new Salt(this.getNextSalt());
-    this.hash = this.genSaltedPassword(password.toCharArray(), this.salt.getSalt());
-  }
-
-  public Password(String password, byte[] salt) {
-    this.salt = new Salt(salt);
     this.hash = this.genSaltedPassword(password.toCharArray(), this.salt.getSalt());
   }
 
@@ -65,12 +63,22 @@ public class Password {
     this.salt = salt;
   }
 
+  /**
+   * Generates a salt for the password to be hashed with.
+   * @return
+   */
   private byte[] getNextSalt() {
     byte[] salt = new byte[16];
     RANDOM.nextBytes(salt);
     return salt;
   }
 
+  /**
+   * Generates the hashed/salted password for safekeeping.
+   * @param password
+   * @param salt
+   * @return
+   */
   private String genSaltedPassword(char[] password, byte[] salt) {
     int KEY_LENGTH = 50;
     int ITERATIONS = 1000;
@@ -84,6 +92,12 @@ public class Password {
     }
   }
 
+  /**
+   * Compares to password hashes and sees if they are equal or not.
+   * @param password1
+   * @param password2
+   * @return
+   */
   public static boolean comparePasswords(Password password1, Password password2) {
     return Objects.equals(password1.getHash(), password2.getHash());
   }

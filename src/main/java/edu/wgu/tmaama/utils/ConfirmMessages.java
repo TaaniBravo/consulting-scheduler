@@ -2,6 +2,9 @@ package edu.wgu.tmaama.utils;
 
 import java.util.ResourceBundle;
 
+/**
+ * Static class that holds the translated confirm messages.
+ */
 public class ConfirmMessages {
   private static final ResourceBundle resources = ResourceBundle.getBundle("/bundles/messages");
 

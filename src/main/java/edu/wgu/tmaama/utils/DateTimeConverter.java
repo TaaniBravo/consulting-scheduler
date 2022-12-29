@@ -87,7 +87,21 @@ public class DateTimeConverter {
     return estDateTime;
   }
 
+  /**
+   * Returns the UTC String in the format of DATE_FORMAT
+   * @return
+   */
   public String getUTCString() {
     return utcDateTime.format(DateTimeFormatter.ofPattern(DATE_FORMAT));
   }
+
+  /**
+   * Static function to convert a LocalDateTime into a java.sql.Timestamp instance.
+   * @param datetime
+   * @return
+   */
+  public static Timestamp convertDateTimeToTimestamp(LocalDateTime datetime) {
+    return Timestamp.valueOf(datetime);
+  }
+
 }

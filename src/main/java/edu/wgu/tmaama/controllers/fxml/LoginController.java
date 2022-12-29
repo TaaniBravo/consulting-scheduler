@@ -31,6 +31,9 @@ import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.stream.Stream;
 
+/**
+ * Controller for the Login stage.
+ */
 public class LoginController {
   private final ResourceBundle resources = ResourceBundle.getBundle("bundles/main");
   @FXML private TextField usernameTextField;
@@ -38,10 +41,18 @@ public class LoginController {
   @FXML private Label errorLabel;
   @FXML private Label zoneLabel;
 
+  /**
+   * Initialize controller by getting the user's zone and loading for the page's zoneLabel
+   */
   public void initialize() {
     zoneLabel.setText(ZoneId.systemDefault().toString());
   }
 
+  /**
+ * Handles the login button by getting the user from the database and checking they entered their password correctly. Will also log the user's attempt to login.
+   * @param actionEvent
+   * @throws IOException
+   */
   @FXML
   private void handleLogin(ActionEvent actionEvent) throws IOException {
     String username = usernameTextField.getText();
@@ -78,6 +89,10 @@ public class LoginController {
     }
   }
 
+  /**
+   * Handles the sign up button. Currently here to just make testing easier when a new user is needed.
+   * @param actionEvent
+   */
   @FXML
   private void handleSignUp(ActionEvent actionEvent) {
     String username = usernameTextField.getText();
@@ -101,6 +116,12 @@ public class LoginController {
     }
   }
 
+  /**
+   * Redirects to the Home stage.
+   * @param actionEvent
+   * @param user
+   * @throws IOException
+   */
   private void redirectToHomePage(ActionEvent actionEvent, User user) throws IOException {
     FXMLLoader loader =
         new FXMLLoader(Objects.requireNonNull(Scheduler.class.getResource("/views/Home.fxml")));
@@ -119,6 +140,10 @@ public class LoginController {
     this.errorLabel.setText(message);
   }
 
+  /**
+   * Popup modal showing the user if they have any upcoming appointments.
+   * @param user
+   */
   private void alertUpcomingAppointments(User user) {
     try {
       ConcreteAppointmentDAO appointmentDAO = new ConcreteAppointmentDAO();

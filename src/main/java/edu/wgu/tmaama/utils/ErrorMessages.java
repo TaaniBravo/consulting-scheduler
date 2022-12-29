@@ -2,6 +2,9 @@ package edu.wgu.tmaama.utils;
 
 import java.util.ResourceBundle;
 
+/**
+ * Static class with constants for the translated error messages.
+ */
 public class ErrorMessages {
   private static final ResourceBundle resources = ResourceBundle.getBundle("/bundles/messages");
   public static final String APPOINTMENT_BLANK_TITLE =
