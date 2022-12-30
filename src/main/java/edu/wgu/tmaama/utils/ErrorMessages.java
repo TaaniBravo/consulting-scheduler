@@ -2,9 +2,7 @@ package edu.wgu.tmaama.utils;
 
 import java.util.ResourceBundle;
 
-/**
- * Static class with constants for the translated error messages.
- */
+/** Static class with constants for the translated error messages. */
 public class ErrorMessages {
   private static final ResourceBundle resources = ResourceBundle.getBundle("/bundles/messages");
   public static final String APPOINTMENT_BLANK_TITLE =
@@ -37,5 +35,8 @@ public class ErrorMessages {
       resources.getString("error.appointment.start.after.now");
   public static final String APPOINTMENT_OUTSIDE_OF_BUSINESS_HOURS =
       resources.getString("error.appointment.outside.business.hours");
-  public static final String GET_USER_APPOINTMENTS = resources.getString("error.get.user.appointments");
+  public static final String GET_USER_APPOINTMENTS =
+      resources.getString("error.get.user.appointments");
+  public static final String OVERLAPPING_APPOINTMENT_TIMES =
+      resources.getString("error.appointment.overlap");
 }

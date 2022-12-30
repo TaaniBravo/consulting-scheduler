@@ -181,7 +181,9 @@ public class AppointmentController {
   }
 
   /**
-   * Handles when the submit button is clicked. Will validate the form before submitting to database.
+   * Handles when the submit button is clicked. Will validate the form before submitting to
+   * database.
+   *
    * @param event
    * @throws IOException
    */
@@ -217,7 +219,8 @@ public class AppointmentController {
   }
 
   /**
-   * Handles the reset of the form, clearing out any text and selected ComboBoxes besides the Appointment's ID.
+   * Handles the reset of the form, clearing out any text and selected ComboBoxes besides the
+   * Appointment's ID.
    */
   @FXML
   private void handleReset() {
@@ -235,6 +238,7 @@ public class AppointmentController {
 
   /**
    * Handles the cancel button. Will send the user back to the Home stage.
+   *
    * @param event
    * @throws IOException
    */
@@ -245,6 +249,7 @@ public class AppointmentController {
 
   /**
    * Handles the actions of INSERTING an appointment into the database.
+   *
    * @param event
    */
   private void addAppointment(ActionEvent event) {
@@ -257,13 +262,19 @@ public class AppointmentController {
       modal.display();
       this.redirectToHomePage(event);
     } catch (SQLException | IOException ex) {
-      // TODO: display error message.
       ex.printStackTrace();
+      String message =
+              ex.getMessage().equals(ErrorMessages.OVERLAPPING_APPOINTMENT_TIMES)
+                      ? ErrorMessages.OVERLAPPING_APPOINTMENT_TIMES
+                      : ex.getMessage();
+      Modal modal = new Modal(Modal.ERROR, message);
+      modal.display();
     }
   }
 
   /**
    * Handles the action of UPDATING an existing appointment into the database.
+   *
    * @param event
    * @throws IOException
    */
@@ -275,12 +286,12 @@ public class AppointmentController {
       Modal modal = new Modal(Modal.SUCCESS, "Appointment was updated.");
       modal.display();
     } catch (SQLException ex) {
-      // TODO: display error message.
       ex.printStackTrace();
-      Modal modal =
-          new Modal(
-              Modal.ERROR,
-              "ERROR: There was an issue updating the appointment:\n" + ex.getMessage());
+      String message =
+          ex.getMessage().equals(ErrorMessages.OVERLAPPING_APPOINTMENT_TIMES)
+              ? ErrorMessages.OVERLAPPING_APPOINTMENT_TIMES
+              : ex.getMessage();
+      Modal modal = new Modal(Modal.ERROR, message);
       modal.display();
     } finally {
       this.redirectToHomePage(event);
@@ -289,6 +300,7 @@ public class AppointmentController {
 
   /**
    * Redirects the user to the Home stage.
+   *
    * @param event
    * @throws IOException
    */
@@ -307,6 +319,7 @@ public class AppointmentController {
 
   /**
    * Entry level validation function that returns a string of the errors to present to the user.
+   *
    * @return
    */
   private String validateForm() {
@@ -320,6 +333,7 @@ public class AppointmentController {
 
   /**
    * Handles the validation of the TextFields (minus the dates).
+   *
    * @param stringBuilder
    */
   private void validateTextFields(StringBuilder stringBuilder) {
@@ -335,6 +349,7 @@ public class AppointmentController {
 
   /**
    * Handles the validation of the ComboBoxes
+   *
    * @param stringBuilder
    */
   private void validateComboBoxes(StringBuilder stringBuilder) {
@@ -347,7 +362,9 @@ public class AppointmentController {
   }
 
   /**
-   * Handles the validation of the dates are the logic around this is much more complex than the other validations.
+   * Handles the validation of the dates are the logic around this is much more complex than the
+   * other validations.
+   *
    * @param stringBuilder
    */
   private void validateDates(StringBuilder stringBuilder) {
@@ -419,6 +436,7 @@ public class AppointmentController {
 
   /**
    * Sets the session user for the current stage.
+   *
    * @param sessionUser
    */
   public void setSessionUser(User sessionUser) {
