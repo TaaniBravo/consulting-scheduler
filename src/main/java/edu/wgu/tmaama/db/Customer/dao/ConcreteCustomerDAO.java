@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Concrete Customer Data Access Object.
+ */
 public class ConcreteCustomerDAO implements CustomerDAO {
   public static final String CUSTOMER_ID = "Customer_ID";
   public static final String CUSTOMER_NAME = "Customer_Name";
@@ -22,6 +25,12 @@ public class ConcreteCustomerDAO implements CustomerDAO {
     this.db = db;
   }
 
+  /**
+   * Tries to insert a new Customer object into the database.
+   * @param customer
+   * @return
+   * @throws SQLException
+   */
   @Override
   public Customer insert(Customer customer) throws SQLException {
     try {
@@ -50,6 +59,12 @@ public class ConcreteCustomerDAO implements CustomerDAO {
     }
   }
 
+  /**
+   * Find a customer by their Customer_ID.
+   * @param id
+   * @return
+   * @throws SQLException
+   */
   @Override
   public Customer findByID(int id) throws SQLException {
     try {
@@ -71,6 +86,11 @@ public class ConcreteCustomerDAO implements CustomerDAO {
     }
   }
 
+  /**
+   * Finds all customers in database.
+   * @return
+   * @throws SQLException
+   */
   @Override
   public ArrayList<Customer> findAll() throws SQLException {
     try {
@@ -87,6 +107,12 @@ public class ConcreteCustomerDAO implements CustomerDAO {
     }
   }
 
+  /**
+   * Returns all customer in database but all allows for some control over the query.
+   * @param options
+   * @return
+   * @throws SQLException
+   */
   public List<Customer> findAll(HashMap<String, String> options) throws SQLException {
     try {
       if (!this.db.checkConnection()) this.db.getConnection();
@@ -142,6 +168,12 @@ public class ConcreteCustomerDAO implements CustomerDAO {
     }
   }
 
+  /**
+   * Tries to delete a customer by their Customer ID.
+   * @param id
+   * @return
+   * @throws SQLException
+   */
   @Override
   public boolean deleteByID(int id) throws SQLException {
     try {
@@ -157,6 +189,12 @@ public class ConcreteCustomerDAO implements CustomerDAO {
     }
   }
 
+  /**
+   * Returns a Customer object from the resultSet passed in.
+   * @param resultSet
+   * @return
+   * @throws SQLException
+   */
   @Override
   public Customer getInstanceFromResultSet(ResultSet resultSet) throws SQLException {
     Customer customer =
@@ -182,6 +220,11 @@ public class ConcreteCustomerDAO implements CustomerDAO {
     return customer;
   }
 
+  /**
+   * Dynamically builds out the options given as part of the query.
+   * @param options
+   * @return
+   */
   private String buildOptions(HashMap<String, String> options) {
     if (options == null) return "";
     StringBuilder queryOptions = new StringBuilder();

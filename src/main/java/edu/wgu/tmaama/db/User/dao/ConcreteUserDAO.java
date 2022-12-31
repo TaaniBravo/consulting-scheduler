@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+/** Concrete Data Access Object for Users table. */
 public class ConcreteUserDAO implements UserDAO {
   private Database db = new Database();
   private Connection cxn = db.getConnection();
@@ -23,13 +24,22 @@ public class ConcreteUserDAO implements UserDAO {
     this.cxn = this.db.getConnection();
   }
 
+  /**
+   * Tries to insert a user and the salt that was used to hash their password into the database.
+   *
+   * @param user
+   * @return
+   * @throws SQLException
+   */
   @Override
   public User insert(User user) throws SQLException {
     try {
       if (!this.db.checkConnection()) this.cxn = this.db.getConnection();
       this.cxn.setAutoCommit(false);
-      String userQuery = "INSERT INTO Users " + "(User_Name, Password, Created_By)" + " VALUES (?, ?, ?)";
-      PreparedStatement userStmt = this.cxn.prepareStatement(userQuery, Statement.RETURN_GENERATED_KEYS);
+      String userQuery =
+          "INSERT INTO Users " + "(User_Name, Password, Created_By)" + " VALUES (?, ?, ?)";
+      PreparedStatement userStmt =
+          this.cxn.prepareStatement(userQuery, Statement.RETURN_GENERATED_KEYS);
       userStmt.setString(1, user.getUsername());
       userStmt.setString(2, user.getPassword().getHash());
       userStmt.setString(3, user.getCreatedBy());
@@ -38,15 +48,14 @@ public class ConcreteUserDAO implements UserDAO {
         throw new SQLException("Creating a new user failed, please try again.");
       ResultSet results = userStmt.getGeneratedKeys();
       assert results != null;
-      if (results.next())
-        user.setUserID(results.getInt(1));
+      if (results.next()) user.setUserID(results.getInt(1));
       Salt salt = user.getPassword().getSalt();
       salt.setUserID(user.getUserID());
       ConcreteSaltDAO saltDAO = new ConcreteSaltDAO(this.db);
       saltDAO.insert(salt);
       this.cxn.commit();
       return user;
-    } catch (SQLException|AssertionError ex) {
+    } catch (SQLException | AssertionError ex) {
       this.cxn.rollback();
       throw ex;
     } finally {
@@ -54,6 +63,13 @@ public class ConcreteUserDAO implements UserDAO {
     }
   }
 
+  /**
+   * Find a user by their userID.
+   *
+   * @param id
+   * @return
+   * @throws SQLException
+   */
   @Override
   public User findByID(int id) throws SQLException {
     try {
@@ -72,6 +88,13 @@ public class ConcreteUserDAO implements UserDAO {
     }
   }
 
+  /**
+   * Find a user by their username.
+   *
+   * @param username
+   * @return
+   * @throws SQLException
+   */
   public User findByUsername(String username) throws SQLException {
     try {
       if (!this.db.checkConnection()) this.cxn = this.db.getConnection();
@@ -89,45 +112,12 @@ public class ConcreteUserDAO implements UserDAO {
     }
   }
 
-//  @Override
-  public ArrayList<User> find(ArrayList<String> attributes, HashMap<String, String> where) throws SQLException {
-    try {
-    if (!this.db.checkConnection()) this.cxn = this.db.getConnection();
-    ArrayList<User> users = new ArrayList<>();
-    StringBuilder stringBuilder = new StringBuilder("SELECT ");
-    for (int i = 0; i < attributes.size(); i++) {
-      String attr = attributes.get(i);
-      if (i == 0) {
-        stringBuilder.append(attr).append(" ");
-      } else {
-        stringBuilder.append(", ").append(attr).append(" ");
-      }
-    }
-
-    stringBuilder.append("FROM Users ");
-
-    if (!where.isEmpty()) {
-      stringBuilder.append("WHERE ");
-      Iterator<Map.Entry<String, String>> iterator = where.entrySet().iterator();
-      while (iterator.hasNext()) {
-        Map.Entry<String, String> clause = iterator.next();
-        stringBuilder.append(clause.getKey()).append(" = '").append(clause.getValue()).append("'");
-        if (iterator.hasNext()) stringBuilder.append(" AND ");
-      }
-    }
-
-    ResultSet resultSet = this.cxn.createStatement().executeQuery(stringBuilder.toString());
-
-    while (resultSet.next()) {
-      users.add(this.getDynamicInstanceFromResultSet(resultSet, attributes));
-    }
-
-    return users;
-    } finally {
-      this.db.closeConnection();
-    }
-  }
-
+  /**
+   * Finds all users in the database.
+   *
+   * @return
+   * @throws SQLException
+   */
   @Override
   public ArrayList<User> findAll() throws SQLException {
     try {
@@ -144,15 +134,22 @@ public class ConcreteUserDAO implements UserDAO {
     }
   }
 
+  /**
+   * Tries to update a user by the user object passed in.
+   *
+   * @param user
+   * @return
+   * @throws SQLException
+   */
   @Override
   public User update(User user) throws SQLException {
     try {
       String query =
-              "UPDATE Users SET "
-                      + "User_Name = ?,"
-                      + "Password = ?,"
-                      + "Last_Updated_By = ?,"
-                      + "WHERE User_ID = ?";
+          "UPDATE Users SET "
+              + "User_Name = ?,"
+              + "Password = ?,"
+              + "Last_Updated_By = ?,"
+              + "WHERE User_ID = ?";
       PreparedStatement stmt = this.cxn.prepareStatement(query);
       stmt.setString(1, user.getUsername());
       stmt.setString(2, user.getPassword().getHash());
@@ -167,6 +164,13 @@ public class ConcreteUserDAO implements UserDAO {
     }
   }
 
+  /**
+   * Tries to delete a user by their userID.
+   *
+   * @param id
+   * @return
+   * @throws SQLException
+   */
   @Override
   public boolean deleteByID(int id) throws SQLException {
     try {
@@ -179,6 +183,13 @@ public class ConcreteUserDAO implements UserDAO {
     }
   }
 
+  /**
+   * Returns a user object based on the resultSet passed in.
+   *
+   * @param resultSet
+   * @return
+   * @throws SQLException
+   */
   @Override
   public User getInstanceFromResultSet(ResultSet resultSet) throws SQLException {
     Password password = new Password();
@@ -191,28 +202,5 @@ public class ConcreteUserDAO implements UserDAO {
         resultSet.getString("Created_By"),
         resultSet.getTimestamp("Last_Update"),
         resultSet.getString("Last_Updated_By"));
-  }
-
-  public User getDynamicInstanceFromResultSet(ResultSet resultSet, ArrayList<String> attributes) throws SQLException {
-    if (attributes.size() == 0) return null;
-    if (attributes.contains("*")) return this.getInstanceFromResultSet(resultSet);
-
-    User user = new User();
-    for (String attr : attributes) {
-      switch (attr) {
-        case "User_ID" -> user.setUserID(resultSet.getInt(attr));
-        case "User_Name" -> user.setUsername(resultSet.getString(attr));
-        case "Password" -> {
-          Password password = new Password();
-          password.setPassword(resultSet.getString("Password"), false);
-        }
-        case "Create_Date" -> user.setCreateDate(resultSet.getTimestamp(attr));
-        case "Created_By" -> user.setCreatedBy(resultSet.getString(attr));
-        case "Last_Update" -> user.setLastUpdate(resultSet.getTimestamp(attr));
-        case "Last_Updated_By" -> user.setLastUpdatedBy(resultSet.getString(attr));
-        default -> throw new RuntimeException("Attribute unknown to table Users");
-      }
-    }
-    return user;
   }
 }

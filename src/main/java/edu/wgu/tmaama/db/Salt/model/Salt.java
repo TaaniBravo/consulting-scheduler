@@ -1,46 +1,82 @@
 package edu.wgu.tmaama.db.Salt.model;
 
+/**
+ * Database model for Salts table. A salt is a term used for hashing sensitive information (namely
+ * passwords) so that we don't have to store a user's password directly. Rather we store the hash
+ * and the salt used to hash the password so that if the database was to be leaked the chance of a
+ * user being hacked is less likely.
+ */
 public class Salt {
-    private int saltID;
-    private byte[] salt;
-    private int userID;
+  private int saltID;
+  private byte[] salt;
+  private int userID;
 
-    public Salt(byte[] salt) {
-        this.salt = salt;
-    }
+  public Salt(byte[] salt) {
+    this.salt = salt;
+  }
 
-    public Salt(byte[] salt, int userID) {
-        this.salt = salt;
-        this.userID = userID;
-    }
+  public Salt(byte[] salt, int userID) {
+    this.salt = salt;
+    this.userID = userID;
+  }
 
-    public Salt(int saltID, byte[] salt, int userID) {
-        this.saltID = saltID;
-        this.salt = salt;
-        this.userID = userID;
-    }
+  public Salt(int saltID, byte[] salt, int userID) {
+    this.saltID = saltID;
+    this.salt = salt;
+    this.userID = userID;
+  }
 
-    public int getSaltID() {
-        return saltID;
-    }
+  /**
+   * Get a salt's saltID.
+   *
+   * @return
+   */
+  public int getSaltID() {
+    return saltID;
+  }
 
-    public void setSaltID(int saltID) {
-        this.saltID = saltID;
-    }
+  /**
+   * Set a salt's saltID.
+   *
+   * @param saltID
+   */
+  public void setSaltID(int saltID) {
+    this.saltID = saltID;
+  }
 
-    public byte[] getSalt() {
-        return salt;
-    }
+  /**
+   * Get a salt's salt.
+   *
+   * @return
+   */
+  public byte[] getSalt() {
+    return salt;
+  }
 
-    public void setSalt(byte[] salt) {
-        this.salt = salt;
-    }
+  /**
+   * Set a salt's salt.
+   *
+   * @param salt
+   */
+  public void setSalt(byte[] salt) {
+    this.salt = salt;
+  }
 
-    public int getUserID() {
-        return userID;
-    }
+  /**
+   * Get a salt's userID.
+   *
+   * @return
+   */
+  public int getUserID() {
+    return userID;
+  }
 
-    public void setUserID(int userID) {
-        this.userID = userID;
-    }
+  /**
+   * Set a salt's userID.
+   *
+   * @return
+   */
+  public void setUserID(int userID) {
+    this.userID = userID;
+  }
 }

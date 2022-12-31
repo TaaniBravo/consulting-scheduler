@@ -73,26 +73,50 @@ public class Country {
     return createDate;
   }
 
+  /**
+   * Get a country's created by user.
+   * @return
+   */
   public String getCreatedBy() {
     return createdBy;
   }
 
+  /**
+   * Set a country's created by user.
+   * @return
+   */
   public void setCreatedBy(String createdBy) {
     this.createdBy = createdBy;
   }
 
+  /**
+   * Get a country's last update timestamp.
+   * @return
+   */
   public Timestamp getLastUpdate() {
     return lastUpdate;
   }
 
+  /**
+   * Get a country's last updated by user.
+   * @return
+   */
   public String getLastUpdatedBy() {
     return lastUpdatedBy;
   }
 
+  /**
+   * Set a country's last updated by user.
+   * @return
+   */
   public void setLastUpdatedBy(String lastUpdatedBy) {
     this.lastUpdatedBy = lastUpdatedBy;
   }
 
+  /**
+   * Override method to return just the country when toString is called.
+   * @return
+   */
   @Override
   public String toString() {
     return this.country;
