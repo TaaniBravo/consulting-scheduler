@@ -2,6 +2,9 @@ package edu.wgu.tmaama.db.Country.model;
 
 import java.sql.Timestamp;
 
+/**
+ * Country model class.
+ */
 public class Country {
   private int countryID;
   private String country;
@@ -30,28 +33,44 @@ public class Country {
     this.lastUpdatedBy = lastUpdatedBy;
   }
 
+  /**
+   * Get a country's countryID.
+   * @return
+   */
   public int getCountryID() {
     return countryID;
   }
 
+  /**
+   * Set a country's countryID.
+   * @param countryID
+   */
   public void setCountryID(int countryID) {
     this.countryID = countryID;
   }
 
+  /**
+   * Get a country's country string.
+   * @return
+   */
   public String getCountry() {
     return country;
   }
 
+  /**
+   * Set a country's country string.
+   * @return
+   */
   public void setCountry(String country) {
     this.country = country;
   }
 
+  /**
+   * Get a country's create date.
+   * @return
+   */
   public Timestamp getCreateDate() {
     return createDate;
-  }
-
-  public void setCreateDate(Timestamp createDate) {
-    this.createDate = createDate;
   }
 
   public String getCreatedBy() {
@@ -64,10 +83,6 @@ public class Country {
 
   public Timestamp getLastUpdate() {
     return lastUpdate;
-  }
-
-  public void setLastUpdate(Timestamp lastUpdate) {
-    this.lastUpdate = lastUpdate;
   }
 
   public String getLastUpdatedBy() {

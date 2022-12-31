@@ -1,6 +1,7 @@
 package edu.wgu.tmaama.utils;
 
 import java.util.ResourceBundle;
+import java.util.function.Function;
 
 /**
  * Static class that holds the translated confirm messages.

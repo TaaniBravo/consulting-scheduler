@@ -32,6 +32,7 @@ import java.util.HashMap;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
+/** Controller for Home stage. */
 public class HomeController {
   private final ResourceBundle bundle = ResourceBundle.getBundle("bundles/main");
   @FXML private TextField searchCustomerTextField;
@@ -67,37 +68,69 @@ public class HomeController {
   private ObservableList<Customer> customers;
   private ObservableList<Appointment> appointments;
 
+  /** Initializes the controller. */
   public void initialize() {
     this.initializeCustomerTable();
     this.initializeCustomerSearchBar();
     this.initializeAppointmentTable();
-    this.initializeAppointmentSearchBar();
   }
 
+  /**
+   * Set customers field that will be used in the customerTableView
+   *
+   * @param customers
+   */
   private void setCustomers(ObservableList<Customer> customers) {
     this.customers = customers;
     this.customerTableView.setItems(this.customers);
   }
 
+  /**
+   * Sets the appointments field that will be used in the appointmentTableView.
+   *
+   * @param appointments
+   */
   private void setAppointments(ObservableList<Appointment> appointments) {
     this.appointments = appointments;
     this.appointmentTableView.setItems(this.appointments);
   }
 
+  /**
+   * Returns the current session user.
+   *
+   * @return
+   */
   public User getSessionUser() {
     return sessionUser;
   }
 
+  /**
+   * Sets the current session user.
+   *
+   * @param sessionUser
+   */
   public void setSessionUser(User sessionUser) {
     this.sessionUser = sessionUser;
     this.usernameLabel.setText(sessionUser.getUsername());
   }
 
+  /**
+   * Signs out the user and returns them to the login page.
+   *
+   * @param actionEvent
+   * @throws IOException
+   */
   @FXML
   private void handleSignOut(ActionEvent actionEvent) throws IOException {
     this.redirectToLoginPage(actionEvent);
   }
 
+  /**
+   * Redirects the user to the login stage.
+   *
+   * @param actionEvent
+   * @throws IOException
+   */
   private void redirectToLoginPage(ActionEvent actionEvent) throws IOException {
     FXMLLoader loader =
         new FXMLLoader(Objects.requireNonNull(Scheduler.class.getResource("/views/Login.fxml")));
@@ -109,6 +142,13 @@ public class HomeController {
     stage.show();
   }
 
+  /**
+   * Redirects the user to the Customer stage.
+   *
+   * @param actionEvent
+   * @param customer
+   * @throws IOException
+   */
   private void redirectToCustomerPage(ActionEvent actionEvent, Customer customer)
       throws IOException {
     FXMLLoader loader =
@@ -128,6 +168,13 @@ public class HomeController {
     stage.show();
   }
 
+  /**
+   * Redirects the user to the appointment page.
+   *
+   * @param actionEvent
+   * @param appointment
+   * @throws IOException
+   */
   private void redirectToAppointmentPage(ActionEvent actionEvent, Appointment appointment)
       throws IOException {
     FXMLLoader loader =
@@ -194,11 +241,23 @@ public class HomeController {
     stage.show();
   }
 
+  /**
+   * Handles the Add Customer button.
+   *
+   * @param actionEvent
+   * @throws IOException
+   */
   @FXML
   private void handleAddCustomer(ActionEvent actionEvent) throws IOException {
     this.redirectToCustomerPage(actionEvent, null);
   }
 
+  /**
+   * Handles the Update Customer button.
+   *
+   * @param actionEvent
+   * @throws IOException
+   */
   @FXML
   private void handleUpdateCustomer(ActionEvent actionEvent) throws IOException {
     Customer customer = this.customerTableView.getSelectionModel().getSelectedItem();
@@ -207,6 +266,11 @@ public class HomeController {
     }
   }
 
+  /**
+   * Handles the Delete Customer button.
+   *
+   * @throws SQLException
+   */
   @FXML
   private void handleDeleteCustomer() throws SQLException {
     Customer customer = this.customerTableView.getSelectionModel().getSelectedItem();
@@ -226,8 +290,13 @@ public class HomeController {
     this.customerTableView.getItems().remove(customer);
   }
 
+  /**
+   * Initializes the customer table by getting the customer list from the database and preparing the
+   * TableView cells. A simple lambda allows us to use our method setTableWidth and pass in the
+   * argument that we want.
+   */
   private void initializeCustomerTable() {
-    this.getCustomersListFromDB();
+    this.fetchCustomersListFromDB();
 
     this.customerIdTableCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
     this.customerNameTableCol.setCellValueFactory(new PropertyValueFactory<>("customerName"));
@@ -244,7 +313,8 @@ public class HomeController {
         });
   }
 
-  private void getCustomersListFromDB() {
+  /** Fetches the customer list from the database. */
+  private void fetchCustomersListFromDB() {
     try {
       // Get Customers
       ConcreteCustomerDAO customerDAO = new ConcreteCustomerDAO();
@@ -258,6 +328,10 @@ public class HomeController {
     }
   }
 
+  /**
+   * Initializes the customer search bar. Using a lambda here allows us to write one time code that
+   * we need to use only for this search bar.
+   */
   private void initializeCustomerSearchBar() {
     this.searchCustomerTextField
         .textProperty()
@@ -291,6 +365,11 @@ public class HomeController {
             }));
   }
 
+  /**
+   * Initializes the appointment table and its cells. A lambda is useful here as the method we want to use
+   * setTableWidth needs to be passed in a TableView and to write a method for this specific reason would
+   * make the code less readable with the abstraction.
+   */
   private void initializeAppointmentTable() {
     this.appointmentIdTableCol.setCellValueFactory(new PropertyValueFactory<>("appointmentID"));
     this.appointmentTitleTableCol.setCellValueFactory(new PropertyValueFactory<>("title"));
@@ -309,8 +388,9 @@ public class HomeController {
         });
   }
 
-  private void initializeAppointmentSearchBar() {}
-
+  /**
+   * Handles the selection of a customer on the customerTableView.
+   */
   @FXML
   private void handleSelectedCustomer() {
     Customer customer = this.customerTableView.getSelectionModel().getSelectedItem();
@@ -327,6 +407,9 @@ public class HomeController {
     this.fetchAppointments();
   }
 
+  /**
+   * Handles the selection of an appointment on the appointmentTableView.
+   */
   @FXML
   private void handleSelectedAppointment() {
     Appointment selectedAppointment =
@@ -341,11 +424,21 @@ public class HomeController {
     this.deleteAppointmentButton.setDisable(false);
   }
 
+  /**
+   * Handles the add appointment button.
+   * @param event
+   * @throws IOException
+   */
   @FXML
   private void handleAddAppointment(ActionEvent event) throws IOException {
     this.redirectToAppointmentPage(event, null);
   }
 
+  /**
+   * Handles the update appointment button.
+   * @param event
+   * @throws IOException
+   */
   @FXML
   private void handleUpdateAppointment(ActionEvent event) throws IOException {
     Appointment selectedAppointment =
@@ -355,6 +448,9 @@ public class HomeController {
     }
   }
 
+  /**
+   * Handles the delete appointment button.
+   */
   @FXML
   private void handleDeleteAppointment() {
     try {
@@ -368,7 +464,6 @@ public class HomeController {
       if (!alertModal.displayAndConfirm(header, content)) return;
       ConcreteAppointmentDAO appointmentDAO = new ConcreteAppointmentDAO();
       boolean success = appointmentDAO.deleteByID(appointment.getAppointmentID());
-      // TODO: Display error.
       if (!success) return;
 
       this.appointments.remove(appointment);
@@ -378,18 +473,27 @@ public class HomeController {
     }
   }
 
+  /**
+   * Handles the Appointment Month RadioButton.
+   */
   @FXML
   private void handleAppointmentMonthRadio() {
     if (weekRadioButton.isSelected()) weekRadioButton.setSelected(false);
     this.fetchAppointments();
   }
 
+  /**
+   * Handles the Appointment Week RadioButton.
+   */
   @FXML
   private void handleAppointmentWeekRadio() {
     if (monthRadioButton.isSelected()) monthRadioButton.setSelected(false);
     this.fetchAppointments();
   }
 
+  /**
+   * Fetches the appointment based on the filters selected from the database.
+   */
   private void fetchAppointments() {
     try {
       ConcreteAppointmentDAO appointmentDAO = new ConcreteAppointmentDAO();
