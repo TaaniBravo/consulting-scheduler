@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<AnchorPane prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/11.0.14-internal"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="edu.wgu.tmaama.controllers.fxml.DivisionReportController">
+    <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+          AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <ButtonBar buttonMinWidth="50.0">
+            <buttons>
+                <ComboBox fx:id="countryComboBox" prefWidth="150.0" promptText="%shared.combobox.country"
+                          ButtonBar.buttonData="LEFT"/>
+                <ComboBox fx:id="divisionComboBox" prefWidth="150.0" promptText="%shared.combobox.division"
+                          ButtonBar.buttonData="LEFT"/>
+                <Button mnemonicParsing="false" onAction="#handleGenerateReport" text="%shared.button.generate.report"
+                        ButtonBar.buttonData="RIGHT"/>
+                <Button mnemonicParsing="false" onAction="#handleReset" text="%shared.button.reset"
+                        ButtonBar.buttonData="RIGHT"/>
+                <Button mnemonicParsing="false" onAction="#handleCancel" text="%shared.button.cancel"
+                        ButtonBar.buttonData="RIGHT"/>
+            </buttons>
+            <VBox.margin>
+                <Insets bottom="32.0"/>
+            </VBox.margin>
+        </ButtonBar>
+        <TableView fx:id="appointmentTableView" prefHeight="545.0" prefWidth="800.0">
+            <columns>
+                <TableColumn fx:id="appointmentIdTableCol" text="%shared.appointment.id"/>
+                <TableColumn fx:id="appointmentTitleTableCol" text="%shared.appointment.title"/>
+                <TableColumn fx:id="appointmentDescTableCol" text="%shared.appointment.desc"/>
+                <TableColumn fx:id="appointmentLocationTableCol" text="%shared.appointment.location"/>
+                <TableColumn fx:id="appointmentTypeTableCol" text="%shared.appointment.type"/>
+                <TableColumn fx:id="appointmentStartTableCol" text="%shared.appointment.start"/>
+                <TableColumn fx:id="appointmentEndTableCol" text="%shared.appointment.end"/>
+                <TableColumn fx:id="appointmentCustomerIDTableCol" text="%shared.appointment.customer.id"/>
+                <TableColumn fx:id="appointmentUserIDTableCol" text="%shared.appointment.user.id"/>
+            </columns>
+        </TableView>
+        <padding>
+            <Insets bottom="24.0" left="24.0" right="24.0" top="24.0"/>
+        </padding>
+    </VBox>
+</AnchorPane>

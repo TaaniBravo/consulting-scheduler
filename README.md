@@ -25,9 +25,6 @@ choco install mysql
 brew install mysql
 ```
 
-### Docker
-TK
-
 ### Step 2 - Creating the Database
 Once you have MySQL installed and running. Run this command in your terminal (doesn't work for Powershell) to get the databases loaded into the file along with some test data you can play with.
 ```shell
@@ -40,6 +37,11 @@ mysql -u <username> -p <password> < ./src/main/resources/sql/dropDatabase.sql
 
 # Using Powershell
 mysql -u root -p -e "source C:\path\to\project\src\main\resources\sql\createDatabaseAndSeed.sql"
+
+# Alternatively you can run the SQL files individual in this order.
+mysql -u <username> -p <password> < ./src/main/resources/sql/createDatabase.sql
+mysql -u <username> -p <password> < ./src/main/resources/sql/createTriggers.sql
+mysql -u <username> -p <password> < ./src/main/resources/sql/seed.sql
 ```
 
 ### Step 3 - Creating a config.properties file
@@ -57,3 +59,7 @@ mvn clean package
 # Then just run jar command
 java -jar ./target/scheduler-1.0-SNAPSHOT-jar-with-dependencies.jar
 ```
+
+### Optional - Run through Container (Docker)
+If you'd like to run the app through Docker than you will need to make sure you don't have a local MySQL database currently running.
+

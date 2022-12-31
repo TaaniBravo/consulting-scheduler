@@ -5,6 +5,11 @@ services:
       context: ./
       target: app
       dockerfile: ./Dockerfile
+    command:
+      - ls /
+      - ls /app
+      - mvn clean package
+      - java -jar /app/target/scheduler-1.0-SNAPSHOT-jar-with-dependencies.jar
     volumes:
       - ./:/app
     ports:
@@ -18,7 +23,7 @@ services:
     image: "mysql:8.0.31"
     restart: "on-failure"
     volumes:
-      - ./src/main/resources/sql/createDatabase.sql:/docker-entrypoint-initdb.d/dump.sql
+      - ./src/main/resources/sql/createDatabaseAndSeed.sql:/docker-entrypoint-initdb.d/dump.sql
       - db:/var/lib/mysql
     ports:
       - "3306:3306"

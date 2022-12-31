@@ -248,6 +248,90 @@ public class ConcreteAppointmentDAO implements AppointmentDAO {
   }
 
   /**
+   * Find appointments types
+   *
+   * @return
+   * @throws SQLException
+   */
+  public ArrayList<String> findAppointmentTypes() throws SQLException {
+    try {
+      if (!this.db.checkConnection()) this.db.getConnection();
+      ArrayList<String> types = new ArrayList<>();
+      String query = "SELECT DISTINCT(Type) FROM Appointments";
+      PreparedStatement stmt = this.cxn.prepareStatement(query);
+      ResultSet resultSet = stmt.executeQuery();
+      while (resultSet.next()) {
+        types.add(resultSet.getString("Type"));
+      }
+      return types;
+    } finally {
+      this.db.closeConnection();
+    }
+  }
+
+  /**
+   * Find appointments types
+   *
+   * @return
+   * @throws SQLException
+   */
+  public ArrayList<Appointment> findAllByTypeAndMonth(String type, int month) throws SQLException {
+    try {
+      if (!this.db.checkConnection()) this.db.getConnection();
+      ArrayList<Appointment> appointments = new ArrayList<>();
+      String query = "SELECT * FROM Appointments " + "WHERE Type = ? " + "AND MONTH(Start) = ?";
+      PreparedStatement stmt = this.cxn.prepareStatement(query);
+      stmt.setString(1, type);
+      stmt.setInt(2, month);
+      ResultSet resultSet = stmt.executeQuery();
+      while (resultSet.next()) {
+        appointments.add(this.getInstanceFromResultSet(resultSet));
+      }
+      return appointments;
+    } finally {
+      this.db.closeConnection();
+    }
+  }
+
+  public ArrayList<Appointment> findAppointmentsByContactID(int contactID) throws SQLException {
+    try {
+      if (!this.db.checkConnection()) this.db.getConnection();
+      ArrayList<Appointment> appointments = new ArrayList<>();
+      String query = "SELECT * FROM Appointments WHERE Contact_ID = ?";
+      PreparedStatement stmt = this.cxn.prepareStatement(query);
+      stmt.setInt(1, contactID);
+      ResultSet resultSet = stmt.executeQuery();
+      while (resultSet.next()) {
+        appointments.add(this.getInstanceFromResultSet(resultSet));
+      }
+      return appointments;
+    } finally {
+      this.db.closeConnection();
+    }
+  }
+
+  public ArrayList<Appointment> findAppointmentsByDivisionID(int divisionID) throws SQLException {
+    try {
+      if (!this.db.checkConnection()) this.db.getConnection();
+      ArrayList<Appointment> appointments = new ArrayList<>();
+      String query =
+          "SELECT * FROM Appointments a "
+              + "JOIN Customer c ON c.Customer_ID = a.Customer_ID "
+              + "JOIN First_Level_Division fld on fld.Division_ID = c.Division_ID"
+              + "WHERE First_Level_Division = ?";
+      PreparedStatement stmt = this.cxn.prepareStatement(query);
+      stmt.setInt(1, divisionID);
+      ResultSet resultSet = stmt.executeQuery();
+      while (resultSet.next()) {
+        appointments.add(this.getInstanceFromResultSet(resultSet));
+      }
+      return appointments;
+    } finally {
+      this.db.closeConnection();
+    }
+  }
+
+  /**
    * Update an appointment by appointmentID
    *
    * @param appointment - the appointment object to update the database with.

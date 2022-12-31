@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.14-internal"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wgu.tmaama.controllers.fxml.TypeReportController">
+    <VBox prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+          AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <padding>
+            <Insets bottom="40.0" left="20.0" right="20.0" top="40.0"/>
+        </padding>
+        <Label text="%type.report.title">
+            <VBox.margin>
+                <Insets bottom="32.0"/>
+            </VBox.margin>
+        </Label>
+        <FlowPane hgap="16.0">
+            <VBox.margin>
+                <Insets bottom="16.0"/>
+            </VBox.margin>
+            <ComboBox fx:id="typeComboBox" prefWidth="150.0"
+                      promptText="%type.report.type.combobox"/>
+            <ComboBox fx:id="monthComboBox" prefWidth="150.0"
+                      promptText="%type.report.time.combobox"/>
+        </FlowPane>
+        <Label fx:id="countLabel" text="%type.report.total.count">
+            <VBox.margin>
+                <Insets bottom="16.0"/>
+            </VBox.margin>
+        </Label>
+        <ButtonBar>
+            <buttons>
+                <Button mnemonicParsing="false" text="%type.report.generate.btn" onAction="#handleGenerateReport"
+                        ButtonBar.buttonData="LEFT"/>
+                <Button mnemonicParsing="false" text="%type.report.reset.btn" onAction="#handleReset"
+                        ButtonBar.buttonData="LEFT"/>
+            </buttons>
+            <VBox.margin>
+                <Insets bottom="32.0"/>
+            </VBox.margin>
+        </ButtonBar>
+        <TableView fx:id="appointmentTableView" prefHeight="400.0">
+            <columns>
+                <TableColumn fx:id="appointmentIdTableCol" text="%shared.appointment.id"/>
+                <TableColumn fx:id="appointmentTitleTableCol" text="%shared.appointment.title"/>
+                <TableColumn fx:id="appointmentDescTableCol" text="%shared.appointment.desc"/>
+                <TableColumn fx:id="appointmentLocationTableCol" text="%shared.appointment.location"/>
+                <TableColumn fx:id="appointmentTypeTableCol" text="%shared.appointment.type"/>
+                <TableColumn fx:id="appointmentStartTableCol" text="%shared.appointment.start"/>
+                <TableColumn fx:id="appointmentEndTableCol" text="%shared.appointment.end"/>
+                <TableColumn fx:id="appointmentCustomerIDTableCol" text="%shared.appointment.customer.id"/>
+                <TableColumn fx:id="appointmentUserIDTableCol" text="%shared.appointment.user.id"/>
+            </columns>
+        </TableView>
+    </VBox>
+</AnchorPane>

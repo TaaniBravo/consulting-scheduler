@@ -3,79 +3,95 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
-<AnchorPane prefHeight="1000.0" prefWidth="1000.0" styleClass="mainPane" stylesheets="@../css/Home.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wgu.tmaama.controllers.fxml.HomeController">
+<AnchorPane prefHeight="1000.0" prefWidth="1000.0" styleClass="mainPane" stylesheets="@../css/Home.css"
+            xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="edu.wgu.tmaama.controllers.fxml.HomeController">
     <VBox AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
-        <HBox alignment="CENTER_LEFT" spacing="50.0">
-            <Label fx:id="usernameLabel" prefWidth="331.0" text="username">
+        <AnchorPane>
+            <Label fx:id="usernameLabel" prefWidth="331.0" text="username" AnchorPane.leftAnchor="0">
                 <graphic>
-                    <Button mnemonicParsing="false" onAction="#handleSignOut" styleClass="signOutButton" text="%home.signout" />
+                    <Button mnemonicParsing="false" onAction="#handleSignOut" styleClass="signOutButton"
+                            text="%home.signout"/>
                 </graphic>
                 <padding>
-                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
                 </padding>
-                <HBox.margin>
-                    <Insets />
-                </HBox.margin>
             </Label>
-        </HBox>
+            <MenuBar fx:id="reportMenuBar" AnchorPane.rightAnchor="0.0">
+                <Menu mnemonicParsing="false" text="%home.reports.menu">
+                    <MenuItem mnemonicParsing="false" text="%home.reports.appointment" onAction="#redirectToTypeReportPage"/>
+                    <MenuItem mnemonicParsing="false" text="%home.reports.contacts" onAction="#redirectToContactReportPage"/>
+                    <MenuItem mnemonicParsing="false" text="%home.reports.divisions" onAction="#redirectToDivisionReportPage"/>
+                </Menu>
+            </MenuBar>
+        </AnchorPane>
         <VBox alignment="CENTER">
             <ButtonBar buttonMinWidth="40.0">
                 <buttons>
-                    <TextField fx:id="searchCustomerTextField" prefHeight="25.0" prefWidth="461.0" promptText="Search for Customer ID or Name" ButtonBar.buttonData="LEFT" />
-                    <Button onAction="#handleAddCustomer" text="%home.customer.add" />
-                    <Button fx:id="updateCustomerButton" disable="true" onAction="#handleUpdateCustomer" text="%home.customer.update" />
-                    <Button fx:id="deleteCustomerButton" disable="true" onAction="#handleDeleteCustomer" styleClass="deleteButton" text="%home.customer.delete" />
+                    <TextField fx:id="searchCustomerTextField" prefHeight="25.0" prefWidth="461.0"
+                               promptText="Search for Customer ID or Name" ButtonBar.buttonData="LEFT"/>
+                    <Button onAction="#handleAddCustomer" text="%home.customer.add"/>
+                    <Button fx:id="updateCustomerButton" disable="true" onAction="#handleUpdateCustomer"
+                            text="%home.customer.update"/>
+                    <Button fx:id="deleteCustomerButton" disable="true" onAction="#handleDeleteCustomer"
+                            styleClass="deleteButton" text="%home.customer.delete"/>
                 </buttons>
             </ButtonBar>
-            <TableView fx:id="customerTableView" onKeyPressed="#handleSelectedCustomer" onMouseClicked="#handleSelectedCustomer">
+            <TableView fx:id="customerTableView" onKeyPressed="#handleSelectedCustomer"
+                       onMouseClicked="#handleSelectedCustomer">
                 <VBox.margin>
-                    <Insets top="20.0" />
+                    <Insets top="20.0"/>
                 </VBox.margin>
                 <columns>
-                    <TableColumn fx:id="customerIdTableCol" prefWidth="100" text="%shared.customer.id" />
-                    <TableColumn fx:id="customerNameTableCol" prefWidth="200" text="%shared.customer.name" />
-                    <TableColumn fx:id="customerAddressTableCol" prefWidth="200" text="%shared.customer.address" />
-                    <TableColumn fx:id="customerPostalCodeTableCol" prefWidth="100" text="%shared.customer.postal" />
-                    <TableColumn fx:id="customerPhoneTableCol" prefWidth="150" text="%shared.customer.phone" />
-                    <TableColumn fx:id="customerDivisionIDTableCol" prefWidth="200" text="%shared.customer.division.id" />
-                    <TableColumn fx:id="customerDivisionTableCol" prefWidth="200" text="%shared.customer.division" />
-                    <TableColumn fx:id="customerCountryIDTableCol" prefWidth="200" text="%shared.customer.country.id" />
+                    <TableColumn fx:id="customerIdTableCol" text="%shared.customer.id"/>
+                    <TableColumn fx:id="customerNameTableCol" text="%shared.customer.name"/>
+                    <TableColumn fx:id="customerAddressTableCol" text="%shared.customer.address"/>
+                    <TableColumn fx:id="customerPostalCodeTableCol" text="%shared.customer.postal"/>
+                    <TableColumn fx:id="customerPhoneTableCol" text="%shared.customer.phone"/>
+                    <TableColumn fx:id="customerDivisionIDTableCol" text="%shared.customer.division.id"/>
+                    <TableColumn fx:id="customerDivisionTableCol" text="%shared.customer.division"/>
+                    <TableColumn fx:id="customerCountryIDTableCol" text="%shared.customer.country.id"/>
                 </columns>
             </TableView>
-         <Label text="%home.customer.selected.note" />
+            <Label text="%home.customer.selected.note"/>
             <padding>
-                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
             </padding>
         </VBox>
         <VBox alignment="CENTER">
             <ButtonBar buttonMinWidth="40.0">
                 <buttons>
-                    <RadioButton fx:id="monthRadioButton" mnemonicParsing="false" onAction="#handleAppointmentMonthRadio" text="%home.appointment.radio.month" ButtonBar.buttonData="LEFT" />
-                    <RadioButton fx:id="weekRadioButton" mnemonicParsing="false" onAction="#handleAppointmentWeekRadio" text="%home.appointment.radio.week" ButtonBar.buttonData="LEFT" />
-                    <Button onAction="#handleAddAppointment" text="%home.appointment.add" />
-                    <Button fx:id="updateAppointmentButton" disable="true" onAction="#handleUpdateAppointment" text="%home.appointment.update" />
-                    <Button fx:id="deleteAppointmentButton" disable="true" onAction="#handleDeleteAppointment" styleClass="deleteButton" text="%home.appointment.delete" />
+                    <RadioButton fx:id="monthRadioButton" mnemonicParsing="false"
+                                 onAction="#handleAppointmentMonthRadio" text="%home.appointment.radio.month"
+                                 ButtonBar.buttonData="LEFT"/>
+                    <RadioButton fx:id="weekRadioButton" mnemonicParsing="false" onAction="#handleAppointmentWeekRadio"
+                                 text="%home.appointment.radio.week" ButtonBar.buttonData="LEFT"/>
+                    <Button onAction="#handleAddAppointment" text="%home.appointment.add"/>
+                    <Button fx:id="updateAppointmentButton" disable="true" onAction="#handleUpdateAppointment"
+                            text="%home.appointment.update"/>
+                    <Button fx:id="deleteAppointmentButton" disable="true" onAction="#handleDeleteAppointment"
+                            styleClass="deleteButton" text="%home.appointment.delete"/>
                 </buttons>
             </ButtonBar>
-            <TableView fx:id="appointmentTableView" onKeyPressed="#handleSelectedAppointment" onMouseClicked="#handleSelectedAppointment">
+            <TableView fx:id="appointmentTableView" onKeyPressed="#handleSelectedAppointment"
+                       onMouseClicked="#handleSelectedAppointment">
                 <VBox.margin>
-                    <Insets top="20.0" />
+                    <Insets top="20.0"/>
                 </VBox.margin>
                 <columns>
-                    <TableColumn fx:id="appointmentIdTableCol" text="%shared.appointment.id" />
-                    <TableColumn fx:id="appointmentTitleTableCol" text="%shared.appointment.title" />
-                    <TableColumn fx:id="appointmentDescTableCol" text="%shared.appointment.desc" />
-                    <TableColumn fx:id="appointmentLocationTableCol" text="%shared.appointment.location" />
-                    <TableColumn fx:id="appointmentTypeTableCol" text="%shared.appointment.type" />
-                    <TableColumn fx:id="appointmentStartTableCol" text="%shared.appointment.start" />
-                    <TableColumn fx:id="appointmentEndTableCol" text="%shared.appointment.end" />
-                    <TableColumn fx:id="appointmentCustomerIDTableCol" text="%shared.appointment.customer.id" />
-                    <TableColumn fx:id="appointmentUserIDTableCol" text="%shared.appointment.user.id" />
+                    <TableColumn fx:id="appointmentIdTableCol" text="%shared.appointment.id"/>
+                    <TableColumn fx:id="appointmentTitleTableCol" text="%shared.appointment.title"/>
+                    <TableColumn fx:id="appointmentDescTableCol" text="%shared.appointment.desc"/>
+                    <TableColumn fx:id="appointmentLocationTableCol" text="%shared.appointment.location"/>
+                    <TableColumn fx:id="appointmentTypeTableCol" text="%shared.appointment.type"/>
+                    <TableColumn fx:id="appointmentStartTableCol" text="%shared.appointment.start"/>
+                    <TableColumn fx:id="appointmentEndTableCol" text="%shared.appointment.end"/>
+                    <TableColumn fx:id="appointmentCustomerIDTableCol" text="%shared.appointment.customer.id"/>
+                    <TableColumn fx:id="appointmentUserIDTableCol" text="%shared.appointment.user.id"/>
                 </columns>
             </TableView>
             <padding>
-                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
             </padding>
         </VBox>
     </VBox>

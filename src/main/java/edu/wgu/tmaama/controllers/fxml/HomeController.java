@@ -9,6 +9,7 @@ import edu.wgu.tmaama.db.FirstLevelDivision.model.FirstLevelDivision;
 import edu.wgu.tmaama.db.User.model.User;
 import edu.wgu.tmaama.utils.AlertModal;
 import edu.wgu.tmaama.utils.ConfirmMessages;
+import edu.wgu.tmaama.utils.FXHelpers;
 import edu.wgu.tmaama.utils.Modal;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -60,6 +61,7 @@ public class HomeController {
   @FXML private Label usernameLabel;
   @FXML private RadioButton monthRadioButton;
   @FXML private RadioButton weekRadioButton;
+  @FXML private MenuBar reportMenuBar;
   private User sessionUser;
   private Customer selectedCustomer;
   private ObservableList<Customer> customers;
@@ -148,6 +150,51 @@ public class HomeController {
   }
 
   @FXML
+  private void redirectToTypeReportPage() throws IOException {
+    FXMLLoader loader =
+        new FXMLLoader(
+            Objects.requireNonNull(Scheduler.class.getResource("/views/TypeReport.fxml")));
+    loader.setResources(this.bundle);
+    Parent pane = loader.load();
+    TypeReportController typeReportController = loader.getController();
+    typeReportController.setSessionUser(this.sessionUser);
+    Stage stage = (Stage) reportMenuBar.getScene().getWindow();
+    Scene scene = new Scene(pane);
+    stage.setScene(scene);
+    stage.show();
+  }
+
+  @FXML
+  private void redirectToContactReportPage() throws IOException {
+    FXMLLoader loader =
+        new FXMLLoader(
+            Objects.requireNonNull(Scheduler.class.getResource("/views/ContactReport.fxml")));
+    loader.setResources(this.bundle);
+    Parent pane = loader.load();
+    ContactReportController contactReportController = loader.getController();
+    contactReportController.setSessionUser(this.sessionUser);
+    Stage stage = (Stage) reportMenuBar.getScene().getWindow();
+    Scene scene = new Scene(pane);
+    stage.setScene(scene);
+    stage.show();
+  }
+
+  @FXML
+  private void redirectToDivisionReportPage() throws IOException {
+    FXMLLoader loader =
+        new FXMLLoader(
+            Objects.requireNonNull(Scheduler.class.getResource("/views/DivisionReport.fxml")));
+    loader.setResources(this.bundle);
+    Parent pane = loader.load();
+    DivisionReportController divisionReportController = loader.getController();
+    divisionReportController.setSessionUser(this.sessionUser);
+    Stage stage = (Stage) reportMenuBar.getScene().getWindow();
+    Scene scene = new Scene(pane);
+    stage.setScene(scene);
+    stage.show();
+  }
+
+  @FXML
   private void handleAddCustomer(ActionEvent actionEvent) throws IOException {
     this.redirectToCustomerPage(actionEvent, null);
   }
@@ -193,7 +240,7 @@ public class HomeController {
 
     Platform.runLater(
         () -> {
-          this.setTableWidth(this.customerTableView);
+          FXHelpers.setTableWidth(this.customerTableView);
         });
   }
 
@@ -258,25 +305,16 @@ public class HomeController {
 
     Platform.runLater(
         () -> {
-          this.setTableWidth(this.appointmentTableView);
+          FXHelpers.setTableWidth(this.appointmentTableView);
         });
   }
 
   private void initializeAppointmentSearchBar() {}
 
-  private void setTableWidth(TableView<?> table) {
-    // Fill the columns to the correct lengths.
-    double tableWidth = table.getWidth();
-    var columns = table.getColumns();
-    double calcColWidth = tableWidth / columns.size();
-    for (var col : columns) {
-      col.setPrefWidth(calcColWidth);
-    }
-  }
-
   @FXML
   private void handleSelectedCustomer() {
     Customer customer = this.customerTableView.getSelectionModel().getSelectedItem();
+    if (customer == null) return;
     if (customer.equals(this.selectedCustomer)) {
       this.selectedCustomer = null;
       this.customerTableView.getSelectionModel().clearSelection();
