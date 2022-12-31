@@ -43,7 +43,6 @@ public class User {
 
   /**
    * Gets a user's password.
-   * @return
    */
   public Password getPassword() {
     return password;
@@ -51,7 +50,6 @@ public class User {
 
   /**
    * Sets a user's password.
-   * @param password
    */
   public void setPassword(Password password) {
     this.password = password;
@@ -59,7 +57,6 @@ public class User {
 
   /**
    * Get a user's create date.
-   * @return
    */
   public Timestamp getCreateDate() {
     return createDate;
@@ -67,7 +64,6 @@ public class User {
 
   /**
    * Get a user's created by user.
-   * @return
    */
   public String getCreatedBy() {
     return createdBy;
@@ -75,7 +71,6 @@ public class User {
 
   /**
    * Set a user's created by user.
-   * @param createdBy
    */
   public void setCreatedBy(String createdBy) {
     this.createdBy = createdBy;
@@ -83,7 +78,6 @@ public class User {
 
   /**
    * Get a user's last update timestamp.
-   * @return
    */
   public Timestamp getLastUpdate() {
     return lastUpdate;
@@ -91,7 +85,6 @@ public class User {
 
   /**
    * Get a user's last updated by user.
-   * @return
    */
   public String getLastUpdatedBy() {
     return lastUpdatedBy;
@@ -99,7 +92,6 @@ public class User {
 
   /**
    * Set a user's last updated by user.
-   * @param lastUpdatedBy
    */
   public void setLastUpdatedBy(String lastUpdatedBy) {
     this.lastUpdatedBy = lastUpdatedBy;
@@ -107,7 +99,6 @@ public class User {
 
   /**
    * Get a user's userID.
-   * @return
    */
   public int getUserID() {
     return userID;
@@ -115,7 +106,6 @@ public class User {
 
   /**
    * Set a user's userID.
-   * @param userID
    */
   public void setUserID(int userID) {
     this.userID = userID;
@@ -123,7 +113,6 @@ public class User {
 
   /**
    * Get a user's username.
-   * @return
    */
   public String getUsername() {
     return username;
@@ -131,7 +120,6 @@ public class User {
 
   /**
    * Set a user's username.
-   * @return
    */
   public void setUsername(String username) {
     this.username = username;
@@ -139,7 +127,6 @@ public class User {
 
   /**
    * Override method that returns just the user's username.
-   * @return
    */
   @Override
   public String toString() {

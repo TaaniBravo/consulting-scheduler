@@ -31,20 +31,7 @@ public class Appointment {
   /** Create appointment object with uninitialized fields. */
   public Appointment() {}
 
-  /**
-   * Create an appointment class without update fields (appointment not in database yet).
-   *
-   * @param title
-   * @param description
-   * @param location
-   * @param type
-   * @param start
-   * @param end
-   * @param createdBy
-   * @param customerID
-   * @param userID
-   * @param contactID
-   */
+  /** Create an appointment class without update fields (appointment not in database yet). */
   public Appointment(
       String title,
       String description,
@@ -73,24 +60,7 @@ public class Appointment {
     this.localEnd = endConverter.getLocalDateTime();
   }
 
-  /**
-   * Create appointment object with all database fields.
-   *
-   * @param appointmentID
-   * @param title
-   * @param description
-   * @param location
-   * @param type
-   * @param start
-   * @param end
-   * @param createDate
-   * @param createdBy
-   * @param lastUpdate
-   * @param lastUpdatedBy
-   * @param customerID
-   * @param userID
-   * @param contactID
-   */
+  /** Create appointment object with all database fields. */
   public Appointment(
       int appointmentID,
       String title,
@@ -127,276 +97,156 @@ public class Appointment {
     this.localEnd = endConverter.getLocalDateTime();
   }
 
-  /**
-   * Get appointment's appointment ID.
-   *
-   * @return
-   */
+  /** Get appointment's appointment ID. */
   public int getAppointmentID() {
     return appointmentID;
   }
 
-  /**
-   * Set appointment's appointment ID.
-   *
-   * @param appointmentID
-   */
+  /** Set appointment's appointment ID. */
   public void setAppointmentID(int appointmentID) {
     this.appointmentID = appointmentID;
   }
 
-  /**
-   * Get appointment's title.
-   *
-   * @return
-   */
+  /** Get appointment's title. */
   public String getTitle() {
     return title;
   }
 
-  /**
-   * Set appointment's title.
-   *
-   * @param title
-   */
+  /** Set appointment's title. */
   public void setTitle(String title) {
     this.title = title;
   }
 
-  /**
-   * Get appointment's description.
-   *
-   * @return
-   */
+  /** Get appointment's description. */
   public String getDescription() {
     return description;
   }
 
-  /**
-   * Set appointment's description
-   *
-   * @param description
-   */
+  /** Set appointment's description */
   public void setDescription(String description) {
     this.description = description;
   }
 
-  /**
-   * Get appointment's location.
-   *
-   * @return
-   */
+  /** Get appointment's location. */
   public String getLocation() {
     return location;
   }
 
-  /**
-   * Set appointment's location
-   *
-   * @param location
-   */
+  /** Set appointment's location */
   public void setLocation(String location) {
     this.location = location;
   }
 
-  /**
-   * Get appointment's type.
-   *
-   * @return
-   */
+  /** Get appointment's type. */
   public String getType() {
     return type;
   }
 
-  /**
-   * Set appointment's type
-   *
-   * @param type
-   */
+  /** Set appointment's type */
   public void setType(String type) {
     this.type = type;
   }
 
-  /**
-   * Get appointment's start.
-   *
-   * @return
-   */
+  /** Get appointment's start. */
   public Timestamp getStart() {
     return start;
   }
 
-  /**
-   * Set appointment's start.
-   *
-   * @param start
-   */
+  /** Set appointment's start. */
   public void setStart(Timestamp start) {
     this.start = start;
     DateTimeConverter dateTimeConverter = new DateTimeConverter(this.start);
     this.localStart = dateTimeConverter.getLocalDateTime();
   }
 
-  /**
-   * Get appointment's end.
-   *
-   * @return
-   */
+  /** Get appointment's end. */
   public Timestamp getEnd() {
     return end;
   }
 
-  /**
-   * Set appointment's end.
-   *
-   * @param end
-   */
+  /** Set appointment's end. */
   public void setEnd(Timestamp end) {
     this.end = end;
     DateTimeConverter dateTimeConverter = new DateTimeConverter(this.end);
     this.localEnd = dateTimeConverter.getLocalDateTime();
   }
 
-  /**
-   * Get appointment's create timestamp.
-   *
-   * @return
-   */
+  /** Get appointment's create timestamp. */
   public Timestamp getCreateDate() {
     return createDate;
   }
 
-  /**
-   * Get appointment's created by user.
-   *
-   * @return
-   */
+  /** Get appointment's created by user. */
   public String getCreatedBy() {
     return createdBy;
   }
 
-  /**
-   * Set appointment's created by user.
-   *
-   * @param createdBy
-   */
+  /** Set appointment's created by user. */
   public void setCreatedBy(String createdBy) {
     this.createdBy = createdBy;
   }
 
-  /**
-   * Get appointment's last update timestamp.
-   *
-   * @return
-   */
+  /** Get appointment's last update timestamp. */
   public Timestamp getLastUpdate() {
     return lastUpdate;
   }
 
-  /**
-   * Get appointment's last updated by user.
-   *
-   * @return
-   */
+  /** Get appointment's last updated by user. */
   public String getLastUpdatedBy() {
     return lastUpdatedBy;
   }
 
-  /**
-   * Set appointment's last updated by user.
-   *
-   * @param lastUpdatedBy
-   */
+  /** Set appointment's last updated by user. */
   public void setLastUpdatedBy(String lastUpdatedBy) {
     this.lastUpdatedBy = lastUpdatedBy;
   }
 
-  /**
-   * Get appointment's customer ID.
-   *
-   * @return
-   */
+  /** Get appointment's customer ID. */
   public int getCustomerID() {
     return customerID;
   }
 
-  /**
-   * Set appointment's customer ID.
-   *
-   * @param customerID
-   */
+  /** Set appointment's customer ID. */
   public void setCustomerID(int customerID) {
     this.customerID = customerID;
   }
 
-  /**
-   * Get appointment's user ID.
-   *
-   * @return
-   */
+  /** Get appointment's user ID. */
   public int getUserID() {
     return userID;
   }
 
-  /**
-   * Set appointment's user ID.
-   *
-   * @param userID
-   */
+  /** Set appointment's user ID. */
   public void setUserID(int userID) {
     this.userID = userID;
   }
 
-  /**
-   * Get appointment's contact ID.
-   *
-   * @return
-   */
+  /** Get appointment's contact ID. */
   public int getContactID() {
     return contactID;
   }
 
-  /**
-   * Set appointment's contact ID.
-   *
-   * @param contactID
-   */
+  /** Set appointment's contact ID. */
   public void setContactID(int contactID) {
     this.contactID = contactID;
   }
 
-  /**
-   * Returns a string of a display friendly version of the localStart
-   *
-   * @return
-   */
+  /** Returns a string of a display friendly version of the localStart */
   public String getLocalStart() {
     return localStart.format(DateTimeFormatter.ofPattern(DateTimeConverter.DISPLAY_FORMAT));
   }
 
-  /**
-   * Get appointment's localStart.
-   *
-   * @return
-   */
+  /** Get appointment's localStart. */
   public LocalDateTime getLocalStartDateTime() {
     return localStart;
   }
 
-  /**
-   * Returns a string of a display friendly version of the localEnd.
-   *
-   * @return
-   */
+  /** Returns a string of a display friendly version of the localEnd. */
   public String getLocalEnd() {
     return localEnd.format(DateTimeFormatter.ofPattern(DateTimeConverter.DISPLAY_FORMAT));
   }
 
-  /**
-   * Get appointment's localEnd.
-   *
-   * @return
-   */
+  /** Get appointment's localEnd. */
   public LocalDateTime getLocalEndDateTime() {
     return localEnd;
   }

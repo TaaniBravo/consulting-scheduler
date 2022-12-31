@@ -35,7 +35,6 @@ public class Country {
 
   /**
    * Get a country's countryID.
-   * @return
    */
   public int getCountryID() {
     return countryID;
@@ -43,7 +42,6 @@ public class Country {
 
   /**
    * Set a country's countryID.
-   * @param countryID
    */
   public void setCountryID(int countryID) {
     this.countryID = countryID;
@@ -51,7 +49,6 @@ public class Country {
 
   /**
    * Get a country's country string.
-   * @return
    */
   public String getCountry() {
     return country;
@@ -59,7 +56,6 @@ public class Country {
 
   /**
    * Set a country's country string.
-   * @return
    */
   public void setCountry(String country) {
     this.country = country;
@@ -67,7 +63,6 @@ public class Country {
 
   /**
    * Get a country's create date.
-   * @return
    */
   public Timestamp getCreateDate() {
     return createDate;
@@ -75,7 +70,6 @@ public class Country {
 
   /**
    * Get a country's created by user.
-   * @return
    */
   public String getCreatedBy() {
     return createdBy;
@@ -83,7 +77,6 @@ public class Country {
 
   /**
    * Set a country's created by user.
-   * @return
    */
   public void setCreatedBy(String createdBy) {
     this.createdBy = createdBy;
@@ -91,7 +84,6 @@ public class Country {
 
   /**
    * Get a country's last update timestamp.
-   * @return
    */
   public Timestamp getLastUpdate() {
     return lastUpdate;
@@ -99,7 +91,6 @@ public class Country {
 
   /**
    * Get a country's last updated by user.
-   * @return
    */
   public String getLastUpdatedBy() {
     return lastUpdatedBy;
@@ -107,7 +98,6 @@ public class Country {
 
   /**
    * Set a country's last updated by user.
-   * @return
    */
   public void setLastUpdatedBy(String lastUpdatedBy) {
     this.lastUpdatedBy = lastUpdatedBy;
@@ -115,7 +105,6 @@ public class Country {
 
   /**
    * Override method to return just the country when toString is called.
-   * @return
    */
   @Override
   public String toString() {

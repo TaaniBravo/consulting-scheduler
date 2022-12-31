@@ -13,13 +13,7 @@ public class ConcreteAppointmentDAO implements AppointmentDAO {
 
   public ConcreteAppointmentDAO() throws SQLException {}
 
-  /**
-   * Insert a new appointment into the database.
-   *
-   * @param appointment
-   * @return
-   * @throws SQLException
-   */
+  /** Insert a new appointment into the database. */
   @Override
   public Appointment insert(Appointment appointment) throws SQLException {
     try {
@@ -50,13 +44,7 @@ public class ConcreteAppointmentDAO implements AppointmentDAO {
     }
   }
 
-  /**
-   * Find appointment by its appointment ID.
-   *
-   * @param id
-   * @return
-   * @throws SQLException
-   */
+  /** Find appointment by its appointment ID. */
   @Override
   public Appointment findByID(int id) throws SQLException {
     try {
@@ -75,12 +63,7 @@ public class ConcreteAppointmentDAO implements AppointmentDAO {
     }
   }
 
-  /**
-   * Find all appointments in database.
-   *
-   * @return
-   * @throws SQLException
-   */
+  /** Find all appointments in database. */
   @Override
   public ArrayList<Appointment> findAll() throws SQLException {
     try {
@@ -101,8 +84,6 @@ public class ConcreteAppointmentDAO implements AppointmentDAO {
    * Find all appointments by a customer's ID.
    *
    * @param customerID - the customer ID to search for.
-   * @return
-   * @throws SQLException
    */
   public ArrayList<Appointment> findAppointmentsByCustomerID(int customerID) throws SQLException {
     try {
@@ -125,8 +106,6 @@ public class ConcreteAppointmentDAO implements AppointmentDAO {
    * Find all appointments by a user's ID
    *
    * @param userID - the user ID to search for.
-   * @return
-   * @throws SQLException
    */
   public ArrayList<Appointment> findAppointmentsByUserID(int userID) throws SQLException {
     try {
@@ -145,12 +124,7 @@ public class ConcreteAppointmentDAO implements AppointmentDAO {
     }
   }
 
-  /**
-   * Find all appointments for the next 7 days.
-   *
-   * @return
-   * @throws SQLException
-   */
+  /** Find all appointments for the next 7 days. */
   public ArrayList<Appointment> findAppointmentsForCurrentWeek() throws SQLException {
     try {
       if (!this.db.checkConnection()) this.db.getConnection();
@@ -170,13 +144,7 @@ public class ConcreteAppointmentDAO implements AppointmentDAO {
     }
   }
 
-  /**
-   * Find appointments for the next 7 days for a given customer.
-   *
-   * @param customerID
-   * @return
-   * @throws SQLException
-   */
+  /** Find appointments for the next 7 days for a given customer. */
   public ArrayList<Appointment> findAppointmentsForCurrentWeek(int customerID) throws SQLException {
     try {
       if (!this.db.checkConnection()) this.db.getConnection();
@@ -198,12 +166,7 @@ public class ConcreteAppointmentDAO implements AppointmentDAO {
     }
   }
 
-  /**
-   * Find appointments for the current month of each year.
-   *
-   * @return
-   * @throws SQLException
-   */
+  /** Find appointments for the current month of each year. */
   public ArrayList<Appointment> findAppointmentsForCurrentMonth() throws SQLException {
     try {
       if (!this.db.checkConnection()) this.db.getConnection();
@@ -220,12 +183,7 @@ public class ConcreteAppointmentDAO implements AppointmentDAO {
     }
   }
 
-  /**
-   * Find appointments for the current month of each year for a given customer by customerID.
-   *
-   * @return
-   * @throws SQLException
-   */
+  /** Find appointments for the current month of each year for a given customer by customerID. */
   public ArrayList<Appointment> findAppointmentsForCurrentMonth(int customerID)
       throws SQLException {
     try {
@@ -247,12 +205,7 @@ public class ConcreteAppointmentDAO implements AppointmentDAO {
     }
   }
 
-  /**
-   * Find appointments types
-   *
-   * @return
-   * @throws SQLException
-   */
+  /** Find appointments types */
   public ArrayList<String> findAppointmentTypes() throws SQLException {
     try {
       if (!this.db.checkConnection()) this.db.getConnection();
@@ -269,12 +222,7 @@ public class ConcreteAppointmentDAO implements AppointmentDAO {
     }
   }
 
-  /**
-   * Find appointments types
-   *
-   * @return
-   * @throws SQLException
-   */
+  /** Find appointments types */
   public ArrayList<Appointment> findAllByTypeAndMonth(String type, int month) throws SQLException {
     try {
       if (!this.db.checkConnection()) this.db.getConnection();
@@ -335,8 +283,6 @@ public class ConcreteAppointmentDAO implements AppointmentDAO {
    * Update an appointment by appointmentID
    *
    * @param appointment - the appointment object to update the database with.
-   * @return
-   * @throws SQLException
    */
   @Override
   public Appointment update(Appointment appointment) throws SQLException {
@@ -375,13 +321,7 @@ public class ConcreteAppointmentDAO implements AppointmentDAO {
     }
   }
 
-  /**
-   * Delete an appointment from the database by appointment ID.
-   *
-   * @param id
-   * @return
-   * @throws SQLException
-   */
+  /** Delete an appointment from the database by appointment ID. */
   @Override
   public boolean deleteByID(int id) throws SQLException {
     String query = "DELETE FROM Appointments WHERE Appointment_ID = ?";
@@ -392,13 +332,7 @@ public class ConcreteAppointmentDAO implements AppointmentDAO {
     return success;
   }
 
-  /**
-   * Returns an Appointment object from a ResultSet.
-   *
-   * @param result
-   * @return
-   * @throws SQLException
-   */
+  /** Returns an Appointment object from a ResultSet. */
   @Override
   public Appointment getInstanceFromResultSet(ResultSet result) throws SQLException {
     return new Appointment(

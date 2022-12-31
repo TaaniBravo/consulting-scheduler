@@ -29,7 +29,6 @@ public class Salt {
   /**
    * Get a salt's saltID.
    *
-   * @return
    */
   public int getSaltID() {
     return saltID;
@@ -38,7 +37,6 @@ public class Salt {
   /**
    * Set a salt's saltID.
    *
-   * @param saltID
    */
   public void setSaltID(int saltID) {
     this.saltID = saltID;
@@ -47,7 +45,6 @@ public class Salt {
   /**
    * Get a salt's salt.
    *
-   * @return
    */
   public byte[] getSalt() {
     return salt;
@@ -56,7 +53,6 @@ public class Salt {
   /**
    * Set a salt's salt.
    *
-   * @param salt
    */
   public void setSalt(byte[] salt) {
     this.salt = salt;
@@ -65,7 +61,6 @@ public class Salt {
   /**
    * Get a salt's userID.
    *
-   * @return
    */
   public int getUserID() {
     return userID;
@@ -74,7 +69,6 @@ public class Salt {
   /**
    * Set a salt's userID.
    *
-   * @return
    */
   public void setUserID(int userID) {
     this.userID = userID;

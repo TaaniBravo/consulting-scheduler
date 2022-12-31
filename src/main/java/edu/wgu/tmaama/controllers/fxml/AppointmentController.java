@@ -114,11 +114,7 @@ public class AppointmentController {
     }
   }
 
-  /**
-   * Fetches the customers from the database and loads them into the Customer ComboBox
-   *
-   * @param db
-   */
+  /** Fetches the customers from the database and loads them into the Customer ComboBox */
   private void loadCustomerComboBox(Database db) {
     try {
       // Load customers. Only load the customer selected if applicable.
@@ -134,11 +130,7 @@ public class AppointmentController {
     }
   }
 
-  /**
-   * Fetches the users from the database and loads them into the User ComboBox
-   *
-   * @param db
-   */
+  /** Fetches the users from the database and loads them into the User ComboBox */
   private void loadUserComboBox(Database db) {
     try {
       ConcreteUserDAO userDAO = new ConcreteUserDAO(db);
@@ -157,11 +149,7 @@ public class AppointmentController {
     }
   }
 
-  /**
-   * Fetches the contacts from the database and loads them into the Contact ComboBox
-   *
-   * @param db
-   */
+  /** Fetches the contacts from the database and loads them into the Contact ComboBox */
   private void loadContactComboBox(Database db) {
     try {
       ConcreteContactDAO contactDAO = new ConcreteContactDAO(db);
@@ -183,9 +171,6 @@ public class AppointmentController {
   /**
    * Handles when the submit button is clicked. Will validate the form before submitting to
    * database.
-   *
-   * @param event
-   * @throws IOException
    */
   @FXML
   private void handleSubmit(ActionEvent event) throws IOException {
@@ -236,22 +221,13 @@ public class AppointmentController {
     this.contactComboBox.getSelectionModel().clearSelection();
   }
 
-  /**
-   * Handles the cancel button. Will send the user back to the Home stage.
-   *
-   * @param event
-   * @throws IOException
-   */
+  /** Handles the cancel button. Will send the user back to the Home stage. */
   @FXML
   private void handleCancel(ActionEvent event) throws IOException {
     this.redirectToHomePage(event);
   }
 
-  /**
-   * Handles the actions of INSERTING an appointment into the database.
-   *
-   * @param event
-   */
+  /** Handles the actions of INSERTING an appointment into the database. */
   private void addAppointment(ActionEvent event) {
     try {
       this.appointment.setCreatedBy(this.sessionUser.getUsername());
@@ -267,12 +243,7 @@ public class AppointmentController {
     }
   }
 
-  /**
-   * Handles the action of UPDATING an existing appointment into the database.
-   *
-   * @param event
-   * @throws IOException
-   */
+  /** Handles the action of UPDATING an existing appointment into the database. */
   private void updateAppointment(ActionEvent event) throws IOException {
     try {
       this.appointment.setLastUpdatedBy(this.sessionUser.getUsername());
@@ -293,12 +264,7 @@ public class AppointmentController {
     }
   }
 
-  /**
-   * Redirects the user to the Home stage.
-   *
-   * @param event
-   * @throws IOException
-   */
+  /** Redirects the user to the Home stage. */
   private void redirectToHomePage(ActionEvent event) throws IOException {
     FXMLLoader loader =
         new FXMLLoader(Objects.requireNonNull(Scheduler.class.getResource("/views/Home.fxml")));
@@ -312,11 +278,7 @@ public class AppointmentController {
     stage.show();
   }
 
-  /**
-   * Entry level validation function that returns a string of the errors to present to the user.
-   *
-   * @return
-   */
+  /** Entry level validation function that returns a string of the errors to present to the user. */
   private String validateForm() {
     StringBuilder stringBuilder = new StringBuilder();
     this.validateTextFields(stringBuilder);
@@ -326,11 +288,7 @@ public class AppointmentController {
     return stringBuilder.toString();
   }
 
-  /**
-   * Handles the validation of the TextFields (minus the dates).
-   *
-   * @param stringBuilder
-   */
+  /** Handles the validation of the TextFields (minus the dates). */
   private void validateTextFields(StringBuilder stringBuilder) {
     if (this.titleTextField.getText().isBlank())
       stringBuilder.append(ErrorMessages.APPOINTMENT_BLANK_TITLE).append("\n");
@@ -342,11 +300,7 @@ public class AppointmentController {
       stringBuilder.append(ErrorMessages.APPOINTMENT_BLANK_TYPE).append("\n");
   }
 
-  /**
-   * Handles the validation of the ComboBoxes
-   *
-   * @param stringBuilder
-   */
+  /** Handles the validation of the ComboBoxes */
   private void validateComboBoxes(StringBuilder stringBuilder) {
     if (this.customerComboBox.getSelectionModel().getSelectedItem() == null)
       stringBuilder.append(ErrorMessages.APPOINTMENT_SELECT_CUSTOMER).append("\n");
@@ -359,8 +313,6 @@ public class AppointmentController {
   /**
    * Handles the validation of the dates are the logic around this is much more complex than the
    * other validations.
-   *
-   * @param stringBuilder
    */
   private void validateDates(StringBuilder stringBuilder) {
     DateTimeConverter startConverter = null;
@@ -431,9 +383,9 @@ public class AppointmentController {
 
   /**
    * Sets the session user for the current stage.
-   *
-   * @param sessionUser
+   * @param sessionUser - User that is currently logged in.
    */
+
   public void setSessionUser(User sessionUser) {
     this.sessionUser = sessionUser;
   }
