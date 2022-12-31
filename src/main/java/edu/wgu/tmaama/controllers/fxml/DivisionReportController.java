@@ -3,7 +3,9 @@ package edu.wgu.tmaama.controllers.fxml;
 import edu.wgu.tmaama.Scheduler;
 import edu.wgu.tmaama.db.Appointment.dao.ConcreteAppointmentDAO;
 import edu.wgu.tmaama.db.Appointment.model.Appointment;
+import edu.wgu.tmaama.db.Country.dao.ConcreteCountryDAO;
 import edu.wgu.tmaama.db.Country.model.Country;
+import edu.wgu.tmaama.db.FirstLevelDivision.dao.ConcreteFirstLevelDivisionDAO;
 import edu.wgu.tmaama.db.FirstLevelDivision.model.FirstLevelDivision;
 import edu.wgu.tmaama.db.User.model.User;
 import edu.wgu.tmaama.utils.FXHelpers;
@@ -29,6 +31,9 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
+/**
+ * Controller for the DivisionReport stage.
+ */
 public class DivisionReportController {
   private final ResourceBundle resources = ResourceBundle.getBundle("/bundles/main");
   private User sessionUser;
@@ -44,10 +49,14 @@ public class DivisionReportController {
   @FXML private TableColumn<Appointment, Integer> appointmentUserIDTableCol;
   @FXML private ComboBox<Country> countryComboBox;
   @FXML private ComboBox<FirstLevelDivision> divisionComboBox;
-  private ArrayList<FirstLevelDivision> divisions;
+  private ObservableList<FirstLevelDivision> divisions;
 
+  /**
+   * Initializes the controller.
+   */
   public void initialize() {
     this.initializeTableViewCells();
+    this.initializeComboBoxes();
 
     Platform.runLater(
         () -> {
@@ -55,6 +64,9 @@ public class DivisionReportController {
         });
   }
 
+  /**
+   * Initializes the appointmentTableView.
+   */
   private void initializeTableViewCells() {
     this.appointmentIdTableCol.setCellValueFactory(new PropertyValueFactory<>("appointmentID"));
     this.appointmentTitleTableCol.setCellValueFactory(new PropertyValueFactory<>("title"));
@@ -68,8 +80,58 @@ public class DivisionReportController {
     this.appointmentUserIDTableCol.setCellValueFactory(new PropertyValueFactory<>("userID"));
   }
 
-  private void initializeComboBoxes() {}
+  /**
+   * Initializes the comboBoxes
+   */
+  private void initializeComboBoxes() {
+    this.initializeCountryComboBox();
+    this.initializeDivisionComboBox();
+  }
 
+  /**
+   * Fetches the countries from the database and loads them into the ComboBox.
+   */
+  private void initializeCountryComboBox() {
+    try {
+      ConcreteCountryDAO countryDAO = new ConcreteCountryDAO();
+      ObservableList<Country> countries = FXCollections.observableArrayList(countryDAO.findAll());
+      this.countryComboBox.setItems(countries);
+      this.countryComboBox.getSelectionModel().select(0);
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  /**
+   * Fetches the First Level Divisions from the database and then based on the country selected in
+   * countryComboBox it will filter out the correct divisions to be available to be selected.
+   */
+  private void initializeDivisionComboBox() {
+    try {
+      ConcreteFirstLevelDivisionDAO divisionDAO = new ConcreteFirstLevelDivisionDAO();
+      this.divisions = FXCollections.observableArrayList(divisionDAO.findAll());
+      this.handleSelectedCountry();
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  /**
+   * Handles the selected country by updating the division ComboBox to only contain divisions that
+   * match the selected country's countryID
+   */
+  @FXML
+  private void handleSelectedCountry() {
+    Country country = this.countryComboBox.getSelectionModel().getSelectedItem();
+    if (country == null) return;
+    ObservableList<FirstLevelDivision> filteredDivisions =
+        this.divisions.filtered(division -> division.getCountryID() == country.getCountryID());
+    this.divisionComboBox.setItems(filteredDivisions);
+  }
+
+  /**
+   * Handles the Generate Report button by trying to find the accurate the data from the database.
+   */
   @FXML
   private void handleGenerateReport() {
     FirstLevelDivision division = this.divisionComboBox.getSelectionModel().getSelectedItem();
@@ -84,6 +146,9 @@ public class DivisionReportController {
     }
   }
 
+  /**
+   * Handles the Reset button by clearing the contactComboBox and setting the table to empty.
+   */
   @FXML
   private void handleReset() {
     this.appointmentTableView.setItems(null);
@@ -91,6 +156,11 @@ public class DivisionReportController {
     this.divisionComboBox.getSelectionModel().clearSelection();
   }
 
+  /**
+   * Handles the Cancel button by redirecting the user to the Home stage.
+   * @param actionEvent
+   * @throws IOException
+   */
   @FXML
   private void handleCancel(ActionEvent actionEvent) throws IOException {
     FXMLLoader loader =
@@ -105,6 +175,10 @@ public class DivisionReportController {
     stage.show();
   }
 
+  /**
+   * Sets the sessionUser.
+   * @param user
+   */
   public void setSessionUser(User user) {
     this.sessionUser = user;
   }

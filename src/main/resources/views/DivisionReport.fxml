@@ -10,9 +10,10 @@
           AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <ButtonBar buttonMinWidth="50.0">
             <buttons>
-                <ComboBox fx:id="countryComboBox" prefWidth="150.0" promptText="%shared.combobox.country"
+                <ComboBox fx:id="countryComboBox" onAction="#handleSelectedCountry"
+                          promptText="%shared.combobox.country"
                           ButtonBar.buttonData="LEFT"/>
-                <ComboBox fx:id="divisionComboBox" prefWidth="150.0" promptText="%shared.combobox.division"
+                <ComboBox fx:id="divisionComboBox" promptText="%shared.combobox.division"
                           ButtonBar.buttonData="LEFT"/>
                 <Button mnemonicParsing="false" onAction="#handleGenerateReport" text="%shared.button.generate.report"
                         ButtonBar.buttonData="RIGHT"/>

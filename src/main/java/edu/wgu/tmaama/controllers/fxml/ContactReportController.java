@@ -28,6 +28,9 @@ import java.sql.Timestamp;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
+/**
+ * Controller for the ContactReport stage.
+ */
 public class ContactReportController {
   private final ResourceBundle resources = ResourceBundle.getBundle("/bundles/main");
   private User sessionUser;
@@ -43,6 +46,9 @@ public class ContactReportController {
   @FXML private TableColumn<Appointment, Integer> appointmentUserIDTableCol;
   @FXML private ComboBox<Contact> contactComboBox;
 
+  /**
+   * Initializes the controller.
+   */
   public void initialize() {
     this.initializeTableViewCells();
     this.initializeContactComboBox();
@@ -53,6 +59,9 @@ public class ContactReportController {
         });
   }
 
+  /**
+   * Initializes the appointmentTableView.
+   */
   private void initializeTableViewCells() {
     this.appointmentIdTableCol.setCellValueFactory(new PropertyValueFactory<>("appointmentID"));
     this.appointmentTitleTableCol.setCellValueFactory(new PropertyValueFactory<>("title"));
@@ -66,6 +75,9 @@ public class ContactReportController {
     this.appointmentUserIDTableCol.setCellValueFactory(new PropertyValueFactory<>("userID"));
   }
 
+  /**
+   * Initializes the contactComboBox by fetching all contacts from the database.
+   */
   private void initializeContactComboBox() {
     try {
       ConcreteContactDAO contactDAO = new ConcreteContactDAO();
@@ -76,6 +88,9 @@ public class ContactReportController {
     }
   }
 
+  /**
+   * Handles the Generate Report button by trying to find the accurate the data from the database.
+   */
   @FXML
   private void handleGenerateReport() {
     Contact contact = this.contactComboBox.getSelectionModel().getSelectedItem();
@@ -90,12 +105,20 @@ public class ContactReportController {
     }
   }
 
+  /**
+   * Handles the Reset button by clearing the contactComboBox and setting the table to empty.
+   */
   @FXML
   private void handleReset() {
     this.appointmentTableView.setItems(null);
     this.contactComboBox.getSelectionModel().clearSelection();
   }
 
+  /**
+   * Handles the Cancel button by redirecting the user to the Home stage.
+   * @param actionEvent
+   * @throws IOException
+   */
   @FXML
   private void handleCancel(ActionEvent actionEvent) throws IOException {
     FXMLLoader loader =
@@ -110,6 +133,10 @@ public class ContactReportController {
     stage.show();
   }
 
+  /**
+   * Sets the sessionUser.
+   * @param user
+   */
   public void setSessionUser(User user) {
     this.sessionUser = user;
   }

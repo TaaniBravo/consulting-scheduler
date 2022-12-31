@@ -316,9 +316,9 @@ public class ConcreteAppointmentDAO implements AppointmentDAO {
       ArrayList<Appointment> appointments = new ArrayList<>();
       String query =
           "SELECT * FROM Appointments a "
-              + "JOIN Customer c ON c.Customer_ID = a.Customer_ID "
-              + "JOIN First_Level_Division fld on fld.Division_ID = c.Division_ID"
-              + "WHERE First_Level_Division = ?";
+              + "JOIN Customers c ON c.Customer_ID = a.Customer_ID "
+              + "JOIN First_Level_Divisions fld on fld.Division_ID = c.Division_ID "
+              + "WHERE fld.Division_ID = ?";
       PreparedStatement stmt = this.cxn.prepareStatement(query);
       stmt.setInt(1, divisionID);
       ResultSet resultSet = stmt.executeQuery();

@@ -35,6 +35,8 @@
                         ButtonBar.buttonData="LEFT"/>
                 <Button mnemonicParsing="false" text="%type.report.reset.btn" onAction="#handleReset"
                         ButtonBar.buttonData="LEFT"/>
+                <Button mnemonicParsing="false" onAction="#handleCancel" text="%shared.button.cancel"
+                        ButtonBar.buttonData="RIGHT"/>
             </buttons>
             <VBox.margin>
                 <Insets bottom="32.0"/>
