@@ -9,16 +9,30 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+/**
+ * Concrete class of ContactDAO
+ */
 public class ConcreteContactDAO implements ContactDAO {
   private Database db = new Database();
   private Connection cxn = db.getConnection();
 
   public ConcreteContactDAO() throws SQLException {}
 
+  /**
+   * This initializer allows for reuse of a one connection.
+   * @param db
+   * @throws SQLException
+   */
   public ConcreteContactDAO(Database db) throws SQLException {
     this.db = db;
   }
 
+  /**
+   * Tries to insert a new contact into the database.
+   * @param contact
+   * @return
+   * @throws SQLException
+   */
   @Override
   public Contact insert(Contact contact) throws SQLException {
     if (!this.db.checkConnection()) this.cxn = db.getConnection();
@@ -33,6 +47,12 @@ public class ConcreteContactDAO implements ContactDAO {
     return newContact;
   }
 
+  /**
+   * Find a contact by their Contact_ID.
+   * @param id
+   * @return
+   * @throws SQLException
+   */
   @Override
   public Contact findByID(int id) throws SQLException {
     if (!this.db.checkConnection()) this.cxn = db.getConnection();
@@ -46,6 +66,11 @@ public class ConcreteContactDAO implements ContactDAO {
     return contact;
   }
 
+  /**
+   * Finds all contacts in the database.
+   * @return
+   * @throws SQLException
+   */
   @Override
   public ArrayList<Contact> findAll() throws SQLException {
     if (!this.db.checkConnection()) this.cxn = db.getConnection();
@@ -59,6 +84,12 @@ public class ConcreteContactDAO implements ContactDAO {
     return contacts;
   }
 
+  /**
+   * Tries to update a contact based on the object passed in.
+   * @param contact
+   * @return
+   * @throws SQLException
+   */
   @Override
   public Contact update(Contact contact) throws SQLException {
     if (!this.db.checkConnection()) this.cxn = db.getConnection();
@@ -75,6 +106,12 @@ public class ConcreteContactDAO implements ContactDAO {
     return updatedContact;
   }
 
+  /**
+   * Tries to delete a contact based on the ID given.
+   * @param id
+   * @return
+   * @throws SQLException
+   */
   @Override
   public boolean deleteByID(int id) throws SQLException {
     if (!this.db.checkConnection()) this.cxn = db.getConnection();
@@ -86,6 +123,12 @@ public class ConcreteContactDAO implements ContactDAO {
     return success;
   }
 
+  /**
+   * Returns a Contact object based on the resultSet passed in.
+   * @param resultSet
+   * @return
+   * @throws SQLException
+   */
   @Override
   public Contact getInstanceFromResultSet(ResultSet resultSet) throws SQLException {
     return new Contact(

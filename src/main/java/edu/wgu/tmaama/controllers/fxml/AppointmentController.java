@@ -262,13 +262,8 @@ public class AppointmentController {
       modal.display();
       this.redirectToHomePage(event);
     } catch (SQLException | IOException ex) {
+      // TODO: display error message.
       ex.printStackTrace();
-      String message =
-              ex.getMessage().equals(ErrorMessages.OVERLAPPING_APPOINTMENT_TIMES)
-                      ? ErrorMessages.OVERLAPPING_APPOINTMENT_TIMES
-                      : ex.getMessage();
-      Modal modal = new Modal(Modal.ERROR, message);
-      modal.display();
     }
   }
 
