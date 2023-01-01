@@ -5,6 +5,15 @@ import java.util.ResourceBundle;
 /** Static class with constants for the translated error messages. */
 public class ErrorMessages {
   private static final ResourceBundle resources = ResourceBundle.getBundle("/bundles/messages");
+  public static final String CUSTOMER_BLANK_NAME = resources.getString("error.customer.name.blank");
+  public static final String CUSTOMER_BLANK_ADDRESS =
+      resources.getString("error.customer.address.blank");
+  public static final String CUSTOMER_BLANK_POSTAL =
+      resources.getString("error.customer.postal.blank");
+  public static final String CUSTOMER_BLANK_PHONE =
+      resources.getString("error.customer.phone.blank");
+  public static final String CUSTOMER_SELECT_DIVISION =
+      resources.getString("error.customer.select.division");
   public static final String APPOINTMENT_BLANK_TITLE =
       resources.getString("error.appointment.title.blank");
   public static final String APPOINTMENT_BLANK_DESC =

@@ -12,7 +12,7 @@
           AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="0.0">
         <Label text="%shared.customer.id"/>
         <TextField fx:id="idTextField" disable="true" editable="false" maxWidth="-Infinity" minWidth="-Infinity"
-                   prefWidth="200.0" text="Auto Generated">
+                   prefWidth="200.0" text="%shared.auto.gen.id">
             <VBox.margin>
                 <Insets bottom="16.0" top="4.0"/>
             </VBox.margin>

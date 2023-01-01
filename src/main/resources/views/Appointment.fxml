@@ -15,7 +15,7 @@
       </font></Label>
     <VBox alignment="CENTER_LEFT" layoutY="-8.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="0.0">
         <Label text="%shared.appointment.id" />
-        <TextField fx:id="idTextField" disable="true" editable="false" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="200.0" text="Auto Generated">
+        <TextField fx:id="idTextField" disable="true" editable="false" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="200.0" text="%shared.auto.gen.id">
             <VBox.margin>
                 <Insets bottom="16.0" top="4.0" />
             </VBox.margin>
@@ -64,21 +64,21 @@
                 <Insets bottom="16.0" />
             </VBox.margin>
             <Label prefWidth="100.0" text="%shared.appointment.customer" />
-            <ComboBox fx:id="customerComboBox" prefWidth="200.0" promptText="Select a Customer" />
+            <ComboBox fx:id="customerComboBox" prefWidth="200.0" promptText="%shared.combobox.customer" />
         </HBox>
         <HBox alignment="CENTER_LEFT">
             <VBox.margin>
                 <Insets bottom="16.0" />
             </VBox.margin>
             <Label prefWidth="100.0" text="%shared.appointment.user" />
-            <ComboBox fx:id="userComboBox" prefWidth="200.0" promptText="Select a User" />
+            <ComboBox fx:id="userComboBox" prefWidth="200.0" promptText="%shared.combobox.user" />
         </HBox>
         <HBox alignment="CENTER_LEFT">
             <VBox.margin>
                 <Insets bottom="16.0" />
             </VBox.margin>
             <Label prefWidth="100.0" text="%shared.appointment.contact" />
-            <ComboBox fx:id="contactComboBox" prefWidth="200.0" promptText="Select a Contact" />
+            <ComboBox fx:id="contactComboBox" prefWidth="200.0" promptText="%shared.combobox.contact" />
         </HBox>
         <ButtonBar buttonMinWidth="32.0">
             <buttons>

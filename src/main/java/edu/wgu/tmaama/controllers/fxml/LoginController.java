@@ -27,6 +27,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.stream.Stream;
@@ -46,6 +47,7 @@ public class LoginController {
    */
   public void initialize() {
     zoneLabel.setText(ZoneId.systemDefault().toString());
+    System.out.println(Locale.getDefault());
   }
 
   /**

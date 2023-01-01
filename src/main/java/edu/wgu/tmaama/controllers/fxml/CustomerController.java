@@ -8,6 +8,7 @@ import edu.wgu.tmaama.db.Customer.model.Customer;
 import edu.wgu.tmaama.db.FirstLevelDivision.dao.ConcreteFirstLevelDivisionDAO;
 import edu.wgu.tmaama.db.FirstLevelDivision.model.FirstLevelDivision;
 import edu.wgu.tmaama.db.User.model.User;
+import edu.wgu.tmaama.utils.ErrorMessages;
 import edu.wgu.tmaama.utils.Modal;
 import edu.wgu.tmaama.utils.SuccessMessages;
 import javafx.collections.FXCollections;
@@ -186,7 +187,12 @@ public class CustomerController {
    * Will try to assign to customer's data from the form into the customer object to be sent to the database
    */
   private void setCustomerValuesFromForm() {
-    if (!this.validateForm()) return;
+    String validationErrors = this.validateForm();
+    if (validationErrors.length() > 0) {
+      Modal modal = new Modal(Modal.ERROR, validationErrors);
+      modal.display();
+      return;
+    }
     this.customer.setCustomerName(nameTextField.getText());
     this.customer.setAddress(addressTextField.getText());
     this.customer.setPostalCode(postalCodeTextField.getText());
@@ -202,9 +208,19 @@ public class CustomerController {
    * Validates that the form was entered correctly.
    * @return
    */
-  private boolean validateForm() {
-    // TODO: Validate the values in form to make sure their applicable (not empty).
-    return true;
+  private String validateForm() {
+    StringBuilder stringBuilder = new StringBuilder();
+    if (this.nameTextField.getText().isBlank())
+      stringBuilder.append(ErrorMessages.CUSTOMER_BLANK_NAME).append("\n");
+    if (this.addressTextField.getText().isBlank())
+      stringBuilder.append(ErrorMessages.CUSTOMER_BLANK_ADDRESS).append("\n");
+    if (this.postalCodeTextField.getText().isBlank())
+      stringBuilder.append(ErrorMessages.CUSTOMER_BLANK_POSTAL).append("\n");
+    if (this.phoneTextField.getText().isBlank())
+      stringBuilder.append(ErrorMessages.CUSTOMER_BLANK_PHONE).append("\n");
+    if (this.divisionComboBox.getSelectionModel().getSelectedItem() == null)
+      stringBuilder.append(ErrorMessages.CUSTOMER_SELECT_DIVISION);
+    return stringBuilder.toString();
   }
 
   /**
