@@ -282,12 +282,12 @@ public class HomeController {
     ConcreteCustomerDAO customerDAO = new ConcreteCustomerDAO();
     boolean success = customerDAO.deleteByID(customer.getCustomerID());
     if (!success) {
-      // TODO: Display error.
       return;
     }
 
     this.customers.remove(customer);
     this.customerTableView.getItems().remove(customer);
+    this.fetchAppointments();
   }
 
   /**
