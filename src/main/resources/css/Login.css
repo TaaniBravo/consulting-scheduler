@@ -1,8 +1,3 @@
-@font-face {
-  font-family: 'Dancing Script Regular', cursive;
-  src: url('../fonts/DancingScript-Regular.ttf');
-}
-
 * {
   -white: #FFFFFF;
   -purple: #C55FFC;
@@ -26,7 +21,6 @@
 
 .title {
   -fx-font-size: 72;
-  -fx-font-family: 'Dancing Script Regular';
   -fx-text-fill: -main-font-color;
 }
 

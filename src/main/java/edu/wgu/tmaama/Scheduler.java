@@ -1,6 +1,5 @@
 package edu.wgu.tmaama;
 
-import edu.wgu.tmaama.controllers.fxml.LoginController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -27,7 +26,6 @@ public class Scheduler extends Application {
         FXMLLoader loader = new FXMLLoader(Scheduler.class.getResource("/views/Login.fxml"));
         loader.setResources(ResourceBundle.getBundle("bundles/main"));
         Scene scene = new Scene(loader.load());
-        scene.getStylesheets().add(String.valueOf(getClass().getResource("/fonts/DancingScript-Regular.ttf")));
         stage.setScene(scene);
         stage.setTitle("Client Scheduler");
         stage.show();

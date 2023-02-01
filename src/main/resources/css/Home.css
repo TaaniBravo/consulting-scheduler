@@ -20,7 +20,6 @@
 }
 
 .title {
-  -fx-font-family: 'Dancing Script Regular';
   -fx-font-size: 72;
   -fx-text-fill: -main-font-color;
 }
