@@ -193,6 +193,7 @@ public class ConcreteCustomerDAO implements CustomerDAO {
 			stmt = this.cxn.prepareStatement(customerQuery);
 			stmt.setInt(1, id);
 			stmt.execute();
+			this.cxn.commit();
 			return true;
 		} catch (SQLException ex) {
 			this.cxn.rollback();
