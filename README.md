@@ -25,7 +25,7 @@ they need to improve.
 ## Getting Started
 
 ### Step 0 - Using the WGU VM
-With the WGU VM you should be able to just the run the app and skip the rest of these steps.
+With the WGU VM you should be able to just the run the app and skip the rest of these steps. If you are unable to login then make sure that `src/main/resources/db/config.properties` has the correct username and password.
 
 ### Step 1 - Installing dependencies
 
