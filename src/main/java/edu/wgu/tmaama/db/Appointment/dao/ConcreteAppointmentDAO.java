@@ -362,20 +362,27 @@ public class ConcreteAppointmentDAO implements AppointmentDAO {
 		}
 	}
 
-  public boolean deleteAppointmentsByCustomerID(int customerID) throws SQLException {
-    try {
-      String query = "DELETE FROM Appointments WHERE Customer_ID = ?";
-      PreparedStatement stmt = this.cxn.prepareStatement(query);
-      stmt.setInt(1, customerID);
-      stmt.execute();
-      return true;
-    } catch (SQLException ex) {
-      ex.printStackTrace();
-      return false;
-    } finally {
-      this.db.closeConnection();
-    }
-  }
+	/**
+	 * Tries to delete all appointments related to a customer ID.
+	 *
+	 * @param customerID
+	 * @return
+	 * @throws SQLException
+	 */
+	public boolean deleteAppointmentsByCustomerID(int customerID) throws SQLException {
+		try {
+			String query = "DELETE FROM Appointments WHERE Customer_ID = ?";
+			PreparedStatement stmt = this.cxn.prepareStatement(query);
+			stmt.setInt(1, customerID);
+			stmt.execute();
+			return true;
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+			return false;
+		} finally {
+			this.db.closeConnection();
+		}
+	}
 
 	/**
 	 * Returns an Appointment object from a ResultSet.

@@ -175,7 +175,7 @@ public class ConcreteCustomerDAO implements CustomerDAO {
 	}
 
 	/**
-	 * Tries to delete a customer by their Customer ID.
+	 * Tries to delete a customer and their appointments by their Customer ID.
 	 *
 	 * @param id
 	 * @return
