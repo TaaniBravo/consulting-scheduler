@@ -1,4 +1,4 @@
 # Ignore everything in this file expect for .gitignore.
-*
+#*
 !.gitignore
 !*.example.properties

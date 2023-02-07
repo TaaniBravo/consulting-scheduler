@@ -24,6 +24,9 @@ they need to improve.
 
 ## Getting Started
 
+### Step 0 - Using the WGU VM
+With the WGU VM you should be able to just the run the app and skip the rest of these steps.
+
 ### Step 1 - Installing dependencies
 
 To get started first you will need to get the MySQL database and the tables created. <br/>
@@ -51,7 +54,7 @@ mysql -u <username> -p <password> < ./src/main/resources/sql/createDatabase.sql
 mysql -u <username> -p <password> < ./src/main/resources/sql/dropDatabase.sql
 
 # Using Powershell
-mysql -u root -p -e "source C:\path\to\project\src\main\resources\sql\createDatabaseAndSeed.sql"
+mysql -u <username> -p -e "source C:\path\to\project\src\main\resources\sql\createDatabaseAndSeed.sql"
 
 # Alternatively you can run the SQL files individual in this order.
 mysql -u <username> -p <password> < ./src/main/resources/sql/createDatabase.sql

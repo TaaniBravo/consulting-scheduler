@@ -295,6 +295,7 @@ public class ConcreteAppointmentDAO implements AppointmentDAO {
               + "Type = ?, "
               + "Start = ?, "
               + "End = ?, "
+              + "Last_Update = NOW(), "
               + "Last_Updated_By = ?, "
               + "Customer_ID = ?, "
               + "User_ID = ?, "

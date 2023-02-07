@@ -4,8 +4,6 @@ import edu.wgu.tmaama.Scheduler;
 import edu.wgu.tmaama.db.Appointment.dao.ConcreteAppointmentDAO;
 import edu.wgu.tmaama.db.Appointment.model.Appointment;
 import edu.wgu.tmaama.db.Database;
-import edu.wgu.tmaama.db.Salt.dao.ConcreteSaltDAO;
-import edu.wgu.tmaama.db.Salt.model.Salt;
 import edu.wgu.tmaama.db.User.dao.ConcreteUserDAO;
 import edu.wgu.tmaama.db.User.model.User;
 import edu.wgu.tmaama.utils.*;
@@ -65,7 +63,6 @@ public class LoginController {
 		try {
 			Database db = new Database();
 			ConcreteUserDAO userDAO = new ConcreteUserDAO(db);
-			ConcreteSaltDAO saltDAO = new ConcreteSaltDAO(db);
 			User user = userDAO.findByUsername(username);
 			if (user == null) {
 				this.printError(this.resources.getString("login.error.username"));
@@ -74,11 +71,10 @@ public class LoginController {
 				return;
 			}
 
-			Salt salt = saltDAO.findByUserID(user.getUserID());
-			Password enteredPassword = new Password(passwordTextField.getText(), salt);
-			boolean isPasswordValid = Password.comparePasswords(user.getPassword(), enteredPassword);
+			String enteredPassword = passwordTextField.getText();
+			int isPasswordValid = user.getPassword().compareTo(enteredPassword);
 
-			if (!isPasswordValid) {
+			if (isPasswordValid != 0) {
 				this.printError(this.resources.getString("login.error.username"));
 				String logInfo = String.format("%s - %s - success: false", currentTime.toString(), username);
 				logger.log(logInfo);
@@ -111,8 +107,7 @@ public class LoginController {
 				return;
 			}
 
-			Password passwordHash = new Password(password);
-			User newUser = new User(username, passwordHash, username);
+			User newUser = new User(username, password, username);
 			User createdUser = userDAO.insert(newUser);
 
 			this.redirectToHomePage(actionEvent, createdUser);
