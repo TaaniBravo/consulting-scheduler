@@ -13,6 +13,7 @@ import edu.wgu.tmaama.db.User.model.User;
 import edu.wgu.tmaama.utils.DateTimeConverter;
 import edu.wgu.tmaama.utils.ErrorMessages;
 import edu.wgu.tmaama.utils.Modal;
+import edu.wgu.tmaama.utils.SuccessMessages;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -234,7 +235,7 @@ public class AppointmentController {
       this.appointment.setLastUpdatedBy(this.sessionUser.getUsername());
       ConcreteAppointmentDAO appointmentDAO = new ConcreteAppointmentDAO();
       appointmentDAO.insert(this.appointment);
-      Modal modal = new Modal(Modal.SUCCESS, "Appointment was created.");
+      Modal modal = new Modal(Modal.SUCCESS, SuccessMessages.APPOINTMENT_ADDED);
       modal.display();
       this.redirectToHomePage(event);
     } catch (SQLException | IOException ex) {
@@ -249,7 +250,7 @@ public class AppointmentController {
       this.appointment.setLastUpdatedBy(this.sessionUser.getUsername());
       ConcreteAppointmentDAO appointmentDAO = new ConcreteAppointmentDAO();
       appointmentDAO.update(this.appointment);
-      Modal modal = new Modal(Modal.SUCCESS, "Appointment was updated.");
+      Modal modal = new Modal(Modal.SUCCESS, SuccessMessages.APPOINTMENT_UPDATED);
       modal.display();
     } catch (SQLException ex) {
       ex.printStackTrace();

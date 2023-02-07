@@ -7,10 +7,7 @@ import edu.wgu.tmaama.db.Customer.dao.ConcreteCustomerDAO;
 import edu.wgu.tmaama.db.Customer.model.Customer;
 import edu.wgu.tmaama.db.FirstLevelDivision.model.FirstLevelDivision;
 import edu.wgu.tmaama.db.User.model.User;
-import edu.wgu.tmaama.utils.AlertModal;
-import edu.wgu.tmaama.utils.ConfirmMessages;
-import edu.wgu.tmaama.utils.FXHelpers;
-import edu.wgu.tmaama.utils.Modal;
+import edu.wgu.tmaama.utils.*;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -282,6 +279,8 @@ public class HomeController {
     ConcreteCustomerDAO customerDAO = new ConcreteCustomerDAO();
     boolean success = customerDAO.deleteByID(customer.getCustomerID());
     if (!success) {
+      Modal modal = new Modal(Modal.ERROR, ErrorMessages.DELETE_CUSTOMER_ERROR);
+      modal.display();
       return;
     }
 
@@ -464,7 +463,11 @@ public class HomeController {
       if (!alertModal.displayAndConfirm(header, content)) return;
       ConcreteAppointmentDAO appointmentDAO = new ConcreteAppointmentDAO();
       boolean success = appointmentDAO.deleteByID(appointment.getAppointmentID());
-      if (!success) return;
+      if (!success) {
+        Modal modal = new Modal(Modal.ERROR, ErrorMessages.DELETE_APPOINTMENT_ERROR);
+        modal.display();
+        return;
+      }
 
       this.appointments.remove(appointment);
       this.appointmentTableView.getItems().remove(appointment);

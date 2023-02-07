@@ -184,12 +184,18 @@ public class ConcreteCustomerDAO implements CustomerDAO {
 	@Override
 	public boolean deleteByID(int id) throws SQLException {
 		try {
-			String query = "DELETE FROM Customers WHERE Customer_ID = ?";
-			PreparedStatement stmt = this.cxn.prepareStatement(query);
+			this.cxn.setAutoCommit(false);
+			String appointmentQuery = "DELETE FROM Appointments WHERE Customer_ID = ?";
+			PreparedStatement stmt = this.cxn.prepareStatement(appointmentQuery);
+			stmt.setInt(1, id);
+			stmt.execute();
+			String customerQuery = "DELETE FROM Customers WHERE Customer_ID = ?";
+			stmt = this.cxn.prepareStatement(customerQuery);
 			stmt.setInt(1, id);
 			stmt.execute();
 			return true;
 		} catch (SQLException ex) {
+			this.cxn.rollback();
 			return false;
 		} finally {
 			this.db.closeConnection();
