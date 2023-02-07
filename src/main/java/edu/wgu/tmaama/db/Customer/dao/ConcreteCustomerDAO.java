@@ -39,8 +39,8 @@ public class ConcreteCustomerDAO implements CustomerDAO {
 			if (!this.db.checkConnection()) this.cxn = this.db.getConnection();
 			String query =
 				"INSERT INTO Customers "
-					+ "(Customer_Name, Address, Postal_Code, Phone, Created_By, Last_Updated_By, Division_ID) "
-					+ "VALUES (?, ?, ?, ?, ?, ?, ?)";
+					+ "(Customer_Name, Address, Postal_Code, Phone, Create_Date, Created_By, Last_Updated_By, Division_ID) "
+					+ "VALUES (?, ?, ?, ?, NOW(), ?, ?, ?)";
 			PreparedStatement stmt = this.cxn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 			stmt.setString(1, customer.getCustomerName());
 			stmt.setString(2, customer.getAddress());

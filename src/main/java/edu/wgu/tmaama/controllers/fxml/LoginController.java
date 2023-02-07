@@ -152,12 +152,12 @@ public class LoginController {
 	 * @param appointments
 	 * @return
 	 */
-	private ArrayList<Appointment> filterAppointments(ArrayList<Appointment> appointments) {
+	private ArrayList<Appointment> findUpcomingUsersAppointments(ArrayList<Appointment> appointments) {
 		ArrayList<Appointment> filteredList = new ArrayList<>();
 		LocalDateTime start = LocalDateTime.now();
 		LocalDateTime end = LocalDateTime.now().plusMinutes(15);
 		appointments.forEach(appointment -> {
-			if (appointment.getLocalStartDateTime().isAfter(start) && appointment.getLocalEndDateTime().isBefore(end))
+			if (appointment.getLocalStartDateTime().isAfter(start) && appointment.getLocalStartDateTime().isBefore(end))
 				filteredList.add(appointment);
 		});
 
@@ -174,7 +174,7 @@ public class LoginController {
 			ConcreteAppointmentDAO appointmentDAO = new ConcreteAppointmentDAO();
 			ArrayList<Appointment> appointments =
 				appointmentDAO.findAppointmentsByUserID(user.getUserID());
-			ArrayList<Appointment> filteredAppointments = this.filterAppointments(appointments);
+			ArrayList<Appointment> filteredAppointments = this.findUpcomingUsersAppointments(appointments);
 
 			if (filteredAppointments.size() == 0) {
 				Modal modal = new Modal(Modal.INFO, InfoMessages.NO_UPCOMING_APPOINTMENTS);

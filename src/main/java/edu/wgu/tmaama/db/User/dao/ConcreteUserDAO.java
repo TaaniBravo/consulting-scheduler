@@ -34,10 +34,11 @@ public class ConcreteUserDAO implements UserDAO {
 			if (!this.db.checkConnection()) this.cxn = this.db.getConnection();
 			this.cxn.setAutoCommit(false);
 			String userQuery =
-				"INSERT INTO Users " + "(User_Name, Password, Created_By)" + " VALUES (?, ?, ?)";
+				"INSERT INTO Users " + "(User_Name, Password, Create_Date, Created_By)" + " VALUES (?, ?, NOW(), ?)";
 			PreparedStatement userStmt =
 				this.cxn.prepareStatement(userQuery, Statement.RETURN_GENERATED_KEYS);
 			userStmt.setString(1, user.getUsername());
+			userStmt.setString(2, user.getPassword());
 			userStmt.setString(2, user.getPassword());
 			userStmt.setString(3, user.getCreatedBy());
 			int affectedRows = userStmt.executeUpdate();
