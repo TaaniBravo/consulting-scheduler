@@ -2,6 +2,7 @@ package edu.wgu.tmaama.db.Appointment.dao;
 
 import edu.wgu.tmaama.db.Appointment.model.Appointment;
 import edu.wgu.tmaama.db.Database;
+import edu.wgu.tmaama.utils.ErrorMessages;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -17,12 +18,59 @@ public class ConcreteAppointmentDAO implements AppointmentDAO {
 	}
 
 	/**
+	 * Checks for existing appointments that overlap in time.
+	 *
+	 * @param start
+	 * @param end
+	 * @return
+	 * @throws SQLException
+	 */
+	private boolean checkForExistingAppointmentBetweenRange(Timestamp start, Timestamp end) throws SQLException {
+		String query = "SELECT * FROM Appointments " +
+			"WHERE Start BETWEEN ? AND ? " +
+			"OR End Between ? AND ?";
+		PreparedStatement stmt = this.cxn.prepareStatement(query);
+		stmt.setTimestamp(1, start);
+		stmt.setTimestamp(2, end);
+		stmt.setTimestamp(3, start);
+		stmt.setTimestamp(4, end);
+		ResultSet results = stmt.executeQuery();
+		return results.next();
+	}
+
+	/**
+	 * Checks for any is existing appointments that will overlap that are not the same appointment.
+	 *
+	 * @param appointmentID
+	 * @param start
+	 * @param end
+	 * @return
+	 * @throws SQLException
+	 */
+	private boolean checkForExistingAppointmentBetweenRange(int appointmentID, Timestamp start, Timestamp end) throws SQLException {
+		String query = "SELECT * FROM Appointments " +
+			"WHERE (Start BETWEEN ? AND ? " +
+			"OR End Between ? AND ?) " +
+			"AND Appointment_ID != ?";
+		PreparedStatement stmt = this.cxn.prepareStatement(query);
+		stmt.setTimestamp(1, start);
+		stmt.setTimestamp(2, end);
+		stmt.setTimestamp(3, start);
+		stmt.setTimestamp(4, end);
+		stmt.setInt(5, appointmentID);
+		ResultSet results = stmt.executeQuery();
+		return results.next();
+	}
+
+	/**
 	 * Insert a new appointment into the database.
 	 */
 	@Override
 	public Appointment insert(Appointment appointment) throws SQLException {
 		try {
 			if (!this.db.checkConnection()) this.db.getConnection();
+			if (this.checkForExistingAppointmentBetweenRange(appointment.getStart(), appointment.getEnd()))
+				throw new SQLException(ErrorMessages.OVERLAPPING_APPOINTMENT_TIMES);
 			String query =
 				"INSERT INTO Appointments "
 					+ "(Title, Description, Location, Type, Start, End, Create_Date, Created_By, Last_Updated_By, Customer_ID, User_ID, Contact_ID)"
@@ -308,6 +356,9 @@ public class ConcreteAppointmentDAO implements AppointmentDAO {
 	@Override
 	public Appointment update(Appointment appointment) throws SQLException {
 		try {
+			if (!this.db.checkConnection()) this.db.getConnection();
+			if (this.checkForExistingAppointmentBetweenRange(appointment.getAppointmentID(), appointment.getStart(), appointment.getEnd()))
+				throw new SQLException(ErrorMessages.OVERLAPPING_APPOINTMENT_TIMES);
 			String query =
 				"UPDATE Appointments SET "
 					+ "Title = ?, "
