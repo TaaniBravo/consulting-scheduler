@@ -27,13 +27,11 @@ public class ConcreteAppointmentDAO implements AppointmentDAO {
 	 */
 	private boolean checkForExistingAppointmentBetweenRange(Timestamp start, Timestamp end) throws SQLException {
 		String query = "SELECT * FROM Appointments " +
-			"WHERE Start BETWEEN ? AND ? " +
-			"OR End Between ? AND ?";
+			"WHERE ? BETWEEN Start AND End " +
+			"OR ? Between Start AND End";
 		PreparedStatement stmt = this.cxn.prepareStatement(query);
 		stmt.setTimestamp(1, start);
 		stmt.setTimestamp(2, end);
-		stmt.setTimestamp(3, start);
-		stmt.setTimestamp(4, end);
 		ResultSet results = stmt.executeQuery();
 		return results.next();
 	}
@@ -49,15 +47,13 @@ public class ConcreteAppointmentDAO implements AppointmentDAO {
 	 */
 	private boolean checkForExistingAppointmentBetweenRange(int appointmentID, Timestamp start, Timestamp end) throws SQLException {
 		String query = "SELECT * FROM Appointments " +
-			"WHERE (Start BETWEEN ? AND ? " +
-			"OR End Between ? AND ?) " +
+			"WHERE (? BETWEEN Start AND End " +
+			"OR ? BETWEEN Start AND End ) " +
 			"AND Appointment_ID != ?";
 		PreparedStatement stmt = this.cxn.prepareStatement(query);
 		stmt.setTimestamp(1, start);
 		stmt.setTimestamp(2, end);
-		stmt.setTimestamp(3, start);
-		stmt.setTimestamp(4, end);
-		stmt.setInt(5, appointmentID);
+		stmt.setInt(3, appointmentID);
 		ResultSet results = stmt.executeQuery();
 		return results.next();
 	}
